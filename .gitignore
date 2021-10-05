@@ -1,0 +1,6 @@
+# Project exclude paths
+/api/target/
+/common/target/
+/config/target/
+/gateway/target/
+/oauth/target/

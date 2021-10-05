@@ -1,0 +1,5 @@
+server:
+  port: 8002
+  profiles: dev
+  application:
+    name: example-cloud-oauth

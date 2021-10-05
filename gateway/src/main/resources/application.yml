@@ -1,0 +1,89 @@
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          lowerCaseServiceId: true
+          enabled: true
+      routes:
+        # 唯一标识
+        - id: auth
+          # 网关转发: 到auth-server 最终表示服务的 ip:port
+          # lb://serviceId
+          # 请求地址 /api-auth/** 会跳转到 lb://auth-server
+          uri: lb://auth-server
+          # 断言: 网关转发的判断条件,只有满足当前条件才会转发,当在加上统一的前缀,到时候输入地址的时候也要输入前缀,然后过滤器加个路径重写
+          predicates:
+            - Path=/api-auth/**
+          # 过滤器: 可以对一个请求过滤, 比如说: 身份认证
+          filters:
+            - StripPrefix=1
+            - PreserveHostHeader
+        - id: auth-login-page
+          uri: lb://auth-server
+          predicates:
+            - Path=/login.html
+          filters:
+            - PreserveHostHeader
+        - id: auth-login-process
+          uri: lb://auth-server
+          predicates:
+            - Path=/user/login
+          filters:
+            - PreserveHostHeader
+        - id: auth-login-token
+          uri: lb://auth-server
+          predicates:
+            - Path=/oauth/token
+          filters:
+            - PreserveHostHeader
+        - id: auth-login-authorize
+          uri: lb://auth-server
+          predicates:
+            - Path=/oauth/authorize
+          filters:
+            - PreserveHostHeader
+        - id: auth-check-process
+          uri: lb://auth-server
+          predicates:
+            - Path=/oauth/check_token
+          filters:
+            - PreserveHostHeader
+        - id: user
+          uri: lb://micro-user
+          predicates:
+            - Path=/api-user/**
+          filters:
+            - StripPrefix=1
+        - id: file
+          uri: lb://micro-file
+          predicates:
+            - Path=/api-file/**
+          filters:
+            - StripPrefix=1
+        - id: log
+          uri: lb://log-center
+          predicates:
+            - Path=/api-log/**
+          filters:
+            - StripPrefix=1
+        - id: generator
+          uri: lb://micro-generator
+          predicates:
+            - Path=/api-generator/**
+          filters:
+            - StripPrefix=1
+        - id: search
+          uri: lb://micro-search
+          predicates:
+            - Path=/api-search/**
+          filters:
+            - StripPrefix=1
+#    sentinel:
+#      datasource.ds1.nacos:
+#        server-addr: ${spring.cloud.nacos.server-addr}
+#        data-id: ${spring.application.name}-sentinel-gw-flow
+#        group-id: DEFAULT_GROUP
+#        ruleType: gw-flow
+#      filter:
+#        enabled: true
