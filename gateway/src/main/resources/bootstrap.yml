@@ -2,10 +2,10 @@ server:
   port: 8008
 spring:
   cloud:
-    sentinel:
-      transport:
-        dashboard: 127.0.0.1:8080 #配置Sentinel dashboard地址
-        port: 8719  #这个端口配置会在应用对应的机器上启动一个Http Server，该Server会与 Sentinel 控制台做交互
+#    sentinel:
+#      transport:
+#        dashboard: 127.0.0.1:8080 #配置Sentinel dashboard地址
+#        port: 8719  #这个端口配置会在应用对应的机器上启动一个Http Server，该Server会与 Sentinel 控制台做交互
     gateway:
       # 路由数组[路由 就是指定当请求满足什么条件的时候转到哪个微服务]
       routes:

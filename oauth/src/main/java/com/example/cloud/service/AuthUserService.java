@@ -1,7 +1,8 @@
 package com.example.cloud.service;
 
-import com.example.cloud.dao.UserDao;
-import com.example.cloud.pojo.Users;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.example.cloud.operator.login.entity.UserInfo;
+import com.example.cloud.operator.login.service.UserInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,6 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -19,21 +19,22 @@ import java.util.ArrayList;
 public class AuthUserService implements UserDetailsService {
 
     @Autowired
-    private UserDao userDao;
+    private UserInfoService userInfoService;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+//    @Autowired
+//    private PasswordEncoder passwordEncoder;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.info("username:" + username);
         // 查询数据库操作
-        Users users = userDao.getUsers(username);
+        UserInfo users = userInfoService.getOne(new LambdaQueryWrapper<UserInfo>()
+                .eq(UserInfo::getUsername, username));
         if (StringUtils.isBlank(users.getPassword())) {
-            throw new UsernameNotFoundException("the user is not found");
+            throw new UsernameNotFoundException("用户不存在");
         }
-        String password = passwordEncoder.encode(users.getPassword());
-        return new User(username, password, new ArrayList<>());
+//        String password = passwordEncoder.encode(users.getPassword());
+        return new User(username, users.getPassword(), new ArrayList<>());
     }
 
 

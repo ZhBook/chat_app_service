@@ -1,3 +1,4 @@
+/*
 package com.example.cloud.controller;
 
 import com.example.cloud.pojo.MyMessage;
@@ -7,16 +8,20 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
 
+*/
 /**
  * 生产者
- **/
+ **//*
+
 @RestController
 @RequestMapping("/api/testRocketMQ")
 public class TestProducerController {
 
-    /**
+    */
+/**
      * 用于发送消息到 RocketMQ 的api
-     */
+     *//*
+
     //@Resource
     //public RocketMQTemplate rocketMQTemplate;
     @GetMapping("/sendMsg")
@@ -32,4 +37,4 @@ public class TestProducerController {
 
         return "send message success";
     }
-}
+}*/

@@ -1,5 +1,5 @@
 server:
   port: 8002
-  profiles: dev
+spring:
   application:
     name: example-cloud-oauth

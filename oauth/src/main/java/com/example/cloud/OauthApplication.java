@@ -8,8 +8,8 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 @SpringBootApplication
 @EnableDiscoveryClient
-@EntityScan("com.example.cloud.pojo")
-@MapperScan("com.example.cloud.dao")
+@EntityScan("com.example.cloud.*.entity")
+@MapperScan("com.example.cloud.operator.*.mapper")
 public class OauthApplication {
     public static void main(String[] args) {
         SpringApplication.run(OauthApplication.class, args);
