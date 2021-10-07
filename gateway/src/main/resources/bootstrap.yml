@@ -1,16 +1,7 @@
 server:
   port: 8008
 spring:
-  security:
-    oauth2:
-      resourceserver:
-        opaquetoken:
-          client-id: example-cloud-oauth
   cloud:
-#    sentinel:
-#      transport:
-#        dashboard: 127.0.0.1:8080 #配置Sentinel dashboard地址
-#        port: 8719  #这个端口配置会在应用对应的机器上启动一个Http Server，该Server会与 Sentinel 控制台做交互
     gateway:
       # 路由数组[路由 就是指定当请求满足什么条件的时候转到哪个微服务]
       discovery:
@@ -34,8 +25,3 @@ spring:
             - StripPrefix=1              # 转发之前去掉1层路径
   application:
     name: example-cloud-gateway
-secure:
-  ignore:
-    urls: #配置白名单路径
-      - "/gateway/api/register/**"
-      - "/auth/oauth/token"

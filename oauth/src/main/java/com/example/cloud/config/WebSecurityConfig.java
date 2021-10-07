@@ -50,7 +50,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().authorizeRequests().antMatchers("/oauth/").permitAll()
                 .and()
                 // 设置登陆页
-//                .csrf().disable()
                 .formLogin().loginPage("/login")
                 // 设置登陆成功url
                 .defaultSuccessUrl("/").permitAll()

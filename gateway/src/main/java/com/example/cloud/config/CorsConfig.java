@@ -26,7 +26,7 @@ public class CorsConfig {
         // 允许跨域的请求来源
         corsConfiguration.addAllowedOrigin(ALL);
         // 是否允许携带cookie跨域
-        corsConfiguration.setAllowCredentials(true);
+//        corsConfiguration.setAllowCredentials(true);
 
         // 任意url都要进行跨域配置
         source.registerCorsConfiguration("/**",corsConfiguration);

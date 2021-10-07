@@ -1,89 +1,24 @@
-#spring:
-#  cloud:
-#    gateway:
-#      discovery:
-#        locator:
-#          lowerCaseServiceId: true
-#          enabled: true
-#      routes:
-#        # 唯一标识
-#        - id: auth
-#          # 网关转发: 到auth-server 最终表示服务的 ip:port
-#          # lb://serviceId
-#          # 请求地址 /api-auth/** 会跳转到 lb://auth-server
-#          uri: lb://auth-server
-#          # 断言: 网关转发的判断条件,只有满足当前条件才会转发,当在加上统一的前缀,到时候输入地址的时候也要输入前缀,然后过滤器加个路径重写
-#          predicates:
-#            - Path=/api-auth/**
-#          # 过滤器: 可以对一个请求过滤, 比如说: 身份认证
-#          filters:
-#            - StripPrefix=1
-#            - PreserveHostHeader
-#        - id: auth-login-page
-#          uri: lb://auth-server
-#          predicates:
-#            - Path=/login.html
-#          filters:
-#            - PreserveHostHeader
-#        - id: auth-login-process
-#          uri: lb://auth-server
-#          predicates:
-#            - Path=/user/login
-#          filters:
-#            - PreserveHostHeader
-#        - id: auth-login-token
-#          uri: lb://auth-server
-#          predicates:
-#            - Path=/oauth/token
-#          filters:
-#            - PreserveHostHeader
-#        - id: auth-login-authorize
-#          uri: lb://auth-server
-#          predicates:
-#            - Path=/oauth/authorize
-#          filters:
-#            - PreserveHostHeader
-#        - id: auth-check-process
-#          uri: lb://auth-server
-#          predicates:
-#            - Path=/oauth/check_token
-#          filters:
-#            - PreserveHostHeader
-#        - id: user
-#          uri: lb://micro-user
-#          predicates:
-#            - Path=/api-user/**
-#          filters:
-#            - StripPrefix=1
-#        - id: file
-#          uri: lb://micro-file
-#          predicates:
-#            - Path=/api-file/**
-#          filters:
-#            - StripPrefix=1
-#        - id: log
-#          uri: lb://log-center
-#          predicates:
-#            - Path=/api-log/**
-#          filters:
-#            - StripPrefix=1
-#        - id: generator
-#          uri: lb://micro-generator
-#          predicates:
-#            - Path=/api-generator/**
-#          filters:
-#            - StripPrefix=1
-#        - id: search
-#          uri: lb://micro-search
-#          predicates:
-#            - Path=/api-search/**
-#          filters:
-#            - StripPrefix=1
-##    sentinel:
-##      datasource.ds1.nacos:
-##        server-addr: ${spring.cloud.nacos.server-addr}
-##        data-id: ${spring.application.name}-sentinel-gw-flow
-##        group-id: DEFAULT_GROUP
-##        ruleType: gw-flow
-##      filter:
-##        enabled: true
+server:
+  port: 8008
+spring:
+  profiles: dev
+  cloud:
+    gateway:
+      # 路由数组[路由 就是指定当请求满足什么条件的时候转到哪个微服务]
+      routes:
+        - id: example-cloud-oauth             # 当前路由的标识, 要求唯一
+          uri: lb://example-cloud-oauth       # lb指的是从 nacos 中按照名称获取微服务,并遵循负载均衡策略
+          predicates:                    # 断言(就是路由转发要满足的条件)
+            - Path=/oauth/**             # 当请求路径满足Path指定的规则时,才进行路由转发
+        # 我们⾃定义的路由 ID，保持唯⼀
+        - id: example-cloud-api
+          # ⽬标服务地址（部署多实例）
+          uri: lb://example-cloud-api
+          # gateway⽹关从服务注册中⼼获取实例信息然后负载后路由
+          # 断⾔：路由条件，Predicate 接受⼀个输⼊参数，返回⼀个布尔值结果。该接⼝包含多种默认⽅法来将 Predicate 组合成其他复杂的逻辑（⽐如：与，或，⾮）。
+          predicates:
+            - Path=/example-gateway/api/**
+          filters:                       # 过滤器,请求在传递过程中可以通过过滤器对其进行一定的修改
+            - StripPrefix=1              # 转发之前去掉1层路径
+  application:
+    name: example-cloud-gateway
