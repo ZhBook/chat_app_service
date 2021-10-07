@@ -1,5 +1,10 @@
 server:
   port: 8002
+#  ssl:
+#    key-store: classpath:example.com_keystore.jks
+#    key-store-password: 123456
+#    key-store-type: JKS
+#    key-alias: example.com
 spring:
   application:
     name: example-cloud-oauth

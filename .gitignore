@@ -4,3 +4,4 @@
 /config/target/
 /gateway/target/
 /oauth/target/
+/config/src/main/resources/application-dev.properties
