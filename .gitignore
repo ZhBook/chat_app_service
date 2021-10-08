@@ -1,7 +1,8 @@
 # Project exclude paths
-/api/target/
+/.idea
 /common/target/
 /config/target/
 /gateway/target/
 /oauth/target/
 /config/src/main/resources/application-dev.properties
+/business/target/

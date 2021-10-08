@@ -1,17 +1,10 @@
 spring:
   datasource:
-    url: jdbc:mysql://${spring.datasource.ip}:3306/user-center?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai
-    username: ${spring.datasource.username}
-    password: ${spring.datasource.password}
+    url: jdbc:mysql://47.97.112.114:3306/user-center?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456789,.
     driver-class-name: com.mysql.cj.jdbc.Driver
 security:
   oauth2:
     client:
       client-secret: JXU0RjYwJXU2NjJGJXU3MzJBJXU0RjYwJXU2NjJGJXU3MzJBJXU0RjYwJXU2NjJGJXU3MzJB
-mybatis-plus:
-  mapper-locations: classpath:/mapper/*Mapper.xml
-  #实体扫描，多个package用逗号或者分号分隔
-  typeAliasesPackage: com.central.oauth.model
-  global-config:
-    db-config:
-      id-type: auto
