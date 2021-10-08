@@ -48,7 +48,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.
                 requestMatchers().anyRequest()
                 .and().authorizeRequests().antMatchers("/oauth/**").permitAll()
-                .and().authorizeRequests().antMatchers("/gateway/api/**").permitAll()
+                .and().authorizeRequests().antMatchers("/register").permitAll()
                 .and()
                 // 设置登陆页
 //                .formLogin().loginPage("/login")

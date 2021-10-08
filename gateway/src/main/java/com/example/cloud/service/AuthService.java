@@ -28,11 +28,11 @@ public class AuthService {
         if (CollectionUtils.isEmpty(authorizations)) {
             return null;
         }
-        if (!authorizations.get(0).startsWith("Bearer ") || !authorizations.get(0).startsWith("Basic ")) {
+        if (!authorizations.get(0).startsWith("Bearer ") && !authorizations.get(0).startsWith("Basic ")) {
             return null;
         }
         //取到jwt令牌
-        String jwt = authorizations.get(0).substring(7);
+        String jwt = authorizations.get(0).split(" ")[1];
         return jwt;
 
 

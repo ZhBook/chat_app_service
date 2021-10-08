@@ -1,5 +1,9 @@
 package com.example.cloud.operator.login.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -7,10 +11,12 @@ import java.util.Date;
  * 
  * @TableName user_info
  */
+@TableName("user_info")
 public class UserInfo implements Serializable {
     /**
      * 
      */
+    @TableId(value = "id",type = IdType.AUTO)
     private Integer id;
 
     /**
