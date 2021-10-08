@@ -20,6 +20,6 @@ public class RegisterController {
 
     @PostMapping("/register")
     public Result<Boolean> registerUser(@RequestBody UserInfo userInfo) {
-        return Result.succeed(registerFacade.registerUser(userInfo));
+        return registerFacade.registerUser(userInfo);
     }
 }

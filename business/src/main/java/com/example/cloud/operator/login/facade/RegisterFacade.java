@@ -1,7 +1,7 @@
 package com.example.cloud.operator.login.facade;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.example.cloud.exception.BusinessException;
+import com.example.cloud.model.Result;
 import com.example.cloud.operator.login.entity.UserInfo;
 import com.example.cloud.operator.login.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,14 +18,15 @@ public class RegisterFacade {
     @Autowired
     private UserInfoService userInfoService;
 
-    public Boolean registerUser(UserInfo userInfo) {
+    public Result registerUser(UserInfo userInfo) {
         UserInfo user = userInfoService.getOne(new LambdaQueryWrapper<UserInfo>()
                 .eq(UserInfo::getPhone, userInfo.getPhone()));
         if (Objects.isNull(user)){
             BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
             userInfo.setPassword(bCryptPasswordEncoder.encode(userInfo.getPassword()));
-            return userInfoService.save(userInfo);
+            userInfoService.save(userInfo);
+            return Result.succeed("添加成功");
         }
-        throw new BusinessException("改用户已存在");
+        return Result.failed("该用户已存在");
     }
 }

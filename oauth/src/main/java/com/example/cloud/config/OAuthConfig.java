@@ -12,7 +12,6 @@ import org.springframework.security.oauth2.config.annotation.configurers.ClientD
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
-import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
@@ -68,14 +67,13 @@ public class OAuthConfig extends AuthorizationServerConfigurerAdapter {
     /**
      * 配置令牌端点的安全约束
      *
-     * @param security
      * @throws Exception
      */
-    @Override
+    /*@Override
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
         //允许表单登录
         security.allowFormAuthenticationForClients();
-    }
+    }*/
 
     @Bean
     public TokenStore redisTokenStore() {
@@ -138,7 +136,7 @@ public class OAuthConfig extends AuthorizationServerConfigurerAdapter {
       converter.setKeyPair(keyStoreKeyFactory.getKeyPair("example.com"));
       //公钥（读取public.txt的公钥信息）
       Resource resource = new ClassPathResource("public.txt");
-      String publicKey = null;
+      String publicKey;
       try {
           publicKey = inputStream2String(resource.getInputStream());
       } catch (final IOException e) {
@@ -151,7 +149,7 @@ public class OAuthConfig extends AuthorizationServerConfigurerAdapter {
     String inputStream2String(InputStream is) throws IOException {
         BufferedReader in = new BufferedReader(new InputStreamReader(is));
         StringBuffer buffer = new StringBuffer();
-        String line = "";
+        String line;
         while ((line = in.readLine()) != null) {
             buffer.append(line);
         }

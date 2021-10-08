@@ -1,24 +1,33 @@
-server:
-  port: 8008
 spring:
   profiles: dev
   cloud:
     gateway:
+      httpclient:
+        # 配置全局加http超时
+        connect-timeout: 1000
+        response-timeout: 5s
       # 路由数组[路由 就是指定当请求满足什么条件的时候转到哪个微服务]
+      discovery:
+        locator:
+          lowerCaseServiceId: true #使用小写服务名，默认是大写
+          enabled: true #开启自动代理
       routes:
-        - id: example-cloud-oauth             # 当前路由的标识, 要求唯一
+        - id: oauth             # 当前路由的标识, 要求唯一
           uri: lb://example-cloud-oauth       # lb指的是从 nacos 中按照名称获取微服务,并遵循负载均衡策略
-          predicates:                    # 断言(就是路由转发要满足的条件)
+          predicates: # 断言(就是路由转发要满足的条件)
             - Path=/oauth/**             # 当请求路径满足Path指定的规则时,才进行路由转发
+          filters:
+            - PreserveHostHeader
         # 我们⾃定义的路由 ID，保持唯⼀
-        - id: example-cloud-api
+        - id: business
           # ⽬标服务地址（部署多实例）
-          uri: lb://example-cloud-api
+          uri: lb://example-cloud-business
           # gateway⽹关从服务注册中⼼获取实例信息然后负载后路由
           # 断⾔：路由条件，Predicate 接受⼀个输⼊参数，返回⼀个布尔值结果。该接⼝包含多种默认⽅法来将 Predicate 组合成其他复杂的逻辑（⽐如：与，或，⾮）。
           predicates:
-            - Path=/example-gateway/api/**
-          filters:                       # 过滤器,请求在传递过程中可以通过过滤器对其进行一定的修改
-            - StripPrefix=1              # 转发之前去掉1层路径
-  application:
-    name: example-cloud-gateway
+            - Path=/business/api/**
+            - Path=/business/resource/**
+          filters: # 过滤器,请求在传递过程中可以通过过滤器对其进行一定的修改
+            - StripPrefix=2              # 转发之前去掉2层路径
+            - StripPrefix=2              # 转发之前去掉2层路径
+

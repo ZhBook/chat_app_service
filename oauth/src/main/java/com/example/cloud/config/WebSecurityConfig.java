@@ -47,24 +47,25 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.
                 requestMatchers().anyRequest()
-                .and().authorizeRequests().antMatchers("/oauth/").permitAll()
+                .and().authorizeRequests().antMatchers("/oauth/**").permitAll()
+                .and().authorizeRequests().antMatchers("/gateway/api/**").permitAll()
                 .and()
                 // 设置登陆页
-                .formLogin().loginPage("/login")
+//                .formLogin().loginPage("/login")
                 // 设置登陆成功url
-                .defaultSuccessUrl("/").permitAll()
+//                .defaultSuccessUrl("/").permitAll()
                 // 设置登录失败url
-                .failureUrl("/login/error")
+//                .failureUrl("/login/error")
                 // 自定义登陆用户名和密码参数，默认为username和password
 //                .usernameParameter("username")
 //                .passwordParameter("password")
-                .and()
+//                .and()
                 .logout().permitAll()
                 // 自动登录
                 .and().rememberMe();
 //                authorizeRequests()
 //                .antMatchers("/**").permitAll();
-        http.csrf().disable();
+//        http.csrf().disable();
     }
 
     /**
