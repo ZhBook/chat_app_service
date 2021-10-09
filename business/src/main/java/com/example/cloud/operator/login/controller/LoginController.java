@@ -1,6 +1,6 @@
 package com.example.cloud.operator.login.controller;
 
-import com.example.cloud.model.Result;
+import com.example.cloud.data.Result;
 import com.example.cloud.operator.login.entity.UserInfo;
 import com.example.cloud.operator.login.facade.LoginFacade;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,5 +20,10 @@ public class LoginController {
     public Result<UserInfo> login(@RequestParam("username") String username,
                                   @RequestParam("password") String password) {
         return Result.succeed(loginFacade.login(username, password));
+    }
+
+    @PostMapping("/test")
+    public Result<UserInfo> test() {
+        return Result.succeed("访问成功了");
     }
 }

@@ -1,6 +1,6 @@
 package com.example.cloud.operator.login.controller;
 
-import com.example.cloud.model.Result;
+import com.example.cloud.data.Result;
 import com.example.cloud.operator.login.entity.UserInfo;
 import com.example.cloud.operator.login.facade.RegisterFacade;
 import org.springframework.beans.factory.annotation.Autowired;

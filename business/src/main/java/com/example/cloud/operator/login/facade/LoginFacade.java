@@ -20,12 +20,12 @@ public class LoginFacade {
 
     public UserInfo login(String username, String password) {
         UserInfo one = userInfoService.getOne(new LambdaQueryWrapper<UserInfo>().eq(UserInfo::getUsername, username));
-        if (Objects.isNull(one)){
+        if (Objects.isNull(one)) {
             throw new BusinessException("用户不存在");
         }
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
         boolean matches = bCryptPasswordEncoder.matches(password, one.getPassword());
-        if (matches){
+        if (matches) {
             return one;
         }
         throw new BusinessException("密码错误");

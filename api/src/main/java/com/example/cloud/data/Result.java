@@ -1,4 +1,4 @@
-package com.example.cloud.model;
+package com.example.cloud.data;
 
 import com.example.cloud.enums.CodeEnum;
 import lombok.AllArgsConstructor;

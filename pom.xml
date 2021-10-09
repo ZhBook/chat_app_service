@@ -14,6 +14,7 @@
         <module>gateway</module>
         <module>oauth</module>
         <module>config</module>
+        <module>api</module>
     </modules>
 
     <!-- 依赖版本管理 -->
