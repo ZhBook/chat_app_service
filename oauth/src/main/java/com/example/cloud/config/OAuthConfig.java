@@ -1,12 +1,22 @@
 package com.example.cloud.config;
 
+import cn.hutool.core.codec.Base64;
+import cn.hutool.core.io.IoUtil;
+import cn.hutool.http.HttpStatus;
+import cn.hutool.json.JSONUtil;
+import com.example.cloud.data.Result;
+import com.example.cloud.data.ResultCode;
+import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
@@ -18,18 +28,24 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
 import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
+import org.springframework.security.web.AuthenticationEntryPoint;
 
 import javax.sql.DataSource;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.security.KeyFactory;
+import java.security.KeyPair;
+import java.security.interfaces.RSAPublicKey;
+import java.security.spec.X509EncodedKeySpec;
 
 /**
  * @author:70968 Date:2021-10-07 08:38
  */
 @Configuration
 @EnableAuthorizationServer
+@RequiredArgsConstructor
 public class OAuthConfig extends AuthorizationServerConfigurerAdapter {
 
 //    @Autowired
@@ -131,9 +147,9 @@ public class OAuthConfig extends AuthorizationServerConfigurerAdapter {
   public JwtAccessTokenConverter accessTokenConverter() {
       //私钥，jks文件路径，以及申请时的密码
       JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-      KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory(new ClassPathResource("example.com_keystore.jks"), "123456".toCharArray());
+      KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory(new ClassPathResource("jwt.jks"), "123456".toCharArray());
       //此处传入的是创建jks文件时的别名-alias ims.abc.com
-      converter.setKeyPair(keyStoreKeyFactory.getKeyPair("example.com"));
+      converter.setKeyPair(keyStoreKeyFactory.getKeyPair("mytestkey"));
       //公钥（读取public.txt的公钥信息）
       Resource resource = new ClassPathResource("public.txt");
       String publicKey;
@@ -154,5 +170,50 @@ public class OAuthConfig extends AuthorizationServerConfigurerAdapter {
             buffer.append(line);
         }
         return buffer.toString();
+    }
+
+    /**
+     * 密钥库中获取密钥对(公钥+私钥)
+     */
+    @Bean
+    public KeyPair keyPair() {
+//        Resource pathResource = new PathResource("D:\\Tools\\jwt.jks");
+
+        KeyStoreKeyFactory factory = new KeyStoreKeyFactory(new ClassPathResource("jwt.jks"), "123456".toCharArray());
+        KeyPair keyPair = factory.getKeyPair("mytestkey", "123456".toCharArray());
+        return keyPair;
+    }
+
+    /**
+     * 本地加载JWT验签公钥
+     * @return
+     */
+    @SneakyThrows
+    @Bean
+    public RSAPublicKey rsaPublicKey() {
+        Resource resource = new ClassPathResource("public.txt");
+        InputStream is = resource.getInputStream();
+        String publicKeyData = IoUtil.read(is).toString();
+        X509EncodedKeySpec keySpec = new X509EncodedKeySpec((Base64.decode(publicKeyData)));
+
+        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+        RSAPublicKey rsaPublicKey = (RSAPublicKey)keyFactory.generatePublic(keySpec);
+        return rsaPublicKey;
+    }
+
+    /**
+     * 自定义认证异常响应数据
+     */
+    @Bean
+    public AuthenticationEntryPoint authenticationEntryPoint() {
+        return (request, response, e) -> {
+            response.setStatus(HttpStatus.HTTP_OK);
+            response.setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
+            response.setHeader("Access-Control-Allow-Origin", "*");
+            response.setHeader("Cache-Control", "no-cache");
+            Result result = Result.failed(ResultCode.FAILED.getMessage());
+            response.getWriter().print(JSONUtil.toJsonStr(result));
+            response.getWriter().flush();
+        };
     }
 }

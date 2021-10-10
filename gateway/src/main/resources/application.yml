@@ -31,4 +31,15 @@ spring:
             - Path=/business/api/**
           filters: # 过滤器,请求在传递过程中可以通过过滤器对其进行一定的修改
             - StripPrefix=2              # 转发之前去掉2层路径
-
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+#          public-key-location: classpath:jwt.jks
+          jwk-set-uri: 'http://localhost:8002/rsa/publicKey' #配置RSA的公钥访问地址
+secure:
+  ignore:
+    urls: #配置白名单路径
+      - "/actuator/**"
+      - "/auth/oauth/token"
+      - "/oauth/token"

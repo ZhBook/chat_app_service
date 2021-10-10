@@ -1,6 +1,7 @@
 package com.example.cloud.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -52,15 +53,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        /*http
-                .requestMatchers().anyRequest()
-                //设置符合条件的端点通过，不被保护
-                .and().authorizeRequests().antMatchers("/oauth/*").permitAll();*/
-        http.csrf().disable()
-                .httpBasic().and()
+        /*http.csrf().disable()
+                .authorizeRequests().antMatchers("/rsa/publicKey").permitAll()
+                .and().httpBasic().and()
                 .formLogin()
                 .and()
-                .authorizeRequests().anyRequest().authenticated();
+                .authorizeRequests().anyRequest().authenticated();*/
+        http.authorizeRequests()
+                .requestMatchers(EndpointRequest.toAnyEndpoint()).permitAll()
+                .antMatchers("/rsa/publicKey").permitAll()
+                .anyRequest().authenticated();
     }
 
     /**

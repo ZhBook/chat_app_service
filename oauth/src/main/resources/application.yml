@@ -4,7 +4,3 @@ spring:
     username: root
     password: 123456789,.
     driver-class-name: com.mysql.cj.jdbc.Driver
-security:
-  oauth2:
-    client:
-      client-secret: JXU0RjYwJXU2NjJGJXU3MzJBJXU0RjYwJXU2NjJGJXU3MzJBJXU0RjYwJXU2NjJGJXU3MzJB
