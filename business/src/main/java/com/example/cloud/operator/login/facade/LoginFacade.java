@@ -30,4 +30,9 @@ public class LoginFacade {
         }
         throw new BusinessException("密码错误");
     }
+
+    public UserInfo getUserByUsername(String username) {
+        UserInfo one = userInfoService.getOne(new LambdaQueryWrapper<UserInfo>().eq(UserInfo::getUsername, username));
+        return one;
+    }
 }

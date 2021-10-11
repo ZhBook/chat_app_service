@@ -1,6 +1,5 @@
-package com.example.cloud.data;
+package com.example.cloud.enums;
 
-import com.example.cloud.enums.CodeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,15 +16,15 @@ public class Result<T> implements Serializable {
     private String msg;
 
     public static <T> Result<T> succeed(String msg) {
-        return of(null, CodeEnum.SUCCESS.getCode(), msg);
+        return of(null, ResultCode.SUCCESS.getCode(), msg);
     }
 
     public static <T> Result<T> succeed(T model, String msg) {
-        return of(model, CodeEnum.SUCCESS.getCode(), msg);
+        return of(model, ResultCode.SUCCESS.getCode(), msg);
     }
 
     public static <T> Result<T> succeed(T model) {
-        return of(model, CodeEnum.SUCCESS.getCode(), "");
+        return of(model, ResultCode.SUCCESS.getCode(), "");
     }
 
     public static <T> Result<T> of(T data, Integer code, String msg) {
@@ -33,10 +32,14 @@ public class Result<T> implements Serializable {
     }
 
     public static <T> Result<T> failed(String msg) {
-        return of(null, CodeEnum.ERROR.getCode(), msg);
+        return of(null, ResultCode.FAILED.getCode(), msg);
     }
 
     public static <T> Result<T> failed(T model, String msg) {
-        return of(model, CodeEnum.ERROR.getCode(), msg);
+        return of(model, ResultCode.FAILED.getCode(), msg);
+    }
+
+    public static boolean isSuccess(Result<?> result) {
+        return result != null && ResultCode.SUCCESS.getCode().equals(result.getCode());
     }
 }

@@ -1,11 +1,14 @@
 package com.example.cloud.config;
 
 import cn.hutool.core.codec.Base64;
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.http.HttpStatus;
 import cn.hutool.json.JSONUtil;
-import com.example.cloud.data.Result;
-import com.example.cloud.data.ResultCode;
+import com.example.cloud.entity.UserInfo;
+import com.example.cloud.enums.Result;
+import com.example.cloud.enums.ResultCode;
+import com.example.cloud.extension.CaptchaTokenGranter;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +21,16 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
+import org.springframework.security.oauth2.provider.CompositeTokenGranter;
+import org.springframework.security.oauth2.provider.TokenGranter;
 import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
+import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
@@ -39,6 +46,10 @@ import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.X509EncodedKeySpec;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author:70968 Date:2021-10-07 08:38
@@ -46,7 +57,7 @@ import java.security.spec.X509EncodedKeySpec;
 @Configuration
 @EnableAuthorizationServer
 @RequiredArgsConstructor
-public class OAuthConfig extends AuthorizationServerConfigurerAdapter {
+public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
 //    @Autowired
 //    private PasswordEncoder passwordEncoder;
@@ -112,8 +123,12 @@ public class OAuthConfig extends AuthorizationServerConfigurerAdapter {
         return defaultTokenServices;
     }
 
+    /**
+     * 配置授权（authorization）以及令牌（token）的访问端点和令牌服务(token services)
+     * @param endpoints
+     * @throws Exception
+     */
     @Override
-    //配置授权以及令牌的访问端点和令牌服务
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         //redis token存储
         endpoints
@@ -122,6 +137,23 @@ public class OAuthConfig extends AuthorizationServerConfigurerAdapter {
                 .accessTokenConverter(accessTokenConverter())
                 .authenticationManager(authenticationManager)
                 .allowedTokenEndpointRequestMethods(HttpMethod.GET, HttpMethod.POST);
+        // 添加自定义授权模式
+        List<TokenGranter> granterList = new ArrayList<>(Arrays.asList(endpoints.getTokenGranter()));
+        granterList.add(new CaptchaTokenGranter(endpoints.getTokenServices(), endpoints.getClientDetailsService(),
+                endpoints.getOAuth2RequestFactory(), authenticationManager
+
+        ));
+
+        CompositeTokenGranter compositeTokenGranter = new CompositeTokenGranter(granterList);
+        endpoints
+                .authenticationManager(authenticationManager)
+                .tokenGranter(compositeTokenGranter)
+                //.userDetailsService(sysUserDetailsService)
+                /** refresh token有两种使用方式：重复使用(true)、非重复使用(false)，默认为true
+                 *  1 重复使用：access token过期刷新时， refresh token过期时间未改变，仍以初次生成的时间为准
+                 *  2 非重复使用：access token过期刷新时， refresh token过期时间延续，在refresh token有效期内刷新便永不失效达到无需再次登录的目的
+                 */
+                .reuseRefreshTokens(true); // 自定义的TokenService
         //数据库存储
 //        endpoints.tokenStore(tokenStore())
 //                .authenticationManager(authenticationManager)
@@ -216,4 +248,29 @@ public class OAuthConfig extends AuthorizationServerConfigurerAdapter {
             response.getWriter().flush();
         };
     }
+
+    /**
+     * JWT内容增强
+     */
+    @Bean
+    public TokenEnhancer tokenEnhancer() {
+        return (accessToken, authentication) -> {
+            Map<String, Object> additionalInfo = CollectionUtil.newHashMap();
+            UserInfo userInfo = (UserInfo) authentication.getUserAuthentication().getPrincipal();
+            additionalInfo.put("userId", userInfo.getId());
+            additionalInfo.put("username", userInfo.getUsername());
+            ((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(additionalInfo);
+            return accessToken;
+        };
+    }
+
+    /**
+     * 密码编码器
+     * 委托方式，根据密码的前缀选择对应的encoder，例如：{bcypt}前缀->标识BCYPT算法加密；{noop}->标识不使用任何加密即明文的方式
+     * 密码判读 DaoAuthenticationProvider#additionalAuthenticationChecks
+     */
+    /*@Bean
+    public PasswordEncoder passwordEncoder() {
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    }*/
 }

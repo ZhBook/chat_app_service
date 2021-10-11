@@ -15,7 +15,6 @@ import java.text.ParseException;
 
 /**
  * 将登录用户的JWT转化成用户信息的全局过滤器
- * Created by macro on 2020/6/17.
  */
 @Component
 @Slf4j

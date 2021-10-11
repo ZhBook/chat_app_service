@@ -1,7 +1,7 @@
 package com.example.cloud.operator.login.facade;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.example.cloud.data.Result;
+import com.example.cloud.enums.Result;
 import com.example.cloud.operator.login.entity.UserInfo;
 import com.example.cloud.operator.login.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;

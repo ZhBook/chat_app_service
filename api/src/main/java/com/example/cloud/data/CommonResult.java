@@ -1,5 +1,8 @@
 package com.example.cloud.data;
 
+import com.example.cloud.enums.ResultCode;
+import com.example.cloud.exception.IErrorCode;
+
 /**
  * 通用返回对象
  * Created by macro on 2019/4/19.

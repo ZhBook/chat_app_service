@@ -1,7 +1,7 @@
 package com.example.cloud.constant;
 
 /**
- * Created by macro on 2020/6/19.
+ * 处理request header
  */
 public class AuthConstant {
 
