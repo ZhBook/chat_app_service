@@ -19,7 +19,6 @@ spring:
           uri: lb://example-cloud-oauth       # lb指的是从 nacos 中按照名称获取微服务,并遵循负载均衡策略
           predicates: # 断言(就是路由转发要满足的条件)
             - Path=/oauth/**             # 当请求路径满足Path指定的规则时,才进行路由转发
-            - Path=/api/v1/**
           filters:
             - PreserveHostHeader
         # 我们⾃定义的路由 ID，保持唯⼀
@@ -29,7 +28,7 @@ spring:
           # gateway⽹关从服务注册中⼼获取实例信息然后负载后路由
           # 断⾔：路由条件，Predicate 接受⼀个输⼊参数，返回⼀个布尔值结果。该接⼝包含多种默认⽅法来将 Predicate 组合成其他复杂的逻辑（⽐如：与，或，⾮）。
           predicates:
-            - Path=/business/api/v1/users/**
+            - Path=/api-business/**
           filters: # 过滤器,请求在传递过程中可以通过过滤器对其进行一定的修改
             - StripPrefix=1              # 转发之前去掉2层路径
   security:
@@ -41,8 +40,6 @@ spring:
 secure:
   ignore:
     urls: #配置白名单路径
-      - "/actuator/**"
-      - "/auth/oauth/token"
       - "/oauth/token"
-      - "/api/v1/users/**"
-      - "/business/api/**"
+      - "/api-business/api/v1/users/**"
+      - "/api-business/resources/**"

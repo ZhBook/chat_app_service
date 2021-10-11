@@ -58,12 +58,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        /*http.csrf().disable()
-                .authorizeRequests().antMatchers("/rsa/publicKey").permitAll()
-                .and().httpBasic().and()
-                .formLogin()
-                .and()  //  /oauth/token
-                .authorizeRequests().anyRequest().authenticated();*/
         http.
                 authorizeRequests()
                 .requestMatchers(EndpointRequest.toAnyEndpoint()).permitAll()
@@ -110,12 +104,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     @Override
     protected UserDetailsService userDetailsService() {
-        /*
-        InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-        manager.createUser(User.withUsername("user_1").password(passwordEncoder().encode("123")
-        ).authorities("USER").build());
-        */
-
         return userDetailsService;
     }
 
@@ -133,9 +121,4 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return provider;
     }
 
-    //设置不用密码加密   不推荐
-//    @Bean
-//    public static NoOpPasswordEncoder passwordEncoder() {
-//        return (NoOpPasswordEncoder) NoOpPasswordEncoder.getInstance();
-//    }
 }

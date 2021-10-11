@@ -14,7 +14,7 @@ import java.util.Objects;
  * @author:70968 Date:2021-10-06 18:27
  */
 @Service
-public class LoginFacade {
+public class UserFacade {
     @Autowired
     private UserInfoService userInfoService;
 
@@ -34,5 +34,17 @@ public class LoginFacade {
     public UserInfo getUserByUsername(String username) {
         UserInfo one = userInfoService.getOne(new LambdaQueryWrapper<UserInfo>().eq(UserInfo::getUsername, username));
         return one;
+    }
+
+    public Boolean registerUser(UserInfo userInfo) {
+        UserInfo user = userInfoService.getOne(new LambdaQueryWrapper<UserInfo>()
+                .eq(UserInfo::getPhone, userInfo.getPhone()));
+        if (Objects.isNull(user)){
+            BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+            userInfo.setPassword(bCryptPasswordEncoder.encode(userInfo.getPassword()));
+            userInfoService.save(userInfo);
+            return Boolean.TRUE;
+        }
+        return Boolean.FALSE;
     }
 }

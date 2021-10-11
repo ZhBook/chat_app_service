@@ -2,7 +2,7 @@ package com.example.cloud.operator.login.controller;
 
 import com.example.cloud.enums.Result;
 import com.example.cloud.operator.login.entity.UserInfo;
-import com.example.cloud.operator.login.facade.LoginFacade;
+import com.example.cloud.operator.login.facade.UserFacade;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,19 +15,30 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/users")
 @Slf4j
 @RequiredArgsConstructor
-public class LoginController {
+public class UserController {
     @Autowired
-    private LoginFacade loginFacade;
+    private UserFacade userFacade;
 
+    /**
+     * 通过用户名和密码进行登录
+     * @param username
+     * @param password
+     * @return
+     */
     @PostMapping("/login")
     public Result<UserInfo> login(@RequestParam("username") String username,
                                   @RequestParam("password") String password) {
-        return Result.succeed(loginFacade.login(username, password));
+        return Result.succeed(userFacade.login(username, password));
     }
 
     @GetMapping("/username/{username}")
     public Result<UserInfo> getUserByUsername(@PathVariable("username") String username){
-        return Result.succeed(loginFacade.getUserByUsername(username));
+        return Result.succeed(userFacade.getUserByUsername(username));
+    }
+
+    @PostMapping("/register")
+    public Result<Boolean> registerUser(@RequestBody UserInfo userInfo) {
+        return Result.succeed(userFacade.registerUser(userInfo),"注册成功");
     }
 
     @PostMapping("/test")
