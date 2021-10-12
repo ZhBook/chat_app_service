@@ -37,7 +37,7 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public Result<Boolean> registerUser(@RequestBody UserInfo userInfo) {
+    public Result<UserInfo> registerUser(@RequestBody UserInfo userInfo) {
         return Result.succeed(userFacade.registerUser(userInfo),"注册成功");
     }
 

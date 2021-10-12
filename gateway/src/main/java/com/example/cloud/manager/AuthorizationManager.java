@@ -1,7 +1,5 @@
 package com.example.cloud.manager;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.authorization.ReactiveAuthorizationManager;
 import org.springframework.security.core.Authentication;
@@ -17,8 +15,8 @@ import reactor.core.publisher.Mono;
 public class AuthorizationManager implements ReactiveAuthorizationManager<AuthorizationContext> {
 /*    @Autowired
     private RedisTemplate<String,Object> redisTemplate;*/
-    @Autowired
-    private RedisTemplate redisTemplate;
+//    @Autowired
+//    private RedisTemplate redisTemplate;
 
     @Override
     public Mono<AuthorizationDecision> check(Mono<Authentication> mono, AuthorizationContext authorizationContext) {
@@ -35,9 +33,7 @@ public class AuthorizationManager implements ReactiveAuthorizationManager<Author
                 .any(authorities::contains)
                 .map(AuthorizationDecision::new)
                 .defaultIfEmpty(new AuthorizationDecision(false));*/
-        return mono.map(auth -> {
-            return new AuthorizationDecision(true);
-        }).defaultIfEmpty(new AuthorizationDecision(false));
+        return mono.map(auth -> new AuthorizationDecision(true)).defaultIfEmpty(new AuthorizationDecision(false));
     }
 
 

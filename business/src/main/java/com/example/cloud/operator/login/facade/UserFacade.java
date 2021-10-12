@@ -3,11 +3,13 @@ package com.example.cloud.operator.login.facade;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.example.cloud.exception.BusinessException;
 import com.example.cloud.operator.login.entity.UserInfo;
+import com.example.cloud.operator.login.mapper.UserInfoMapper;
 import com.example.cloud.operator.login.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.Objects;
 
 /**
@@ -17,6 +19,9 @@ import java.util.Objects;
 public class UserFacade {
     @Autowired
     private UserInfoService userInfoService;
+
+    @Resource
+    private UserInfoMapper userInfoMapper;
 
     public UserInfo login(String username, String password) {
         UserInfo one = userInfoService.getOne(new LambdaQueryWrapper<UserInfo>().eq(UserInfo::getUsername, username));
@@ -36,15 +41,16 @@ public class UserFacade {
         return one;
     }
 
-    public Boolean registerUser(UserInfo userInfo) {
-        UserInfo user = userInfoService.getOne(new LambdaQueryWrapper<UserInfo>()
-                .eq(UserInfo::getPhone, userInfo.getPhone()));
-        if (Objects.isNull(user)){
+    public UserInfo registerUser(UserInfo userInfo) {
+        Integer integer = userInfoMapper.selectCount(new LambdaQueryWrapper<UserInfo>()
+                .eq(UserInfo::getPhone, userInfo.getPhone())
+        );
+        if (integer == 0) {
             BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
             userInfo.setPassword(bCryptPasswordEncoder.encode(userInfo.getPassword()));
             userInfoService.save(userInfo);
-            return Boolean.TRUE;
+            return userInfo;
         }
-        return Boolean.FALSE;
+        throw new BusinessException("该账户已存在");
     }
 }

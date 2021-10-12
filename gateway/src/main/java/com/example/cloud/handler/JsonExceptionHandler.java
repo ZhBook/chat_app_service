@@ -21,6 +21,12 @@ public class JsonExceptionHandler extends DefaultErrorWebExceptionHandler {
         super(errorAttributes, resourceProperties, errorProperties, applicationContext);
     }
 
+    /**
+     * BusinessException 业务异常处理
+     * @param request
+     * @param options
+     * @return
+     */
     @Override
     protected Map<String, Object> getErrorAttributes(ServerRequest request, ErrorAttributeOptions options) {
         int code = 500;
@@ -28,7 +34,6 @@ public class JsonExceptionHandler extends DefaultErrorWebExceptionHandler {
         if (error instanceof NotFoundException){
             code =404;
         }
-
         return response(code, this.buildMessage(request, error));
     }
     /**
