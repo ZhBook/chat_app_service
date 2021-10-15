@@ -3,7 +3,7 @@ package com.example.cloud.utils;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
-import com.example.cloud.entity.AuthConstants;
+import com.example.cloud.constants.AuthConstants;
 import com.example.cloud.enums.AuthenticationMethodEnum;
 import com.nimbusds.jose.JWSObject;
 import lombok.SneakyThrows;

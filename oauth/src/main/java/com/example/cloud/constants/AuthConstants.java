@@ -1,4 +1,4 @@
-package com.example.cloud.entity;
+package com.example.cloud.constants;
 
 public interface AuthConstants {
 

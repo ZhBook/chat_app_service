@@ -1,7 +1,7 @@
 package com.example.cloud.service;
 
 import com.example.cloud.api.UserFeignClient;
-import com.example.cloud.entity.UserInfo;
+import com.example.cloud.constants.UserInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;

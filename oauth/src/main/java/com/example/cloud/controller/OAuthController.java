@@ -1,7 +1,7 @@
 package com.example.cloud.controller;
 
 import cn.hutool.json.JSONUtil;
-import com.example.cloud.entity.AuthConstants;
+import com.example.cloud.constants.AuthConstants;
 import com.example.cloud.enums.Result;
 import com.example.cloud.utils.RequestUtils;
 import com.nimbusds.jose.jwk.JWKSet;

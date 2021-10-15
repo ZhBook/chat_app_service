@@ -1,4 +1,4 @@
-package com.example.cloud.entity;
+package com.example.cloud.constants;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;

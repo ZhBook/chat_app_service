@@ -1,5 +1,7 @@
 package com.example.cloud.config;
 
+import com.example.cloud.constants.SecurityConstants;
+import com.example.cloud.handler.OauthLogoutSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.logout.LogoutHandler;
+
+import javax.annotation.Resource;
 
 @Configuration
 @EnableWebSecurity
@@ -27,6 +32,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private UserDetailsService userDetailsService;
 
     private final UserDetailsService sysUserDetailsService;
+
+    @Resource
+    private LogoutHandler oauthLogoutHandler;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -63,7 +71,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .requestMatchers(EndpointRequest.toAnyEndpoint()).permitAll()
                 .and().authorizeRequests().antMatchers("/oauth/**").permitAll()
                 .antMatchers("/rsa/publicKey").permitAll()
-                .anyRequest().authenticated();
+                .anyRequest().authenticated()
+                .and()
+                .logout()
+                .logoutUrl(SecurityConstants.LOGOUT_URL)
+                .logoutSuccessHandler(new OauthLogoutSuccessHandler())
+                .addLogoutHandler(oauthLogoutHandler)
+                .clearAuthentication(true);
 
         /**
          * access(String)	如果给定的SpEL表达式计算结果为true，则允许访问

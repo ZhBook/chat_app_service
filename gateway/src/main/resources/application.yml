@@ -40,6 +40,6 @@ spring:
 secure:
   ignore:
     urls: #配置白名单路径
-      - "/oauth/token"
+      - "/oauth/**"
       - "/api-business/api/v1/users/**"
       - "/api-business/resources/**"

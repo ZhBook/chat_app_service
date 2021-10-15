@@ -5,7 +5,7 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.http.HttpStatus;
 import cn.hutool.json.JSONUtil;
-import com.example.cloud.entity.UserInfo;
+import com.example.cloud.constants.UserInfo;
 import com.example.cloud.enums.Result;
 import com.example.cloud.enums.ResultCode;
 import com.example.cloud.extension.CaptchaTokenGranter;
