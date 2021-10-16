@@ -8,11 +8,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 /**
  * @author:70968 Date:2021-10-06 09:48
  */
 @RestController
-@RequestMapping("/api/v1/users")
+@RequestMapping("/users")
 @Slf4j
 @RequiredArgsConstructor
 public class UserController {
@@ -31,13 +33,23 @@ public class UserController {
         return Result.succeed(userFacade.login(username, password));
     }
 
+    /**
+     * 通过用户名获取用户信息
+     * @param username
+     * @return
+     */
     @GetMapping("/username/{username}")
     public Result<UserInfo> getUserByUsername(@PathVariable("username") String username){
         return Result.succeed(userFacade.getUserByUsername(username));
     }
 
+    /**
+     * 用户注册接口
+     * @param userInfo
+     * @return
+     */
     @PostMapping("/register")
-    public Result<UserInfo> registerUser(@RequestBody UserInfo userInfo) {
+    public Result<UserInfo> registerUser(@Valid @RequestBody UserInfo userInfo) {
         return Result.succeed(userFacade.registerUser(userInfo),"注册成功");
     }
 

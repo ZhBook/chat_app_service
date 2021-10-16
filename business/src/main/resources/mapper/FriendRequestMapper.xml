@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.cloud.operator.friends.mapper.FriendRequestMapper">
+
+    <resultMap id="BaseResultMap" type="com.example.cloud.operator.friends.entity.FriendRequest">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="sendUserId" column="send_user_id" jdbcType="BIGINT"/>
+            <result property="sendUserUsername" column="send_user_username" jdbcType="VARCHAR"/>
+            <result property="receiveUserId" column="receive_user_id" jdbcType="BIGINT"/>
+            <result property="receiveUserUsername" column="receive_user_username" jdbcType="VARCHAR"/>
+            <result property="message" column="message" jdbcType="VARCHAR"/>
+            <result property="infoState" column="info_state" jdbcType="CHAR"/>
+            <result property="isAgree" column="is_agree" jdbcType="CHAR"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,send_user_id,send_user_username,
+        receive_user_id,receive_user_username,message,
+        info_state,is_agree,create_time,
+        update_time
+    </sql>
+</mapper>

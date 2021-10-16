@@ -23,6 +23,12 @@ public class UserFacade {
     @Resource
     private UserInfoMapper userInfoMapper;
 
+    /**
+     * 用户登录验证接口
+     * @param username
+     * @param password
+     * @return
+     */
     public UserInfo login(String username, String password) {
         UserInfo one = userInfoService.getOne(new LambdaQueryWrapper<UserInfo>().eq(UserInfo::getUsername, username));
         if (Objects.isNull(one)) {
@@ -36,11 +42,21 @@ public class UserFacade {
         throw new BusinessException("密码错误");
     }
 
+    /**
+     * 通过用户名获取用户信息
+     * @param username
+     * @return
+     */
     public UserInfo getUserByUsername(String username) {
         UserInfo one = userInfoService.getOne(new LambdaQueryWrapper<UserInfo>().eq(UserInfo::getUsername, username));
         return one;
     }
 
+    /**
+     * 用户注册接口
+     * @param userInfo
+     * @return
+     */
     public UserInfo registerUser(UserInfo userInfo) {
         Integer integer = userInfoMapper.selectCount(new LambdaQueryWrapper<UserInfo>()
                 .eq(UserInfo::getPhone, userInfo.getPhone())
