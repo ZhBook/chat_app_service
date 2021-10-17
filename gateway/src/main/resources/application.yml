@@ -43,3 +43,6 @@ secure:
       - "/oauth/**"
       - "/api-business/api/v1/users/**"
       - "/api-business/resources/**"
+feign:
+  httpclient:
+    connection-timeout: 5000

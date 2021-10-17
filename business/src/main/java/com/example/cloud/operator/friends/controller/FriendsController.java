@@ -9,10 +9,7 @@ import com.example.cloud.operator.login.entity.UserInfo;
 import com.example.cloud.system.NoParamsUserBean;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author:70968 Date:2021-10-16 08:49
@@ -30,7 +27,7 @@ public class FriendsController {
      * @param request
      * @return
      */
-    @PostMapping
+    @GetMapping
     public Result<PageResult<UserInfo>> getFriends(@RequestBody NoParamsUserBean request) {
         return Result.succeed(friendsFacade.getFriends(request));
     }
