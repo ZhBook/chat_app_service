@@ -20,4 +20,8 @@ public class FriendsResponse {
 
     private String sex;
 
+    private int isDelete;
+
+    private int isEnabled;
+
 }

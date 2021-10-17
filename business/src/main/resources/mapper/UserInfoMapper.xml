@@ -11,11 +11,11 @@
             <result property="headImgUrl" column="head_img_url" jdbcType="VARCHAR"/>
             <result property="EMail" column="e_mail" jdbcType="VARCHAR"/>
             <result property="phone" column="phone" jdbcType="VARCHAR"/>
-            <result property="sex" column="sex" jdbcType="CHAR"/>
+            <result property="sex" column="sex" jdbcType="TINYINT"/>
             <result property="address" column="address" jdbcType="VARCHAR"/>
             <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
-            <result property="isDelete" column="is_delete" jdbcType="CHAR"/>
-            <result property="isEnabled" column="is_enabled" jdbcType="CHAR"/>
+            <result property="isDelete" column="is_delete" jdbcType="TINYINT"/>
+            <result property="isEnabled" column="is_enabled" jdbcType="TINYINT"/>
     </resultMap>
 
     <sql id="Base_Column_List">

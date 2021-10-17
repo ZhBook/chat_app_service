@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.validation.constraints.Email;
@@ -38,7 +37,7 @@ public class UserInfo implements Serializable {
     /**
      *
      */
-    @JsonIgnore
+//    @JsonIgnore
     @NotBlank(message = "密码不能为空")
     private String password;
 
@@ -63,7 +62,7 @@ public class UserInfo implements Serializable {
     /**
      *
      */
-    private String sex;
+    private int sex;
 
     /**
      *
@@ -79,11 +78,11 @@ public class UserInfo implements Serializable {
     /**
      * 删除标志：0没删除，1删除
      */
-    private String isDelete;
+    private int isDelete;
 
     /**
      * 启用标志：0启用，1不启用
      */
-    private String isEnabled;
+    private int isEnabled;
 
 }

@@ -1,6 +1,6 @@
 package com.example.cloud.data.request.friends;
 
-import com.example.cloud.data.system.NoParamsUserBean;
+import com.example.cloud.system.NoParamsUserBean;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;

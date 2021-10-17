@@ -2,8 +2,8 @@ package com.example.cloud.config;
 
 import cn.hutool.core.util.ArrayUtil;
 import com.example.cloud.compoent.RestAuthenticationEntryPoint;
-import com.example.cloud.compoent.RestfulAccessDeniedHandler;
 import com.example.cloud.constant.AuthConstant;
+import com.example.cloud.handler.RestfulAccessDeniedHandler;
 import com.example.cloud.manager.AuthorizationManager;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;

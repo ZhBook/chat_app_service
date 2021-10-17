@@ -1,7 +1,6 @@
 package com.example.cloud.controller;
 
 import cn.hutool.json.JSONUtil;
-import com.example.cloud.entity.AuthConstants;
 import com.example.cloud.enums.Result;
 import com.example.cloud.utils.RequestUtils;
 import com.nimbusds.jose.jwk.JWKSet;
@@ -36,6 +35,7 @@ public class OAuthController {
 
     /**
      * OAuth2认证
+     *
      * @param principal
      * @param parameters
      * @return
@@ -63,11 +63,14 @@ public class OAuthController {
          * 请求头自动填充，token必须原生返回，否则显示 undefined undefined
          * 账号/密码:  client_id/client_secret : client/123456
          */
-        if (AuthConstants.TEST_CLIENT_ID.equals(clientId)) {
-            return tokenEndpoint.postAccessToken(principal, parameters).getBody();
-        }
+//        if (AuthConstants.TEST_CLIENT_ID.equals(clientId)) {
+//            return tokenEndpoint.postAccessToken(principal, parameters).getBody();
+//        }
 
-        OAuth2AccessToken accessToken = tokenEndpoint.postAccessToken(principal, parameters).getBody();
+        OAuth2AccessToken accessToken = null;
+
+        accessToken = tokenEndpoint.postAccessToken(principal, parameters).getBody();
+
         return Result.succeed(accessToken);
     }
 

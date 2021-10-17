@@ -11,8 +11,8 @@
             <result property="receiveUserId" column="receive_user_id" jdbcType="BIGINT"/>
             <result property="receiveUserUsername" column="receive_user_username" jdbcType="VARCHAR"/>
             <result property="message" column="message" jdbcType="VARCHAR"/>
-            <result property="infoState" column="info_state" jdbcType="CHAR"/>
-            <result property="isAgree" column="is_agree" jdbcType="CHAR"/>
+            <result property="infoState" column="info_state" jdbcType="TINYINT"/>
+            <result property="isAgree" column="is_agree" jdbcType="TINYINT"/>
             <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
             <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
     </resultMap>

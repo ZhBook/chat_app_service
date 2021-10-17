@@ -18,4 +18,5 @@ public enum StateEnum {
         this.code = code;
         this.msg = msg;
     }
+
 }

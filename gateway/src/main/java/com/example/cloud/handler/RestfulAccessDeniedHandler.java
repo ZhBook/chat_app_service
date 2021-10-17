@@ -1,4 +1,4 @@
-package com.example.cloud.compoent;
+package com.example.cloud.handler;
 
 import cn.hutool.json.JSONUtil;
 import com.example.cloud.data.CommonResult;

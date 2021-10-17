@@ -1,15 +1,18 @@
 package com.example.cloud.operator.friends.controller;
 
+import com.example.cloud.data.PageResult;
 import com.example.cloud.data.request.friends.AddFriendsRequest;
 import com.example.cloud.data.request.friends.HandleFriendsRequest;
 import com.example.cloud.enums.Result;
 import com.example.cloud.operator.friends.facade.FriendsFacade;
 import com.example.cloud.operator.login.entity.UserInfo;
+import com.example.cloud.system.NoParamsUserBean;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author:70968 Date:2021-10-16 08:49
@@ -24,12 +27,12 @@ public class FriendsController {
     /**
      * 返回好友列表，无分页
      *
-     * @param userId
+     * @param request
      * @return
      */
-    @GetMapping("/{userId}")
-    public Result<List<UserInfo>> getFriends(@PathVariable("userId") Long userId) {
-        return Result.succeed(friendsFacade.getFriends(userId));
+    @PostMapping
+    public Result<PageResult<UserInfo>> getFriends(@RequestBody NoParamsUserBean request) {
+        return Result.succeed(friendsFacade.getFriends(request));
     }
 
     /**

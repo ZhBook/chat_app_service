@@ -29,6 +29,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if (Objects.nonNull(data)){
             return data;
         }
+
       /*  else if (!userDetails.isEnabled()) {
             throw new DisabledException("该账户已被禁用!");
         } else if (!userDetails.isAccountNonLocked()) {
