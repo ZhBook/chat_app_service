@@ -24,12 +24,10 @@ public class OperatorAspect {
     @Autowired
     private UserInfoService userInfoService;
 
-    //表示匹配controller包及其子包下的所有方法  execution(* com.xyz.service..*.*(..))
     @Pointcut("execution(* com.example.cloud.operator.*.controller..*.*(..))")
     public void pointCut() {
         log.debug("调用了");
     }
-
     /**
      * 捕获所有controller方法调用，遇到有BaseOperatorRequest子类传参的，获取当前请求的用户，自动设置BaseOperatorRequest中的操作人信息
      *
@@ -66,8 +64,4 @@ public class OperatorAspect {
         }
         return pjp.proceed();
     }
-
-//    @Pointcut("execution(* com.example.cloud.operator.friends.controller.FriendsController.getFriends(..))")
-
-
 }

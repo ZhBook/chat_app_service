@@ -25,6 +25,7 @@ public class UserFacade {
 
     /**
      * 用户登录验证接口
+     *
      * @param username
      * @param password
      * @return
@@ -44,6 +45,7 @@ public class UserFacade {
 
     /**
      * 通过用户名获取用户信息
+     *
      * @param username
      * @return
      */
@@ -54,6 +56,7 @@ public class UserFacade {
 
     /**
      * 用户注册接口
+     *
      * @param userInfo
      * @return
      */

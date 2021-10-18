@@ -1,7 +1,6 @@
 package com.example.cloud.filter;
 
 import cn.hutool.core.util.StrUtil;
-import com.example.cloud.api.UserFeignClient;
 import com.nimbusds.jose.JWSObject;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,8 +28,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class AuthGlobalFilter implements GlobalFilter, Ordered {
 
-    private final UserFeignClient userFeignClient;
-
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         String token = exchange.getRequest().getHeaders().getFirst("Authorization");
@@ -47,19 +44,6 @@ public class AuthGlobalFilter implements GlobalFilter, Ordered {
             String userStr = jwsObject.getPayload().toString();
             log.info("AuthGlobalFilter.filter() user:{}", userStr);
             ServerHttpRequest request = exchange.getRequest().mutate().header("user", userStr).build();
-            /*
-            JSONObject jsonObject = JSONUtil.parseObj(userStr);
-            String user_name = jsonObject.getStr("user_name");
-            Result<UserInfo> userByUsername = userFeignClient.getUserByUsername(user_name);
-            UserInfo data = userByUsername.getData();
-            String s = JSONUtil.toJsonStr(data);
-            Map map = JSONUtil.toBean(s, Map.class);
-
-            exchange.getRequest().mutate().header("userInfo",s).build();
-            exchange.getAttributes().put("xxxxxxxxxxxxx","xxxxxxxxxxxxxxxxx");
-            request.getQueryParams().toSingleValueMap().putAll(map);
-            */
-
             log.info(exchange.getAttributes().toString());
             exchange = exchange.mutate().request(request).build();
 
