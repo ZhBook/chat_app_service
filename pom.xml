@@ -66,6 +66,7 @@
         <hibernate-validator.version>6.2.0.Final</hibernate-validator.version>
         <dubbo.version>2.7.8</dubbo.version>
         <curator.version>5.1.0</curator.version>
+        <fastjson.version>1.2.76</fastjson.version>
     </properties>
 
     <dependencies>
@@ -295,7 +296,12 @@
                 <artifactId>curator-framework</artifactId>
                 <version>${curator.version}</version>
             </dependency>
-
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>fastjson</artifactId>
+                <version>${fastjson.version}</version>
+                <type>pom</type>
+            </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>

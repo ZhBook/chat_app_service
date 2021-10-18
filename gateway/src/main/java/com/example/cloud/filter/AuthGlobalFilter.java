@@ -48,12 +48,19 @@ public class AuthGlobalFilter implements GlobalFilter, Ordered {
             log.info("AuthGlobalFilter.filter() user:{}", userStr);
             ServerHttpRequest request = exchange.getRequest().mutate().header("user", userStr).build();
             /*
-            JSONObject jsonObject = JSONObject.parseObject(userStr);
-            String username = jsonObject.get("user_name").toString();
-            Result<UserInfo> userByUsername = userFeignClient.getUserByUsername(username);
+            JSONObject jsonObject = JSONUtil.parseObj(userStr);
+            String user_name = jsonObject.getStr("user_name");
+            Result<UserInfo> userByUsername = userFeignClient.getUserByUsername(user_name);
             UserInfo data = userByUsername.getData();
-            Map map = JSON.parseObject(JSON.toJSONString(data), Map.class);*/
-            log.info(exchange.getRequest().getQueryParams().toString());
+            String s = JSONUtil.toJsonStr(data);
+            Map map = JSONUtil.toBean(s, Map.class);
+
+            exchange.getRequest().mutate().header("userInfo",s).build();
+            exchange.getAttributes().put("xxxxxxxxxxxxx","xxxxxxxxxxxxxxxxx");
+            request.getQueryParams().toSingleValueMap().putAll(map);
+            */
+
+            log.info(exchange.getAttributes().toString());
             exchange = exchange.mutate().request(request).build();
 
         } catch (ParseException e) {

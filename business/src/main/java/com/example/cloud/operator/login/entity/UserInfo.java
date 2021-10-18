@@ -20,13 +20,13 @@ import java.util.Date;
 @TableName("user_info")
 public class UserInfo implements Serializable {
 
-    private static final long serialVersionUID = 1L;
 
+    private static final long serialVersionUID = 3198003632271441027L;
     /**
      *
      */
     @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
+    private Long id;
 
     /**
      *

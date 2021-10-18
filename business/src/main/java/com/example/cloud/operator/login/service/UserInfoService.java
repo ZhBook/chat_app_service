@@ -8,4 +8,7 @@ import com.example.cloud.operator.login.entity.UserInfo;
 */
 public interface UserInfoService extends IService<UserInfo> {
 
+    UserInfo getLoginUser();
+
+    UserInfo getUserInfoByUsername(String username);
 }

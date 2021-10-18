@@ -12668,7 +12668,7 @@ io_threads_active:0
 2021-10-11 17:49:36.646 [http-nio-8001-exec-1] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/json, application/*+json]
 2021-10-11 17:49:36.647 [http-nio-8001-exec-1] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Writing [Result(data=UserInfo [Hash = -881509189, id=5, username=123, password=$2a$10$hWqnJwp.P1vVkbJq5.D8ZOv (truncated)...]
 2021-10-11 17:49:36.654 [http-nio-8001-exec-1] DEBUG org.springframework.web.servlet.DispatcherServlet - Completed 200 OK
-2021-10-11 17:49:36.682 [http-nio-8002-exec-4] DEBUG o.s.web.client.HttpMessageConverterExtractor - Reading to [com.example.cloud.enums.Result<com.example.cloud.entity.UserInfo>]
+2021-10-11 17:49:36.682 [http-nio-8002-exec-4] DEBUG o.s.web.client.HttpMessageConverterExtractor - Reading to [com.example.cloud.enums.Result<com.example.cloud.constants.UserInfo>]
 2021-10-11 17:49:36.755 [http-nio-8002-exec-4] DEBUG io.lettuce.core.RedisClient - Trying to get a Redis connection for: RedisURI [host='47.97.112.114', port=16379]
 2021-10-11 17:49:36.756 [http-nio-8002-exec-4] DEBUG io.lettuce.core.RedisClient - Resolved SocketAddress 47.97.112.114:16379 using RedisURI [host='47.97.112.114', port=16379]
 2021-10-11 17:49:36.756 [http-nio-8002-exec-4] DEBUG io.lettuce.core.RedisClient - Connecting to Redis at 47.97.112.114:16379
