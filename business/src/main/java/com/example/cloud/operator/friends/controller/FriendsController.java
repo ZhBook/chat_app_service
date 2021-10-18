@@ -29,13 +29,7 @@ public class FriendsController {
      */
     @GetMapping
     public Result<PageResult<UserInfo>> getFriends(NoParamsUserBean request) {
-//    public Result<PageResult<UserInfo>> getFriends(HttpServletRequest request) {
-//        return Result.succeed(friendsFacade.getFriends(request));
-//        Enumeration<String> attributeNames = request.getAttributeNames();
-//        Object userInfo = request.getAttribute("userInfo");
-//        Map<String, String[]> parameterMap = request.getParameterMap();
-//        Enumeration<String> headerNames = request.getHeaderNames();
-        return null;
+        return Result.succeed(friendsFacade.getFriends(request));
     }
 
     /**
@@ -51,6 +45,7 @@ public class FriendsController {
 
     /**
      * 处理好友请求
+     *
      * @param request
      * @return
      */

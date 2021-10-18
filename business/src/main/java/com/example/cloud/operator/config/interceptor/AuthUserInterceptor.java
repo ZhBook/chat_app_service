@@ -37,7 +37,7 @@ public class AuthUserInterceptor extends HandlerInterceptorAdapter {
 
         if (StringUtils.isEmpty(accessToken)) {
             log.error("ACCESS_TOKEN为空, url=[{}], ip={}", request.getRequestURI(), ip);
-            return notAuth(response);
+            return super.preHandle(request,response,handler);
         }
         UserInfo loginUser = userInfoService.getLoginUser();
         if (Objects.isNull(loginUser)) {

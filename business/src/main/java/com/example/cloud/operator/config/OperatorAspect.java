@@ -5,11 +5,11 @@ import com.example.cloud.operator.login.entity.UserInfo;
 import com.example.cloud.operator.login.service.UserInfoService;
 import com.example.cloud.system.UserBeanRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.beanutils.BeanUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -41,7 +41,7 @@ public class OperatorAspect {
     public Object around(ProceedingJoinPoint pjp) throws Throwable {
         Object[] args = pjp.getArgs();
         if (null != args && args.length > 0) {
-            // 先检查是否有BaseOperatorRequest子类传参，如果有才查询请求的用户
+            // 先检查是否有UserBeanRequest子类传参，如果有才查询请求的用户
             boolean needUser = false;
             for (Object arg : args) {
                 if (arg instanceof UserBeanRequest) {
@@ -54,12 +54,11 @@ public class OperatorAspect {
                 UserInfo loginUser = userInfoService.getLoginUser();
                 for (Object arg : args) {
                     if (arg instanceof UserBeanRequest) {
-
                         UserBeanRequest request = (UserBeanRequest) arg;
                         if (null == loginUser) {
-                            throw new BusinessException(403,"未登录");
+                            throw new BusinessException(403, "未登录");
                         }
-                        BeanUtils.copyProperties(loginUser, request);
+                        BeanUtils.copyProperties(request, loginUser);
                         request.setUsername(loginUser.getUsername());
                     }
                 }
@@ -67,4 +66,8 @@ public class OperatorAspect {
         }
         return pjp.proceed();
     }
+
+//    @Pointcut("execution(* com.example.cloud.operator.friends.controller.FriendsController.getFriends(..))")
+
+
 }
