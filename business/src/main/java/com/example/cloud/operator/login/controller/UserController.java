@@ -1,14 +1,14 @@
 package com.example.cloud.operator.login.controller;
 
+import com.example.cloud.data.response.login.UserInfoResponse;
 import com.example.cloud.enums.Result;
 import com.example.cloud.operator.login.entity.UserInfo;
 import com.example.cloud.operator.login.facade.UserFacade;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
 
 /**
  * @author:70968 Date:2021-10-06 09:48
@@ -38,9 +38,19 @@ public class UserController {
      * @param username
      * @return
      */
-    @GetMapping("/username/{username}")
-    public Result<UserInfo> getUserByUsername(@PathVariable("username") String username){
+    @GetMapping("/username")
+    public Result<UserInfo> getUserByUsername(@RequestParam("username") String username){
         return Result.succeed(userFacade.getUserByUsername(username));
+    }
+
+    /**
+     * 通过手机号查询用户信息
+     * @param mobile
+     * @return
+     */
+    @GetMapping("/mobile/{mobile}")
+    public Result<UserInfo> getUserByMobile(@PathVariable("mobile")String mobile){
+        return Result.succeed(userFacade.getUserByMobile(mobile));
     }
 
     /**
@@ -49,7 +59,7 @@ public class UserController {
      * @return
      */
     @PostMapping("/register")
-    public Result<UserInfo> registerUser(@Valid @RequestBody UserInfo userInfo) {
+    public Result<UserInfoResponse> registerUser(@RequestBody @Validated UserInfo userInfo) {
         return Result.succeed(userFacade.registerUser(userInfo),"注册成功");
     }
 

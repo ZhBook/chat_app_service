@@ -1,15 +1,15 @@
-package com.example.cloud.operator.config;
+package com.example.cloud.config;
 
 import com.example.cloud.exception.BusinessException;
 import com.example.cloud.operator.login.entity.UserInfo;
 import com.example.cloud.operator.login.service.UserInfoService;
 import com.example.cloud.system.UserBeanRequest;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.beanutils.BeanUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -28,8 +28,9 @@ public class OperatorAspect {
     public void pointCut() {
         log.debug("调用了");
     }
+
     /**
-     * 捕获所有controller方法调用，遇到有BaseOperatorRequest子类传参的，获取当前请求的用户，自动设置BaseOperatorRequest中的操作人信息
+     * 捕获所有controller方法调用，遇到有UserBeanRequest子类传参的，获取当前请求的用户，自动设置UserBeanRequest中的操作人信息
      *
      * @param pjp
      * @return
@@ -56,7 +57,7 @@ public class OperatorAspect {
                         if (null == loginUser) {
                             throw new BusinessException(403, "未登录");
                         }
-                        BeanUtils.copyProperties(request, loginUser);
+                        BeanUtils.copyProperties(loginUser, request);
                         request.setUsername(loginUser.getUsername());
                     }
                 }

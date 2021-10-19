@@ -1,10 +1,13 @@
 package com.example.cloud.operator.login.facade;
 
+import cn.hutool.core.util.RandomUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.example.cloud.data.response.login.UserInfoResponse;
 import com.example.cloud.exception.BusinessException;
 import com.example.cloud.operator.login.entity.UserInfo;
 import com.example.cloud.operator.login.mapper.UserInfoMapper;
 import com.example.cloud.operator.login.service.UserInfoService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -50,8 +53,7 @@ public class UserFacade {
      * @return
      */
     public UserInfo getUserByUsername(String username) {
-        UserInfo one = userInfoService.getOne(new LambdaQueryWrapper<UserInfo>().eq(UserInfo::getUsername, username));
-        return one;
+        return userInfoService.getUserInfoByUsername(username);
     }
 
     /**
@@ -60,16 +62,38 @@ public class UserFacade {
      * @param userInfo
      * @return
      */
-    public UserInfo registerUser(UserInfo userInfo) {
-        Integer integer = userInfoMapper.selectCount(new LambdaQueryWrapper<UserInfo>()
-                .eq(UserInfo::getPhone, userInfo.getPhone())
+    public UserInfoResponse registerUser(UserInfo userInfo) {
+        Integer num = userInfoMapper.selectCount(new LambdaQueryWrapper<UserInfo>()
+                .eq(UserInfo::getMobile, userInfo.getMobile())
         );
-        if (integer == 0) {
+        if (num == 0) {
             BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
             userInfo.setPassword(bCryptPasswordEncoder.encode(userInfo.getPassword()));
+            String randomName;
+            for (; ; ) {
+                randomName = RandomUtil.randomString(18);
+                UserInfo infoByUsername = userInfoService.getUserInfoByUsername(randomName);
+                if (Objects.isNull(infoByUsername)) {
+                    break;
+                }
+            }
+            userInfo.setUsername(randomName);
             userInfoService.save(userInfo);
-            return userInfo;
+
+            UserInfoResponse userInfoResponse = new UserInfoResponse();
+            BeanUtils.copyProperties(userInfo, userInfoResponse);
+            return userInfoResponse;
         }
-        throw new BusinessException("该账户已存在");
+        throw new BusinessException("该手机号已注册");
+    }
+
+    /**
+     * 通过手机号码查询用户信息
+     * @param mobile
+     * @return
+     */
+    public UserInfo getUserByMobile(String mobile) {
+        return userInfoMapper.selectOne(new LambdaQueryWrapper<UserInfo>()
+                .eq(UserInfo::getMobile,mobile));
     }
 }

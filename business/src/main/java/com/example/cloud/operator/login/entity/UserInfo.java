@@ -9,7 +9,6 @@ import lombok.Data;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -31,12 +30,12 @@ public class UserInfo implements Serializable {
     /**
      *
      */
-    @NotBlank(message = "用户名不能为空")
     private String username;
 
     /**
      * 昵称
      */
+    @NotBlank(message = "用户名不能为空")
     private String nickname;
 
     /**
@@ -60,9 +59,9 @@ public class UserInfo implements Serializable {
     /**
      *
      */
-    @Size(max = 11,min = 11,message = "手机号码长度错误")
-    @Pattern(regexp = "1\\d{10}", message = "手机号格式错误")
-    private String phone;
+    @Pattern(regexp = "^1(3|4|5|7|8)\\d{9}$",message = "手机号码格式错误")
+    @NotBlank(message = "手机号码不能为空")
+    private String mobile;
 
     /**
      *

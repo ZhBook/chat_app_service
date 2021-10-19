@@ -1,4 +1,4 @@
-package com.example.cloud.operator.config.interceptor;
+package com.example.cloud.config.interceptor;
 
 import cn.hutool.json.JSONUtil;
 import com.example.cloud.exception.BusinessException;
@@ -55,7 +55,7 @@ public class AuthUserInterceptor extends HandlerInterceptorAdapter {
             response.setContentType("application/json; charset=utf-8");
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             out = response.getWriter();
-            BusinessException businessException = new BusinessException(401, "");
+            BusinessException businessException = new BusinessException(401, "token验证失败");
             out.write(JSONUtil.toJsonStr(businessException));
         } catch (Exception e) {
             log.error("异常", e);

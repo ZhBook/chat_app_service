@@ -11,6 +11,7 @@ import lombok.experimental.FieldDefaults;
 @Getter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class HandleFriendsRequest extends NoParamsUserBean {
+
     Long requestId;
 
     String isAgree;

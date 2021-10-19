@@ -4,12 +4,15 @@ import com.example.cloud.enums.Result;
 import com.example.cloud.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.nio.file.AccessDeniedException;
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  * 用于处理业务层面的错误
@@ -66,6 +69,20 @@ public class DefaultExceptionAdvice {
     @ExceptionHandler(Exception.class)
     public Result handleException(Exception e) {
         return defHandler("未知异常", e);
+    }
+
+    /**
+     * 处理validator验证失败的异常
+     * @param e
+     * @return
+     */
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public Result handException(MethodArgumentNotValidException e){
+        //循环处理第一个错误
+        List<ObjectError> allErrors = e.getBindingResult().getAllErrors();
+        ObjectError objectError = allErrors.get(0);
+        return defHandler(objectError.getDefaultMessage(),e);
     }
 
     private Result defHandler(String msg, Exception e) {

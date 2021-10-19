@@ -1,6 +1,9 @@
 package com.example.cloud.controller;
 
+import cn.hutool.core.lang.Validator;
 import cn.hutool.json.JSONUtil;
+import com.example.cloud.api.UserFeignClient;
+import com.example.cloud.entity.UserInfo;
 import com.example.cloud.enums.Result;
 import com.example.cloud.utils.RequestUtils;
 import com.nimbusds.jose.jwk.JWKSet;
@@ -13,6 +16,7 @@ import org.springframework.security.oauth2.provider.endpoint.TokenEndpoint;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import java.security.KeyPair;
 import java.security.Principal;
 import java.security.interfaces.RSAPublicKey;
@@ -30,6 +34,9 @@ public class OAuthController {
 
     @Autowired
     private KeyPair keyPair;
+
+    @Resource
+    private UserFeignClient userFeignClient;
 
     private TokenEndpoint tokenEndpoint;
 
@@ -57,19 +64,20 @@ public class OAuthController {
         String clientId = RequestUtils.getOAuth2ClientId();
         log.info("OAuth认证授权 客户端ID:{}，请求参数：{}", clientId, JSONUtil.toJsonStr(parameters));
 
+        //通过手机号码登陆
+        String username = parameters.get("username");
+        if (Validator.isMobile(username)){
+            Result<UserInfo> result = userFeignClient.getUserByMobile(username);
+            parameters.put("username",result.getData().getUsername());
+        }
         /**
          * knife4j接口文档测试使用
          *
          * 请求头自动填充，token必须原生返回，否则显示 undefined undefined
          * 账号/密码:  client_id/client_secret : client/123456
          */
-//        if (AuthConstants.TEST_CLIENT_ID.equals(clientId)) {
-//            return tokenEndpoint.postAccessToken(principal, parameters).getBody();
-//        }
 
-        OAuth2AccessToken accessToken = null;
-
-        accessToken = tokenEndpoint.postAccessToken(principal, parameters).getBody();
+        OAuth2AccessToken accessToken = tokenEndpoint.postAccessToken(principal, parameters).getBody();
 
         return Result.succeed(accessToken);
     }

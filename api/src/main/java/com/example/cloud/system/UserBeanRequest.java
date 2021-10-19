@@ -17,13 +17,15 @@ public abstract class UserBeanRequest implements Serializable {
 
     private String username;
 
+    private String nickname;
+
     private String password;
 
     private String headImgUrl;
 
     private String EMail;
 
-    private String phone;
+    private String mobile;
 
     private int sex;
 
