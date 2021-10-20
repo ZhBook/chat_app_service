@@ -3,13 +3,15 @@ package com.example.cloud.operator.friends.controller;
 import com.example.cloud.data.PageResult;
 import com.example.cloud.data.request.friends.AddFriendsRequest;
 import com.example.cloud.data.request.friends.HandleFriendsRequest;
+import com.example.cloud.data.response.friends.FriendsResponse;
 import com.example.cloud.enums.BaseResult;
 import com.example.cloud.operator.friends.facade.FriendsFacade;
-import com.example.cloud.operator.login.entity.UserInfo;
 import com.example.cloud.system.PagingUserBaseRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @author:70968 Date:2021-10-16 08:49
@@ -28,8 +30,8 @@ public class FriendsController {
      * @return
      */
     @GetMapping
-    public BaseResult<PageResult<UserInfo>> getFriends(PagingUserBaseRequest request) {
-        return BaseResult.succeed(friendsFacade.getFriends(request));
+    public PageResult<List<FriendsResponse>> getFriends(PagingUserBaseRequest request) {
+        return PageResult.pageSuccess(friendsFacade.getFriends(request));
     }
 
     /**

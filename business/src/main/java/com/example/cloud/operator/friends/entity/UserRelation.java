@@ -1,8 +1,5 @@
 package com.example.cloud.operator.friends.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
@@ -17,23 +14,32 @@ import java.util.Date;
 @Data
 public class UserRelation implements Serializable {
     /**
-     * 
+     *
      */
-    @TableId(type = IdType.AUTO)
     private Long id;
 
     /**
-     * 
+     *
      */
     private Long userId;
 
     /**
-     * 
+     *
      */
     private Long friendId;
 
     /**
-     * 
+     *
+     */
+    private String friendName;
+
+    /**
+     *
+     */
+    private String friendHeadUrl;
+
+    /**
+     *
      */
     private Date createTime;
 
@@ -43,10 +49,7 @@ public class UserRelation implements Serializable {
     private String isRelation;
 
     /**
-     * 
+     *
      */
     private Date delTime;
-
-    @TableField(exist = false)
-    private static final long serialVersionUID = 1L;
 }

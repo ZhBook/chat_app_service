@@ -13,6 +13,8 @@ import lombok.experimental.FieldDefaults;
 public class HandleFriendsRequest extends NoParamsUserBean {
 
     Long requestId;
-
+    Long friendId;
+    String friendName;
+    String friendHeadUrl;
     String isAgree;
 }

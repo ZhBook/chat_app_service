@@ -1,24 +1,23 @@
 package com.example.cloud.operator.friends.facade;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.example.cloud.data.PageResult;
 import com.example.cloud.data.request.friends.AddFriendsRequest;
 import com.example.cloud.data.request.friends.HandleFriendsRequest;
+import com.example.cloud.data.response.friends.FriendsResponse;
 import com.example.cloud.enums.StateEnum;
-import com.example.cloud.enums.UserStateEnum;
 import com.example.cloud.exception.BusinessException;
 import com.example.cloud.operator.friends.entity.FriendRequest;
 import com.example.cloud.operator.friends.entity.UserRelation;
 import com.example.cloud.operator.friends.service.FriendRequestService;
 import com.example.cloud.operator.friends.service.UserRelationService;
-import com.example.cloud.operator.login.entity.UserInfo;
 import com.example.cloud.operator.login.service.UserInfoService;
 import com.example.cloud.system.PagingUserBaseRequest;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -44,21 +43,19 @@ public class FriendsFacade {
      * @param request
      * @return
      */
-    public PageResult<UserInfo> getFriends(PagingUserBaseRequest request) {
+    public List<FriendsResponse> getFriends(PagingUserBaseRequest request) {
         Long userId = request.getId();
         List<UserRelation> friends = userRelationService.list(new LambdaQueryWrapper<UserRelation>().eq(UserRelation::getUserId, userId));
-        List<Long> friendIds = friends.stream().map(f -> f.getFriendId()).collect(Collectors.toList());
-        if (friendIds.isEmpty()) {
-            return PageResult.pageSuccess(new Page<>());
+        if (Objects.isNull(friends)) {
+            return new ArrayList<>();
         }
-        List<UserInfo> list = userInfoService.list(new LambdaQueryWrapper<UserInfo>()
-                .in(UserInfo::getId, friendIds)
-                .eq(UserInfo::getIsDelete, UserStateEnum.NORMAL)
-                .eq(UserInfo::getIsEnabled, UserStateEnum.ENABLED));
-        if (list.isEmpty()) {
-            return PageResult.pageSuccess(new Page<>());
-        }
-        return PageResult.pageSuccess(list);
+        List<FriendsResponse> responses = new ArrayList<>();
+        responses = friends.stream().map(f -> {
+            FriendsResponse friendsResponse = new FriendsResponse();
+            BeanUtils.copyProperties(f, friendsResponse);
+            return friendsResponse;
+        }).collect(Collectors.toList());
+        return responses;
     }
 
     /**
@@ -95,11 +92,13 @@ public class FriendsFacade {
             UserRelation userRelation = new UserRelation();
             userRelation.setUserId(friendRequest.getSendUserId());
             userRelation.setFriendId(friendRequest.getReceiveUserId());
+            userRelation.setFriendName(request.getFriendName());
+            userRelation.setFriendHeadUrl(request.getFriendHeadUrl());
             userRelation.setCreateTime(new Date());
             userRelation.setIsRelation("0");
             userRelationService.save(userRelation);
         }
-        friendRequest.setIsAgree(isAgree);
+        friendRequest.setIsAgree(request.getIsAgree());
         friendRequest.setInfoState(StateEnum.ENABLED.getCode());
         friendRequest.setUpdateTime(new Date());
         friendRequestService.updateById(friendRequest);
