@@ -1,6 +1,7 @@
 package com.example.cloud.operator.friends.facade;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.cloud.data.PageResult;
 import com.example.cloud.data.request.friends.AddFriendsRequest;
 import com.example.cloud.data.request.friends.HandleFriendsRequest;
@@ -13,8 +14,7 @@ import com.example.cloud.operator.friends.service.FriendRequestService;
 import com.example.cloud.operator.friends.service.UserRelationService;
 import com.example.cloud.operator.login.entity.UserInfo;
 import com.example.cloud.operator.login.service.UserInfoService;
-import com.example.cloud.system.NoParamsUserBean;
-import com.google.common.collect.Lists;
+import com.example.cloud.system.PagingUserBaseRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,21 +44,21 @@ public class FriendsFacade {
      * @param request
      * @return
      */
-    public PageResult<UserInfo> getFriends(NoParamsUserBean request) {
+    public PageResult<UserInfo> getFriends(PagingUserBaseRequest request) {
         Long userId = request.getId();
         List<UserRelation> friends = userRelationService.list(new LambdaQueryWrapper<UserRelation>().eq(UserRelation::getUserId, userId));
         List<Long> friendIds = friends.stream().map(f -> f.getFriendId()).collect(Collectors.toList());
         if (friendIds.isEmpty()) {
-            return new PageResult(0l, 0, Lists.newArrayList());
+            return PageResult.pageSuccess(new Page<>());
         }
         List<UserInfo> list = userInfoService.list(new LambdaQueryWrapper<UserInfo>()
                 .in(UserInfo::getId, friendIds)
                 .eq(UserInfo::getIsDelete, UserStateEnum.NORMAL)
                 .eq(UserInfo::getIsEnabled, UserStateEnum.ENABLED));
         if (list.isEmpty()) {
-            return new PageResult(0l, 0, Lists.newArrayList());
+            return PageResult.pageSuccess(new Page<>());
         }
-        return new PageResult(0l, list.size(), list);
+        return PageResult.pageSuccess(list);
     }
 
     /**

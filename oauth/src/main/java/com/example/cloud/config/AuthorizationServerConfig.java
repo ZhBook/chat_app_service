@@ -6,8 +6,8 @@ import cn.hutool.core.io.IoUtil;
 import cn.hutool.http.HttpStatus;
 import cn.hutool.json.JSONUtil;
 import com.example.cloud.entity.UserInfo;
-import com.example.cloud.enums.Result;
-import com.example.cloud.enums.ResultCode;
+import com.example.cloud.enums.BaseResult;
+import com.example.cloud.enums.ResultCodeEnum;
 import com.example.cloud.extension.CaptchaTokenGranter;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -243,8 +243,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
             response.setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
             response.setHeader("Access-Control-Allow-Origin", "*");
             response.setHeader("Cache-Control", "no-cache");
-            Result result = Result.failed(ResultCode.FAILED.getMessage());
-            response.getWriter().print(JSONUtil.toJsonStr(result));
+            BaseResult baseResult = BaseResult.failed(ResultCodeEnum.FAILED.getMessage());
+            response.getWriter().print(JSONUtil.toJsonStr(baseResult));
             response.getWriter().flush();
         };
     }

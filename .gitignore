@@ -1,4 +1,4 @@
-# Project exclude paths
+.gitignore# Project exclude paths
 /.idea
 /common/target/
 /config/target/

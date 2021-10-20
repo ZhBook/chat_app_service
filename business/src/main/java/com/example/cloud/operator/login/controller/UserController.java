@@ -1,11 +1,10 @@
 package com.example.cloud.operator.login.controller;
 
 import com.example.cloud.data.response.login.UserInfoResponse;
-import com.example.cloud.enums.Result;
+import com.example.cloud.enums.BaseResult;
 import com.example.cloud.operator.login.entity.UserInfo;
 import com.example.cloud.operator.login.facade.UserFacade;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/users")
-@Slf4j
 @RequiredArgsConstructor
 public class UserController {
     @Autowired
@@ -28,9 +26,9 @@ public class UserController {
      * @return
      */
     @PostMapping("/login")
-    public Result<UserInfo> login(@RequestParam("username") String username,
-                                  @RequestParam("password") String password) {
-        return Result.succeed(userFacade.login(username, password));
+    public BaseResult<UserInfo> login(@RequestParam("username") String username,
+                                      @RequestParam("password") String password) {
+        return BaseResult.succeed(userFacade.login(username, password));
     }
 
     /**
@@ -39,8 +37,8 @@ public class UserController {
      * @return
      */
     @GetMapping("/username")
-    public Result<UserInfo> getUserByUsername(@RequestParam("username") String username){
-        return Result.succeed(userFacade.getUserByUsername(username));
+    public BaseResult<UserInfo> getUserByUsername(@RequestParam("username") String username){
+        return BaseResult.succeed(userFacade.getUserByUsername(username));
     }
 
     /**
@@ -49,8 +47,8 @@ public class UserController {
      * @return
      */
     @GetMapping("/mobile/{mobile}")
-    public Result<UserInfo> getUserByMobile(@PathVariable("mobile")String mobile){
-        return Result.succeed(userFacade.getUserByMobile(mobile));
+    public BaseResult<UserInfo> getUserByMobile(@PathVariable("mobile")String mobile){
+        return BaseResult.succeed(userFacade.getUserByMobile(mobile));
     }
 
     /**
@@ -59,12 +57,12 @@ public class UserController {
      * @return
      */
     @PostMapping("/register")
-    public Result<UserInfoResponse> registerUser(@RequestBody @Validated UserInfo userInfo) {
-        return Result.succeed(userFacade.registerUser(userInfo),"注册成功");
+    public BaseResult<UserInfoResponse> registerUser(@RequestBody @Validated UserInfo userInfo) {
+        return BaseResult.succeed(userFacade.registerUser(userInfo),"注册成功");
     }
 
     @PostMapping("/test")
-    public Result<UserInfo> test() {
-        return Result.succeed("访问成功了");
+    public BaseResult<UserInfo> test() {
+        return BaseResult.succeed("访问成功了");
     }
 }

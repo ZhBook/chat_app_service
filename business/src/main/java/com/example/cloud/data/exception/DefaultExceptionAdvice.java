@@ -1,6 +1,6 @@
 package com.example.cloud.data.exception;
 
-import com.example.cloud.enums.Result;
+import com.example.cloud.enums.BaseResult;
 import com.example.cloud.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -27,7 +27,7 @@ public class DefaultExceptionAdvice {
      */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({IllegalArgumentException.class})
-    public Result badRequestException(IllegalArgumentException e) {
+    public BaseResult badRequestException(IllegalArgumentException e) {
         return defHandler("参数解析失败", e);
     }
 
@@ -37,7 +37,7 @@ public class DefaultExceptionAdvice {
      */
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler({AccessDeniedException.class})
-    public Result badMethodExpressException(AccessDeniedException e) {
+    public BaseResult badMethodExpressException(AccessDeniedException e) {
         return defHandler("没有权限请求当前方法", e);
     }
 
@@ -47,7 +47,7 @@ public class DefaultExceptionAdvice {
      */
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler({SQLException.class})
-    public Result handleSQLException(SQLException e) {
+    public BaseResult handleSQLException(SQLException e) {
         return defHandler("服务运行SQLException异常", e);
     }
 
@@ -57,7 +57,7 @@ public class DefaultExceptionAdvice {
      */
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(BusinessException.class)
-    public Result handleException(BusinessException e) {
+    public BaseResult handleException(BusinessException e) {
         return defHandler(e.getMessage(), e);
     }
 
@@ -67,7 +67,7 @@ public class DefaultExceptionAdvice {
      */
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)
-    public Result handleException(Exception e) {
+    public BaseResult handleException(Exception e) {
         return defHandler("未知异常", e);
     }
 
@@ -78,15 +78,15 @@ public class DefaultExceptionAdvice {
      */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public Result handException(MethodArgumentNotValidException e){
+    public BaseResult handException(MethodArgumentNotValidException e){
         //循环处理第一个错误
         List<ObjectError> allErrors = e.getBindingResult().getAllErrors();
         ObjectError objectError = allErrors.get(0);
         return defHandler(objectError.getDefaultMessage(),e);
     }
 
-    private Result defHandler(String msg, Exception e) {
+    private BaseResult defHandler(String msg, Exception e) {
         log.error(msg, e);
-        return Result.failed(msg);
+        return BaseResult.failed(msg);
     }
 }

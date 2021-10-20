@@ -3,10 +3,10 @@ package com.example.cloud.operator.friends.controller;
 import com.example.cloud.data.PageResult;
 import com.example.cloud.data.request.friends.AddFriendsRequest;
 import com.example.cloud.data.request.friends.HandleFriendsRequest;
-import com.example.cloud.enums.Result;
+import com.example.cloud.enums.BaseResult;
 import com.example.cloud.operator.friends.facade.FriendsFacade;
 import com.example.cloud.operator.login.entity.UserInfo;
-import com.example.cloud.system.NoParamsUserBean;
+import com.example.cloud.system.PagingUserBaseRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -28,8 +28,8 @@ public class FriendsController {
      * @return
      */
     @GetMapping
-    public Result<PageResult<UserInfo>> getFriends(NoParamsUserBean request) {
-        return Result.succeed(friendsFacade.getFriends(request));
+    public BaseResult<PageResult<UserInfo>> getFriends(PagingUserBaseRequest request) {
+        return BaseResult.succeed(friendsFacade.getFriends(request));
     }
 
     /**
@@ -39,8 +39,8 @@ public class FriendsController {
      * @return
      */
     @PostMapping("/add")
-    public Result<Boolean> addFriends(@RequestBody AddFriendsRequest request) {
-        return Result.succeed(friendsFacade.addFriends(request));
+    public BaseResult<Boolean> addFriends(@RequestBody AddFriendsRequest request) {
+        return BaseResult.succeed(friendsFacade.addFriends(request));
     }
 
     /**
@@ -50,8 +50,8 @@ public class FriendsController {
      * @return
      */
     @PostMapping("/handle")
-    public Result<Boolean> handleFriends(@RequestBody HandleFriendsRequest request) {
-        return Result.succeed(friendsFacade.handleFriends(request));
+    public BaseResult<Boolean> handleFriends(@RequestBody HandleFriendsRequest request) {
+        return BaseResult.succeed(friendsFacade.handleFriends(request));
     }
 
 }

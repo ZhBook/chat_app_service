@@ -4,7 +4,7 @@ import cn.hutool.core.lang.Validator;
 import cn.hutool.json.JSONUtil;
 import com.example.cloud.api.UserFeignClient;
 import com.example.cloud.entity.UserInfo;
-import com.example.cloud.enums.Result;
+import com.example.cloud.enums.BaseResult;
 import com.example.cloud.utils.RequestUtils;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
@@ -67,8 +67,8 @@ public class OAuthController {
         //通过手机号码登陆
         String username = parameters.get("username");
         if (Validator.isMobile(username)){
-            Result<UserInfo> result = userFeignClient.getUserByMobile(username);
-            parameters.put("username",result.getData().getUsername());
+            BaseResult<UserInfo> baseResult = userFeignClient.getUserByMobile(username);
+            parameters.put("username", baseResult.getData().getUsername());
         }
         /**
          * knife4j接口文档测试使用
@@ -79,7 +79,7 @@ public class OAuthController {
 
         OAuth2AccessToken accessToken = tokenEndpoint.postAccessToken(principal, parameters).getBody();
 
-        return Result.succeed(accessToken);
+        return BaseResult.succeed(accessToken);
     }
 
     @GetMapping("/token/rsa/publicKey")
