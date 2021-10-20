@@ -68,7 +68,7 @@ public class DefaultExceptionAdvice {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)
     public BaseResult handleException(Exception e) {
-        return defHandler("未知异常", e);
+        return defHandler("服务器异常", e);
     }
 
     /**

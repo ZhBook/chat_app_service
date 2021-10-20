@@ -6,17 +6,17 @@
 
     <resultMap id="BaseResultMap" type="com.example.cloud.operator.login.entity.UserInfo">
             <id property="id" column="id" jdbcType="BIGINT"/>
-            <baseResult property="username" column="username" jdbcType="VARCHAR"/>
-            <baseResult property="nickname" column="nickname" jdbcType="VARCHAR"/>
-            <baseResult property="password" column="password" jdbcType="VARCHAR"/>
-            <baseResult property="headImgUrl" column="head_img_url" jdbcType="VARCHAR"/>
-            <baseResult property="EMail" column="e_mail" jdbcType="VARCHAR"/>
-            <baseResult property="mobile" column="mobile" jdbcType="VARCHAR"/>
-            <baseResult property="sex" column="sex" jdbcType="TINYINT"/>
-            <baseResult property="address" column="address" jdbcType="VARCHAR"/>
-            <baseResult property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
-            <baseResult property="isDelete" column="is_delete" jdbcType="TINYINT"/>
-            <baseResult property="isEnabled" column="is_enabled" jdbcType="TINYINT"/>
+            <result property="username" column="username" jdbcType="VARCHAR"/>
+            <result property="nickname" column="nickname" jdbcType="VARCHAR"/>
+            <result property="password" column="password" jdbcType="VARCHAR"/>
+            <result property="headImgUrl" column="head_img_url" jdbcType="VARCHAR"/>
+            <result property="EMail" column="e_mail" jdbcType="VARCHAR"/>
+            <result property="mobile" column="mobile" jdbcType="VARCHAR"/>
+            <result property="sex" column="sex" jdbcType="TINYINT"/>
+            <result property="address" column="address" jdbcType="VARCHAR"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="isDelete" column="is_delete" jdbcType="TINYINT"/>
+            <result property="isEnabled" column="is_enabled" jdbcType="TINYINT"/>
     </resultMap>
 
     <sql id="Base_Column_List">

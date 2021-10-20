@@ -7,7 +7,7 @@ import lombok.experimental.FieldDefaults;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public abstract class PagingUserBaseRequest extends UserBeanRequest {
+public class PagingUserBaseRequest extends UserBeanRequest {
 
     /**
      * 默认第一页

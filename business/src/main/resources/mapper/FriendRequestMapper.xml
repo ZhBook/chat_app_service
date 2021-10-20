@@ -6,15 +6,15 @@
 
     <resultMap id="BaseResultMap" type="com.example.cloud.operator.friends.entity.FriendRequest">
             <id property="id" column="id" jdbcType="BIGINT"/>
-            <baseResult property="sendUserId" column="send_user_id" jdbcType="BIGINT"/>
-            <baseResult property="sendUserUsername" column="send_user_username" jdbcType="VARCHAR"/>
-            <baseResult property="receiveUserId" column="receive_user_id" jdbcType="BIGINT"/>
-            <baseResult property="receiveUserUsername" column="receive_user_username" jdbcType="VARCHAR"/>
-            <baseResult property="message" column="message" jdbcType="VARCHAR"/>
-            <baseResult property="infoState" column="info_state" jdbcType="TINYINT"/>
-            <baseResult property="isAgree" column="is_agree" jdbcType="TINYINT"/>
-            <baseResult property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
-            <baseResult property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+            <result property="sendUserId" column="send_user_id" jdbcType="BIGINT"/>
+            <result property="sendUserUsername" column="send_user_username" jdbcType="VARCHAR"/>
+            <result property="receiveUserId" column="receive_user_id" jdbcType="BIGINT"/>
+            <result property="receiveUserUsername" column="receive_user_username" jdbcType="VARCHAR"/>
+            <result property="message" column="message" jdbcType="VARCHAR"/>
+            <result property="infoState" column="info_state" jdbcType="TINYINT"/>
+            <result property="isAgree" column="is_agree" jdbcType="TINYINT"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <sql id="Base_Column_List">
