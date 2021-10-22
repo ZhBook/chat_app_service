@@ -81,7 +81,7 @@ public class FriendsFacade {
      */
     @Transactional
     public Boolean handleFriends(HandleFriendsRequest request) {
-        FriendRequest friendRequest = friendRequestService.getById(request.getId());
+        FriendRequest friendRequest = friendRequestService.getById(request.getRequestId());
         if (Objects.isNull(friendRequest)) {
             throw new BusinessException("记录不存在");
         }
