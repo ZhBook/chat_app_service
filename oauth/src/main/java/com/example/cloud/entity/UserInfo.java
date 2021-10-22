@@ -4,14 +4,12 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 import java.util.Collection;
 import java.util.Date;
 
@@ -27,17 +25,23 @@ public class UserInfo implements UserDetails {
      *
      */
     @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
+    private Long id;
 
     /**
      *
      */
-    @NotBlank(message = "用户名不能为空")
     private String username;
 
     /**
+     * 昵称
+     */
+    @NotBlank(message = "用户名不能为空")
+    private String nickname;
+
+    /**
      *
      */
+//    @JsonIgnore
     @NotBlank(message = "密码不能为空")
     private String password;
 
@@ -55,14 +59,14 @@ public class UserInfo implements UserDetails {
     /**
      *
      */
-    @Size(max = 11, min = 11, message = "手机号码长度错误")
-    @Pattern(regexp = "1\\d{10}", message = "手机号格式错误")
-    private String phone;
+    @Pattern(regexp = "^1(3|4|5|7|8)\\d{9}$",message = "手机号码格式错误")
+    @NotBlank(message = "手机号码不能为空")
+    private String mobile;
 
     /**
      *
      */
-    private String sex;
+    private int sex;
 
     /**
      *
@@ -78,12 +82,12 @@ public class UserInfo implements UserDetails {
     /**
      * 删除标志：0没删除，1删除
      */
-    private String isDelete;
+    private int isDelete;
 
     /**
      * 启用标志：0启用，1不启用
      */
-    private String isEnabled;
+    private int isEnabled;
 
     @Override
     public boolean isAccountNonExpired() {
@@ -102,7 +106,7 @@ public class UserInfo implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        if (StringUtils.equals(isEnabled,"0")) {
+        if (isEnabled == 0) {
             return true;
         } else {
             return false;

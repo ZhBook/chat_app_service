@@ -49,8 +49,7 @@ public class FriendsFacade {
         if (Objects.isNull(friends)) {
             return new ArrayList<>();
         }
-        List<FriendsResponse> responses = new ArrayList<>();
-        responses = friends.stream().map(f -> {
+        List<FriendsResponse> responses = friends.stream().map(f -> {
             FriendsResponse friendsResponse = new FriendsResponse();
             BeanUtils.copyProperties(f, friendsResponse);
             return friendsResponse;

@@ -3,6 +3,8 @@ package com.example.cloud.controller;
 import cn.hutool.core.lang.Validator;
 import cn.hutool.json.JSONUtil;
 import com.example.cloud.api.UserFeignClient;
+import com.example.cloud.data.UserInfoResponse;
+import com.example.cloud.entity.AccessToken;
 import com.example.cloud.entity.UserInfo;
 import com.example.cloud.enums.BaseResult;
 import com.example.cloud.utils.RequestUtils;
@@ -10,6 +12,7 @@ import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.endpoint.TokenEndpoint;
@@ -66,8 +69,9 @@ public class OAuthController {
 
         //通过手机号码登陆
         String username = parameters.get("username");
-        if (Validator.isMobile(username)){
-            BaseResult<UserInfo> baseResult = userFeignClient.getUserByMobile(username);
+        BaseResult<UserInfo> baseResult = userFeignClient.getUserByUsername(username);
+        if (Validator.isMobile(username)) {
+            baseResult = userFeignClient.getUserByMobile(username);
             parameters.put("username", baseResult.getData().getUsername());
         }
         /**
@@ -78,8 +82,12 @@ public class OAuthController {
          */
 
         OAuth2AccessToken accessToken = tokenEndpoint.postAccessToken(principal, parameters).getBody();
-
-        return BaseResult.succeed(accessToken);
+        AccessToken result = new AccessToken();
+        UserInfoResponse userInfoResponse = new UserInfoResponse();
+        BeanUtils.copyProperties(baseResult.getData(), userInfoResponse);
+        result.setAccess_token(accessToken.getValue());
+        result.setUserInfoResponse(userInfoResponse);
+        return BaseResult.succeed(result);
     }
 
     @GetMapping("/token/rsa/publicKey")
