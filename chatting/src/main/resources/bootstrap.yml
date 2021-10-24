@@ -1,0 +1,10 @@
+#server:
+#  port: 9001
+netty:
+  server:
+    port:9001
+spring:
+  application:
+    name: example-cloud-chatting   #唯一名称
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
