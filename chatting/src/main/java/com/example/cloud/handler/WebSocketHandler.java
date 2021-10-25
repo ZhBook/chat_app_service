@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -48,7 +49,7 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketF
      * @throws Exception
      */
     @Override
-    @Transactional
+    @Transactional(rollbackFor = SQLException.class)
     protected void channelRead0(ChannelHandlerContext ctx, TextWebSocketFrame msg) throws Exception {
         try {
             //接受客户端发送的消息
