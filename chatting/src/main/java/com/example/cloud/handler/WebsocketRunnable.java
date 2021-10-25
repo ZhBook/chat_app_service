@@ -22,7 +22,7 @@ public class WebsocketRunnable implements Runnable {
     @Override
     public void run() {
         try {
-            System.out.println(Thread.currentThread().getName()+"--"+LocalDateTime.now().toString());
+            log.info(Thread.currentThread().getName()+"--"+ LocalDateTime.now());
             channelHandlerContext.channel().writeAndFlush(new TextWebSocketFrame(LocalDateTime.now().toString()));
         } catch (Exception e) {
             log.error("websocket服务器推送消息发生错误：",e);

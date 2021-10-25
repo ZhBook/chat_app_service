@@ -23,14 +23,14 @@ public class ChatMessage {
      * 2：图片
      * 3：视频
      */
-    Long type;
+    Integer type;
     String createTime;
-    Long haveRead;
+    Integer haveRead;
     /**
      * 消息状态
      * 0：发送成功
      * 1：发送失败
      * 2：删除
      */
-    String state;
+    Integer state;
 }

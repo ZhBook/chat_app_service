@@ -7,11 +7,12 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="api" />
         <module name="business" />
         <module name="common" />
+        <module name="api" />
         <module name="config" />
         <module name="oauth" />
+        <module name="chatting" />
         <module name="gateway" />
       </profile>
     </annotationProcessing>

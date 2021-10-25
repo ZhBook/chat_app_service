@@ -15,13 +15,16 @@ public class WebsocketApplication {
 
     @PostConstruct
     public void start() {
-        try {
-            log.info(Thread.currentThread().getName() + ":websocket启动中......");
-            websocketInitialization.init();
-            log.info(Thread.currentThread().getName() + ":websocket启动成功！！！");
-        } catch (Exception e) {
-            log.error("websocket发生错误：",e);
-        }
+        //需要开启一个新的线程来执行netty server 服务器
+        new Thread(() -> {
+            try {
+                log.info(Thread.currentThread().getName() + ":websocket启动中......");
+                websocketInitialization.init();
+                log.info(Thread.currentThread().getName() + ":websocket启动成功！！！");
+            } catch (InterruptedException e) {
+                log.error("websocket发生错误：", e);
+            }
+        }).start();
     }
 }
 

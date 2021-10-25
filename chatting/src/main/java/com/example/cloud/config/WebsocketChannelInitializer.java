@@ -18,6 +18,9 @@ public class WebsocketChannelInitializer extends ChannelInitializer<SocketChanne
     @Autowired
     private WebSocketHandler webSocketHandler;
 
+    /** * webSocket协议名 */
+    private static final String WEBSOCKET_PROTOCOL = "WebSocket";
+
     @Value("${webSocket.netty.path}")
     private String path;
 
@@ -33,6 +36,11 @@ public class WebsocketChannelInitializer extends ChannelInitializer<SocketChanne
         pipeline.addLast(new HttpServerCodec());
         //是以块方式写，添加ChunkedWriteHandler处理器
         pipeline.addLast(new ChunkedWriteHandler());
+
+        //针对客户端，若10s内无读事件则触发心跳处理方法HeartBeatHandler#userEventTriggered
+//        pipeline.addLast(new IdleStateHandler(10 , 0 , 0));
+        //自定义空闲状态检测(自定义心跳检测handler)
+//        pipeline.addLast(new HeartBeatHandler());
         /*
           说明
           1. http数据在传输过程中是分段, HttpObjectAggregator ，就是可以将多个段聚合
@@ -46,7 +54,8 @@ public class WebsocketChannelInitializer extends ChannelInitializer<SocketChanne
           4. WebSocketServerProtocolHandler 核心功能是将 http协议升级为 ws协议 , 保持长连接
           5. 是通过一个 状态码 101
         */
-        pipeline.addLast(new WebSocketServerProtocolHandler(path));
+        /* 说明： 一、对应webSocket，它的数据是以帧（frame）的形式传递 二、浏览器请求时 ws://localhost:58080/xxx 表示请求的uri 三、核心功能是将http协议升级为ws协议，保持长链接 */
+        pipeline.addLast(new WebSocketServerProtocolHandler(path, WEBSOCKET_PROTOCOL, true, 65536 * 10));
         //自定义的handler ，处理业务逻辑
         pipeline.addLast(webSocketHandler);
     }
