@@ -88,14 +88,25 @@ public class FriendsFacade {
         String isAgree = request.getIsAgree();
         //如果同意，则保存好友关系
         if (Objects.equals(isAgree, "1")) {
+            Date date = new Date();
+            //保存自己与好友的关系
             UserRelation userRelation = new UserRelation();
             userRelation.setUserId(friendRequest.getSendUserId());
             userRelation.setFriendId(friendRequest.getReceiveUserId());
             userRelation.setFriendName(request.getFriendName());
             userRelation.setFriendHeadUrl(request.getFriendHeadUrl());
-            userRelation.setCreateTime(new Date());
+            userRelation.setCreateTime(date);
             userRelation.setIsRelation("0");
             userRelationService.save(userRelation);
+            //保存好友与自己的关系
+            UserRelation friendRelation = new UserRelation();
+            friendRelation.setUserId(friendRequest.getReceiveUserId());
+            friendRelation.setFriendId(friendRequest.getSendUserId());
+            friendRelation.setFriendName(request.getNickname());
+            friendRelation.setFriendHeadUrl(request.getHeadImgUrl());
+            friendRelation.setCreateTime(date);
+            friendRelation.setIsRelation("0");
+            userRelationService.save(friendRelation);
         }
         friendRequest.setIsAgree(request.getIsAgree());
         friendRequest.setInfoState(StateEnum.ENABLED.getCode());
