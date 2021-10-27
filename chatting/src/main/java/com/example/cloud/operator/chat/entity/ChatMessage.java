@@ -1,4 +1,4 @@
-package com.example.cloud.chat.entity;
+package com.example.cloud.operator.chat.entity;
 
 import lombok.AccessLevel;
 import lombok.Data;

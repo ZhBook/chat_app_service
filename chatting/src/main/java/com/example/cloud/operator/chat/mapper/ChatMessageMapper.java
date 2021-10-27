@@ -1,8 +1,8 @@
-package com.example.cloud.chat.mapper;
+package com.example.cloud.operator.chat.mapper;
 
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.example.cloud.chat.entity.ChatMessage;
+import com.example.cloud.operator.chat.entity.ChatMessage;
 
 /**
 * @Entity generator.domain.ChatMessage

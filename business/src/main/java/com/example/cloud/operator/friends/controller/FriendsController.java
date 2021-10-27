@@ -4,7 +4,7 @@ import com.example.cloud.data.PageResult;
 import com.example.cloud.data.request.friends.AddFriendsRequest;
 import com.example.cloud.data.request.friends.HandleFriendsRequest;
 import com.example.cloud.data.response.friends.FriendsResponse;
-import com.example.cloud.enums.BaseResult;
+import com.example.cloud.data.BaseResult;
 import com.example.cloud.operator.friends.facade.FriendsFacade;
 import com.example.cloud.system.PagingUserBaseRequest;
 import lombok.extern.slf4j.Slf4j;

@@ -1,7 +1,7 @@
-package com.example.cloud.chat.service;
+package com.example.cloud.operator.chat.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.example.cloud.chat.entity.ChatMessage;
+import com.example.cloud.operator.chat.entity.ChatMessage;
 
 /**
 *

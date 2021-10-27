@@ -1,6 +1,6 @@
 package com.example.cloud.data.exception;
 
-import com.example.cloud.enums.BaseResult;
+import com.example.cloud.data.BaseResult;
 import com.example.cloud.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

@@ -1,6 +1,6 @@
 package com.example.cloud.operator.login.controller;
 
-import com.example.cloud.enums.BaseResult;
+import com.example.cloud.data.BaseResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 

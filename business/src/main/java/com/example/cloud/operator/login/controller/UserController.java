@@ -1,7 +1,7 @@
 package com.example.cloud.operator.login.controller;
 
 import com.example.cloud.data.response.login.UserInfoResponse;
-import com.example.cloud.enums.BaseResult;
+import com.example.cloud.data.BaseResult;
 import com.example.cloud.operator.login.entity.UserInfo;
 import com.example.cloud.operator.login.facade.UserFacade;
 import lombok.RequiredArgsConstructor;

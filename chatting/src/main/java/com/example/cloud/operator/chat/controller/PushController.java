@@ -1,8 +1,8 @@
-package com.example.cloud.chat.controller;
+package com.example.cloud.operator.chat.controller;
 
-import com.example.cloud.chat.entity.ChatMessage;
-import com.example.cloud.chat.service.PushService;
-import com.example.cloud.enums.BaseResult;
+import com.example.cloud.operator.chat.entity.ChatMessage;
+import com.example.cloud.operator.chat.service.PushService;
+import com.example.cloud.data.BaseResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

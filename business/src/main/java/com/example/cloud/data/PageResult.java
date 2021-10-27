@@ -1,7 +1,6 @@
 package com.example.cloud.data;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.example.cloud.enums.BaseResult;
 import com.example.cloud.enums.ResultCodeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

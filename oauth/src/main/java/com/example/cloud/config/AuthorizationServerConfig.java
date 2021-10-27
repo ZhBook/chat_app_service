@@ -6,7 +6,7 @@ import cn.hutool.core.io.IoUtil;
 import cn.hutool.http.HttpStatus;
 import cn.hutool.json.JSONUtil;
 import com.example.cloud.entity.UserInfo;
-import com.example.cloud.enums.BaseResult;
+import com.example.cloud.data.BaseResult;
 import com.example.cloud.enums.ResultCodeEnum;
 import com.example.cloud.extension.CaptchaTokenGranter;
 import lombok.RequiredArgsConstructor;

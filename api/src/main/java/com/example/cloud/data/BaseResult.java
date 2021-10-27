@@ -1,5 +1,6 @@
-package com.example.cloud.enums;
+package com.example.cloud.data;
 
+import com.example.cloud.enums.ResultCodeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
