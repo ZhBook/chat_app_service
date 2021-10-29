@@ -56,4 +56,9 @@ public class FriendsController {
         return BaseResult.succeed(friendsFacade.handleFriends(request));
     }
 
+    @GetMapping("/search")
+    public PageResult<List<FriendsResponse>> searchFriends(@RequestParam("column") String column){
+        return PageResult.pageSuccess(friendsFacade.searchFriends(column));
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.example.cloud.operator.friends.facade;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.cloud.data.request.friends.AddFriendsRequest;
 import com.example.cloud.data.request.friends.HandleFriendsRequest;
 import com.example.cloud.data.response.friends.FriendsResponse;
@@ -113,5 +114,10 @@ public class FriendsFacade {
         friendRequest.setUpdateTime(new Date());
         friendRequestService.updateById(friendRequest);
         return Boolean.TRUE;
+    }
+
+    public Page searchFriends(String column) {
+//        userInfoService.page()
+        return null;
     }
 }
