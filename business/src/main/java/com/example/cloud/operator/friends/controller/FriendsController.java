@@ -5,6 +5,7 @@ import com.example.cloud.data.request.friends.AddFriendsRequest;
 import com.example.cloud.data.request.friends.HandleFriendsRequest;
 import com.example.cloud.data.response.friends.FriendsResponse;
 import com.example.cloud.data.BaseResult;
+import com.example.cloud.data.response.login.UserInfoResponse;
 import com.example.cloud.operator.friends.facade.FriendsFacade;
 import com.example.cloud.system.PagingUserBaseRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -56,9 +57,14 @@ public class FriendsController {
         return BaseResult.succeed(friendsFacade.handleFriends(request));
     }
 
-    @GetMapping("/search")
-    public PageResult<List<FriendsResponse>> searchFriends(@RequestParam("column") String column){
-        return PageResult.pageSuccess(friendsFacade.searchFriends(column));
+    /**
+     * 查找好友
+     * @param column
+     * @return
+     */
+    @PostMapping("/search")
+    public PageResult<List<UserInfoResponse>> searchFriends(@RequestBody PagingUserBaseRequest pagingUserBaseRequest, @RequestParam("column") String column){
+        return PageResult.pageSuccess(friendsFacade.searchFriends(pagingUserBaseRequest,column));
     }
 
 }

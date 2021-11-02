@@ -5,12 +5,14 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.cloud.data.request.friends.AddFriendsRequest;
 import com.example.cloud.data.request.friends.HandleFriendsRequest;
 import com.example.cloud.data.response.friends.FriendsResponse;
+import com.example.cloud.data.response.login.UserInfoResponse;
 import com.example.cloud.enums.StateEnum;
 import com.example.cloud.exception.BusinessException;
 import com.example.cloud.operator.friends.entity.FriendRequest;
 import com.example.cloud.operator.friends.entity.UserRelation;
 import com.example.cloud.operator.friends.service.FriendRequestService;
 import com.example.cloud.operator.friends.service.UserRelationService;
+import com.example.cloud.operator.login.entity.UserInfo;
 import com.example.cloud.operator.login.service.UserInfoService;
 import com.example.cloud.system.PagingUserBaseRequest;
 import org.springframework.beans.BeanUtils;
@@ -116,8 +118,24 @@ public class FriendsFacade {
         return Boolean.TRUE;
     }
 
-    public Page searchFriends(String column) {
-//        userInfoService.page()
-        return null;
+    /**
+     * 模糊查询
+     * @param paging
+     * @param column
+     * @return
+     */
+    public Page searchFriends(PagingUserBaseRequest paging, String column) {
+
+        List<UserInfo> list = userInfoService.list(new LambdaQueryWrapper<UserInfo>()
+                .like(UserInfo::getMobile, column)
+                .like(UserInfo::getUsername, column));
+        List<UserInfoResponse> collect = list.stream().map(userInfo -> {
+            UserInfoResponse response = new UserInfoResponse();
+            BeanUtils.copyProperties(userInfo, response);
+            return response;
+        }).collect(Collectors.toList());
+        Page page = new Page<>(paging.getPageIndex(), paging.getPageSize(),collect.size());
+        page.setRecords(collect);
+        return page;
     }
 }
