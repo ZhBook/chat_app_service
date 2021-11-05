@@ -13,6 +13,7 @@ public class ChatMessage {
     Long id;
     Long userId;
     Long friendId;
+    String friendNickname;
     String context;
     String url;
     String headImgUrl;
