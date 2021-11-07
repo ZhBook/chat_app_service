@@ -31,7 +31,7 @@ public class UserRelation implements Serializable {
     /**
      *
      */
-    private String friendName;
+    private String friendNickname;
 
     /**
      *

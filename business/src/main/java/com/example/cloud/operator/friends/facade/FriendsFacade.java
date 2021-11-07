@@ -96,7 +96,7 @@ public class FriendsFacade {
             UserRelation userRelation = new UserRelation();
             userRelation.setUserId(friendRequest.getSendUserId());
             userRelation.setFriendId(friendRequest.getReceiveUserId());
-            userRelation.setFriendName(request.getFriendName());
+            userRelation.setFriendNickname(request.getFriendName());
             userRelation.setFriendHeadUrl(request.getFriendHeadUrl());
             userRelation.setCreateTime(date);
             userRelation.setIsRelation("0");
@@ -105,7 +105,7 @@ public class FriendsFacade {
             UserRelation friendRelation = new UserRelation();
             friendRelation.setUserId(friendRequest.getReceiveUserId());
             friendRelation.setFriendId(friendRequest.getSendUserId());
-            friendRelation.setFriendName(request.getNickname());
+            friendRelation.setFriendNickname(request.getNickname());
             friendRelation.setFriendHeadUrl(request.getHeadImgUrl());
             friendRelation.setCreateTime(date);
             friendRelation.setIsRelation("0");

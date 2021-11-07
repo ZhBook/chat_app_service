@@ -21,7 +21,7 @@ public class PushController {
      * @param msg
      */
     @PostMapping("/friend")
-    public BaseResult pushMsgToOne(@RequestParam("receiveId") String receiveId, @RequestBody ChatMessage msg) {
+    public BaseResult pushMsgToOne(@RequestParam("receiveId") Long receiveId, @RequestBody ChatMessage msg) {
         return BaseResult.succeed(pushService.pushMsgToOne(receiveId, msg));
     }
 

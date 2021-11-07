@@ -11,6 +11,6 @@ public interface PushService {
      * @param userId
      * @param msg
      */
-    String pushMsgToOne(String userId, ChatMessage msg);
+    String pushMsgToOne(Long userId, ChatMessage msg);
 
 }
