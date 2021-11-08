@@ -29,9 +29,6 @@ public class PushServiceImpl implements PushService {
 
     @Override
     public String pushMsgToOne(Long receiveId, ChatMessage msg) {
-        //对调消息的friendId和UserId
-        msg.setFriendId(msg.getUserId());
-        msg.setUserId(receiveId);
         //获取所有连接的客户端,如果是集群环境使用redis的hash数据类型存储即可
         Map<String, Channel> channelMap = WebSocketHandler.getChannelMap();
         //获取与用户主键绑定的channel,如果是集群环境使用redis的hash数据类型存储即可
