@@ -42,7 +42,7 @@ spring:
       resourceserver:
         jwt:
 #          public-key-location: classpath:jwt.jks
-          jwk-set-uri: 'http://localhost:8002/oauth/token/rsa/publicKey' #配置RSA的公钥访问地址
+          jwk-set-uri: 'http://10.0.16.5:8002/oauth/token/rsa/publicKey' #配置RSA的公钥访问地址
 secure:
   ignore:
     urls: #配置白名单路径,该白名单用来验证是否需要通过token认证，仍然需要gateway验证
