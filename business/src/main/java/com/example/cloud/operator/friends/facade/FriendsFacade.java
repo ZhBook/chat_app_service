@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.cloud.data.request.friends.AddFriendsRequest;
 import com.example.cloud.data.request.friends.HandleFriendsRequest;
 import com.example.cloud.data.response.friends.FriendsResponse;
+import com.example.cloud.data.response.friends.NewFriendResponse;
 import com.example.cloud.data.response.login.UserInfoResponse;
 import com.example.cloud.enums.StateEnum;
 import com.example.cloud.exception.BusinessException;
@@ -120,6 +121,7 @@ public class FriendsFacade {
 
     /**
      * 模糊查询
+     *
      * @param paging
      * @param column
      * @return
@@ -134,8 +136,27 @@ public class FriendsFacade {
             BeanUtils.copyProperties(userInfo, response);
             return response;
         }).collect(Collectors.toList());
-        Page page = new Page<>(paging.getPageIndex(), paging.getPageSize(),collect.size());
+        Page page = new Page<>(paging.getPageIndex(), paging.getPageSize(), collect.size());
         page.setRecords(collect);
+        return page;
+    }
+
+    /**
+     * 获取新的好友请求
+     * @param request
+     * @return
+     */
+    public Page getNewFriends(PagingUserBaseRequest request) {
+        List<FriendRequest> list = friendRequestService.list(new LambdaQueryWrapper<FriendRequest>()
+                .eq(FriendRequest::getReceiveUserId, request.getId())
+                .orderByDesc(FriendRequest::getCreateTime));
+        List<NewFriendResponse> result = list.stream().map(l -> {
+            NewFriendResponse response = new NewFriendResponse();
+            BeanUtils.copyProperties(l, response);
+            return response;
+        }).collect(Collectors.toList());
+        Page<NewFriendResponse> page = new Page<>(request.getPageIndex(), request.getPageSize(), result.size());
+        page.setRecords(result);
         return page;
     }
 }

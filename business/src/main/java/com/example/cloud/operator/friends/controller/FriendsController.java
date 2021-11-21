@@ -1,10 +1,11 @@
 package com.example.cloud.operator.friends.controller;
 
+import com.example.cloud.data.BaseResult;
 import com.example.cloud.data.PageResult;
 import com.example.cloud.data.request.friends.AddFriendsRequest;
 import com.example.cloud.data.request.friends.HandleFriendsRequest;
 import com.example.cloud.data.response.friends.FriendsResponse;
-import com.example.cloud.data.BaseResult;
+import com.example.cloud.data.response.friends.NewFriendResponse;
 import com.example.cloud.data.response.login.UserInfoResponse;
 import com.example.cloud.operator.friends.facade.FriendsFacade;
 import com.example.cloud.system.PagingUserBaseRequest;
@@ -67,4 +68,13 @@ public class FriendsController {
         return PageResult.pageSuccess(friendsFacade.searchFriends(pagingUserBaseRequest,column));
     }
 
+    /**
+     * 获取新的好友请求
+     * @param request
+     * @return
+     */
+    @GetMapping("/request")
+    public  PageResult<List<NewFriendResponse>> getNewFriends(@RequestBody PagingUserBaseRequest request){
+        return PageResult.pageSuccess(friendsFacade.getNewFriends(request));
+    }
 }
