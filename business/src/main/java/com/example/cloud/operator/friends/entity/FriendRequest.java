@@ -32,6 +32,8 @@ public class FriendRequest implements Serializable {
      */
     private String sendUserUsername;
 
+    private String sendHeadImgUrl;
+
     /**
      * 接收方用户id
      */

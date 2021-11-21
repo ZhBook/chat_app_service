@@ -62,6 +62,7 @@ implements UserInfoService{
             log.info("获取token为空");
             return null;
         }
+        //todo 需要修改成，从oauth中获取用户信息
         UserInfo userInfo = (UserInfo) request.getAttribute(WebUtil.REQ_ATTR_LOGIN_USER_KEY);
 
         if (Objects.nonNull(userInfo)) {
