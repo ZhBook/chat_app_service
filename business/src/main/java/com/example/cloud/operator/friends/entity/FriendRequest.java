@@ -32,7 +32,15 @@ public class FriendRequest implements Serializable {
      */
     private String sendUserUsername;
 
+    /**
+     * 发送者头像
+     */
     private String sendHeadImgUrl;
+
+    /**
+     * 发送者昵称
+     */
+    private String sendUserNickname;
 
     /**
      * 接收方用户id
@@ -62,7 +70,7 @@ public class FriendRequest implements Serializable {
     /**
      * 是否同意
      */
-    private String isAgree;
+    private int isAgree;
 
     /**
      * 更新时间

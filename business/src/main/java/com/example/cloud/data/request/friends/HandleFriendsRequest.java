@@ -16,5 +16,5 @@ public class HandleFriendsRequest extends NoParamsUserBean {
     Long friendId;
     String friendName;
     String friendHeadUrl;
-    String isAgree;
+    Integer isAgree;
 }

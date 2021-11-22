@@ -29,7 +29,8 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
- * @author:70968 Date:2021-10-16 08:56
+ * @author:70968
+ * Date:2021-10-16 08:56
  */
 @Service
 public class FriendsFacade {
@@ -74,6 +75,11 @@ public class FriendsFacade {
         friendRequest.setMessage(request.getMessage());
         friendRequest.setReceiveUserId(request.getFriendId());
         friendRequest.setSendUserId(request.getId());
+        friendRequest.setSendHeadImgUrl(request.getHeadImgUrl());
+        friendRequest.setSendUserNickname(request.getNickname());
+        friendRequest.setSendUserUsername(request.getUsername());
+        friendRequest.setIsAgree(0);
+        friendRequest.setInfoState(0);
         friendRequestService.save(friendRequest);
         return Boolean.TRUE;
     }
@@ -90,7 +96,7 @@ public class FriendsFacade {
         if (Objects.isNull(friendRequest)) {
             throw new BusinessException("记录不存在");
         }
-        String isAgree = request.getIsAgree();
+        Integer isAgree = request.getIsAgree();
         //如果同意，则保存好友关系
         if (Objects.equals(isAgree, "1")) {
             Date date = new Date();

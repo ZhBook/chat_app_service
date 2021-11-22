@@ -27,6 +27,10 @@ public class NewFriendResponse {
      */
     private String sendHeadImgUrl;
 
+    /**
+     * 发送方昵称
+     */
+    private String sendUserNickname;
 
     /**
      * 请求消息
@@ -41,5 +45,5 @@ public class NewFriendResponse {
     /**
      * 是否同意
      */
-    private String isAgree;
+    private int isAgree;
 }
