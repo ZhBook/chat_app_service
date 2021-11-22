@@ -15,6 +15,7 @@ import com.example.cloud.operator.friends.service.FriendRequestService;
 import com.example.cloud.operator.friends.service.UserRelationService;
 import com.example.cloud.operator.login.entity.UserInfo;
 import com.example.cloud.operator.login.service.UserInfoService;
+import com.example.cloud.system.NoParamsUserBean;
 import com.example.cloud.system.PagingUserBaseRequest;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -146,7 +147,7 @@ public class FriendsFacade {
      * @param request
      * @return
      */
-    public Page getNewFriends(PagingUserBaseRequest request) {
+    public List<NewFriendResponse> getNewFriends(NoParamsUserBean request) {
         List<FriendRequest> list = friendRequestService.list(new LambdaQueryWrapper<FriendRequest>()
                 .eq(FriendRequest::getReceiveUserId, request.getId())
                 .orderByDesc(FriendRequest::getCreateTime));
@@ -155,8 +156,7 @@ public class FriendsFacade {
             BeanUtils.copyProperties(l, response);
             return response;
         }).collect(Collectors.toList());
-        Page<NewFriendResponse> page = new Page<>(request.getPageIndex(), request.getPageSize(), result.size());
-        page.setRecords(result);
-        return page;
+
+        return result;
     }
 }

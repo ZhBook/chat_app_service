@@ -8,6 +8,7 @@ import com.example.cloud.data.response.friends.FriendsResponse;
 import com.example.cloud.data.response.friends.NewFriendResponse;
 import com.example.cloud.data.response.login.UserInfoResponse;
 import com.example.cloud.operator.friends.facade.FriendsFacade;
+import com.example.cloud.system.NoParamsUserBean;
 import com.example.cloud.system.PagingUserBaseRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,7 +75,7 @@ public class FriendsController {
      * @return
      */
     @GetMapping("/request")
-    public  PageResult<List<NewFriendResponse>> getNewFriends(@RequestBody PagingUserBaseRequest request){
+    public  PageResult<List<NewFriendResponse>> getNewFriends(NoParamsUserBean request){
         return PageResult.pageSuccess(friendsFacade.getNewFriends(request));
     }
 }
