@@ -1,6 +1,5 @@
-FROM openjdk:8u292
+FROM openjdk:11.0.13-jdk
 
-LABEL MAINTAINER=Andy
 WORKDIR /apps
 ADD target/chatting.jar /apps/
 EXPOSE 9001 58080
