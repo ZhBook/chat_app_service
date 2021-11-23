@@ -3,18 +3,19 @@ package com.example.cloud.operator.file.facade;
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.model.ObjectMetadata;
+import com.aliyun.oss.model.PutObjectRequest;
 import com.example.cloud.exception.BusinessException;
 import com.example.cloud.operator.file.entity.FileInfo;
 import com.example.cloud.operator.file.mapper.FileInfoMapper;
+import com.example.cloud.operator.file.properties.OSSProperties;
 import com.example.cloud.operator.utils.FileUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.io.IOException;
-import java.io.InputStream;
 
 /**
  * @author zhouhd
@@ -26,17 +27,14 @@ public class FileFacade {
 
     @Resource
     private FileInfoMapper fileInfoMapper;
+    @Autowired
+    private OSSProperties ossProperties;
 
-    private static String endpoint = "oss-cn-hangzhou.aliyuncs.com";
-    private static String accessKeyId = "LTAI5tNxU5MV2bCV91eT4qnc";
-    private static String accessKeySecret = "2IcjuSiFPT0RIey2zsRc3jz2ulyd7N";
-    private static String bucketName = "hub-tensua-com";
-    private static String key = "LTAI5tNxU5MV2bCV91eT4qnc";
-
-    @Value("${upload.file.path}")
-    private String path;
-
+    private static final String PATH_SPLIT = "/";
     private static final String FILE_SPLIT = ".";
+    private static final String IMG_PREFIX = "images";
+    private static final String File_PREFIX = "files";
+
 
     public FileInfo upload(MultipartFile file) {
         FileInfo fileInfo = FileUtil.getFileInfo(file);
@@ -44,23 +42,31 @@ public class FileFacade {
         if (!fileInfo.getName().contains(FILE_SPLIT)) {
             throw new BusinessException("缺少后缀名");
         }
-        OSS ossClient = new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
+        OSS ossClient = new OSSClientBuilder().build(ossProperties.getEndpoint(), ossProperties.getAccessKey(), ossProperties.getAccessKeySecret());
+        ObjectMetadata objectMetadata = new ObjectMetadata();
+        objectMetadata.setContentLength(file.getSize());
+        objectMetadata.setContentType(file.getContentType());
+        String fileSuffix = FileUtil.getFileSuffix(fileInfo.getName());
+        String key = File_PREFIX + PATH_SPLIT + fileInfo.getId() + fileSuffix;
+        if (fileInfo.getIsImg()) {
+            key = IMG_PREFIX + PATH_SPLIT + fileInfo.getId() + fileSuffix;
+        }
         try {
-            InputStream inputStream = file.getInputStream();
-            // new对象元信息
-            ObjectMetadata meta = new ObjectMetadata();
-            // 设置contentType
-            meta.setContentType(file.getContentType());
-            ossClient.createBucket(bucketName);
-            ossClient.putObject(bucketName, key, inputStream, meta);
+            PutObjectRequest putObjectRequest = new PutObjectRequest(
+                    ossProperties.getBucketName(), key, file.getInputStream(), objectMetadata);
+            ossClient.putObject(putObjectRequest);
+            //https://tensua-file.oss-cn-hangzhou.aliyuncs.com/4200BBB6-0F39-4F78-9A37-56361E12549D.jpeg
             //返回路径
+            fileInfo.setPath(key);
+            fileInfo.setUrl(ossProperties.getUrl() + PATH_SPLIT + key);
+            // 设置文件来源
+            fileInfo.setSource("OSS");
             fileInfoMapper.insert(fileInfo);
         } catch (IOException e) {
-            log.error("上传文件失败，原因：{}",e.getMessage());
+            log.error("上传文件失败，原因：{}", e.getMessage());
         } finally {
             ossClient.shutdown();
         }
-
 
         return fileInfo;
     }
