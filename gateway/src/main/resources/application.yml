@@ -49,6 +49,7 @@ secure:
       - "/oauth/**"
       - "/api-business/api/v1/users/**"
       - "/api-business/resources/**"
+      - "/api-business/api/v1/upload/**"
 feign:
   httpclient:
     connection-timeout: 5000

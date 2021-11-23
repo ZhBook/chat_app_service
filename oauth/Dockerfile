@@ -2,6 +2,7 @@ FROM openjdk:11.0.13-jdk
 
 WORKDIR /apps
 ADD target/oauth.jar /apps/
+RUN echo "Asia/Shanghai" > /etc/timezone
 EXPOSE 8002
 CMD ["java","-jar","-Xmx128m","-Xms128m","oauth.jar"]
 # docker run --name micro-user \
