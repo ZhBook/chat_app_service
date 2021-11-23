@@ -1,6 +1,7 @@
 package com.example.cloud.config.interceptor;
 
 import cn.hutool.json.JSONUtil;
+import com.example.cloud.config.IgnoreUrlsConfig;
 import com.example.cloud.exception.BusinessException;
 import com.example.cloud.operator.login.entity.UserInfo;
 import com.example.cloud.operator.login.service.UserInfoService;
@@ -15,6 +16,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -26,20 +28,35 @@ import java.util.Objects;
 public class AuthUserInterceptor extends HandlerInterceptorAdapter {
     @Autowired
     private UserInfoService userInfoService;
+    @Autowired
+    private IgnoreUrlsConfig ignoreUrlsConfig;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-         String accessToken = request.getHeader(WebUtil.ACCESS_TOKEN_KEY);
+        String accessToken = request.getHeader(WebUtil.ACCESS_TOKEN_KEY);
         log.info("accessToken：" + accessToken);
 
         //IP信息
         String ip = IpAddressUtil.get(request);
-
+        String requestURI = request.getRequestURI();
+        List<String> urls = ignoreUrlsConfig.getUrls();
+        Boolean flag = Boolean.FALSE;
+        for (String url : urls) {
+            if (StringUtils.equals(url, requestURI)) {
+                flag = Boolean.TRUE;
+            }
+        }
+        //todo 需要优化
+        if (flag) {
+            log.info("该访问连接不需要验证，url=[{}], ip={}", request.getRequestURI(), ip);
+            return super.preHandle(request, response, handler);
+        }
         if (StringUtils.isEmpty(accessToken)) {
             log.error("ACCESS_TOKEN为空, url=[{}], ip={}", request.getRequestURI(), ip);
-            return super.preHandle(request,response,handler);
+            return super.preHandle(request, response, handler);
         }
         UserInfo loginUser = userInfoService.getLoginUser();
+        request.getRequestURL();
         if (Objects.isNull(loginUser)) {
             log.error("获取用户信息失败, url=[{}], ip={}, accessToken={}", request.getRequestURI(), ip, accessToken);
             return notAuth(response);

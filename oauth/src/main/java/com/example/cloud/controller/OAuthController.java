@@ -24,6 +24,7 @@ import java.security.KeyPair;
 import java.security.Principal;
 import java.security.interfaces.RSAPublicKey;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * 获取RSA公钥接口
@@ -72,6 +73,9 @@ public class OAuthController {
         BaseResult<UserInfo> baseResult = userFeignClient.getUserByUsername(username);
         if (Validator.isMobile(username)) {
             baseResult = userFeignClient.getUserByMobile(username);
+            if (Objects.isNull(baseResult.getData())) {
+                return BaseResult.failed("用户名不存在");
+            }
             parameters.put("username", baseResult.getData().getUsername());
         }
         /**
