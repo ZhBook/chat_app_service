@@ -1,5 +1,6 @@
 FROM openjdk:11.0.13-jdk
 
+MAINTAINER zhooke
 WORKDIR /apps
 ADD target/chatting.jar /apps/
 RUN echo "Asia/Shanghai" > /etc/timezone

@@ -1,5 +1,6 @@
 FROM openjdk:11.0.13-jdk
 
+MAINTAINER zhooke
 WORKDIR /apps
 ADD target/business.jar /apps/
 EXPOSE 8001
