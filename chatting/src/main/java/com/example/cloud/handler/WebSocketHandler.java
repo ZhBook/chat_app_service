@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -35,7 +36,7 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketF
     //任务map，存储future，用于停止队列任务
     private static Map<String, Future> futureMap = new ConcurrentHashMap<>();
     //存储channel的id和用户主键的映射，客户端保证用户主键传入的是唯一值，解决问题四，如果是集群中需要换成redis的hash数据类型存储即可
-    private static Map<String, Long> clientMap = new ConcurrentHashMap<>();
+    private static Map<Long, String> clientMap = new ConcurrentHashMap<>();
 
     @Resource
     private ChatMessageMapper messageMapper;
@@ -59,7 +60,7 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketF
             String key = ctx.channel().id().asLongText();
             Long userId = chatMessage.getUserId();
             //存储channel的id和用户的主键
-            clientMap.put(key, chatMessage.getUserId());
+            clientMap.put(chatMessage.getUserId(), key);
             log.info("接受客户端的消息......" + ctx.channel().remoteAddress() + "-参数[" + userId + "]");
 
             //用户信息不存在，加入队列，查之前未读消息，并且发送给用户
@@ -118,7 +119,11 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketF
         //移除通信过的channel
         channelMap.remove(key);
         //移除和用户绑定的channel
-        clientMap.remove(key);
+        Collection<String> values = clientMap.values();
+        if (values.contains(key)){
+            values.remove(key);
+        }
+//        clientMap.remove(key);
         //关闭掉线客户端的future
         Optional.ofNullable(futureMap.get(key)).ifPresent(future -> {
             future.cancel(true);
@@ -141,7 +146,11 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketF
         //移除通信过的channel
         channelMap.remove(key);
         //移除和用户绑定的channel
-        clientMap.remove(key);
+        Collection<String> values = clientMap.values();
+        if (values.contains(key)){
+            values.remove(key);
+        }
+//        clientMap.remove(key);
         //移除定时任务
         Optional.ofNullable(futureMap.get(key)).ifPresent(future -> {
             future.cancel(true);
@@ -160,7 +169,7 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketF
         return futureMap;
     }
 
-    public static Map<String, Long> getClientMap() {
+    public static Map<Long, String> getClientMap() {
         return clientMap;
     }
 }

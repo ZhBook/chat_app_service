@@ -70,6 +70,13 @@ public class FriendsFacade {
      * @return
      */
     public Boolean addFriends(AddFriendsRequest request) {
+        FriendRequest one = friendRequestService.getOne(new LambdaQueryWrapper<FriendRequest>()
+                .eq(FriendRequest::getSendUserId, request.getId())
+                .eq(FriendRequest::getReceiveUserId, request.getFriendId()));
+        if (Objects.nonNull(one)){
+            one.setMessage(request.getMessage());
+            return Boolean.TRUE;
+        }
         FriendRequest friendRequest = new FriendRequest();
         friendRequest.setCreateTime(new Date());
         friendRequest.setMessage(request.getMessage());

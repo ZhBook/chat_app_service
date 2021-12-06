@@ -12,7 +12,9 @@ import lombok.Getter;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public enum MessageTypeEnum {
     PONG(0,"心跳测试"),
-    TEXT(1,"聊天消息");
+    TEXT(1,"聊天消息"),
+    FRIEND_REQUEST(2,"好友请求"),
+    ;
 
     int code;
     String msg;
