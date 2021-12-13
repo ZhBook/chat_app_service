@@ -13,7 +13,10 @@ import lombok.Getter;
 public enum MessageTypeEnum {
     PONG(0,"心跳测试"),
     TEXT(1,"聊天消息"),
-    FRIEND_REQUEST(2,"好友请求"),
+    VOICE(2,"语音消息"),
+    IMAGE(3,"图片消息"),
+    VIDEO(4,"视频聊天"),
+    FRIEND_REQUEST(5,"好友请求"),
     ;
 
     int code;
