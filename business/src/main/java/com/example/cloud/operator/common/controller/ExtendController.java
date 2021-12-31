@@ -1,7 +1,7 @@
 package com.example.cloud.operator.common.controller;
 
 import com.example.cloud.data.BaseResult;
-import com.example.cloud.operator.common.facade.FileFacade;
+import com.example.cloud.operator.common.facade.ExtendFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
  **/
 @RestController
 @RequestMapping("/file")
-public class FileController {
+public class ExtendController {
 
     @Autowired
-    private FileFacade facade;
+    private ExtendFacade facade;
 
     @GetMapping("/qrcode")
     public BaseResult<byte[]> getQrCode(@RequestParam("content")String content){

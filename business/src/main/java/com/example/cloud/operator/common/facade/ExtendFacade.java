@@ -12,7 +12,7 @@ import java.awt.*;
  * @since 2021/12/31 13:55
  **/
 @Service
-public class FileFacade {
+public class ExtendFacade {
 
     /**
      * 获取二维码
