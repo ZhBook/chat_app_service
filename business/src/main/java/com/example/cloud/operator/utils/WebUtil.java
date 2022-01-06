@@ -27,4 +27,14 @@ public final class WebUtil {
         }
         return requestAttributes.getRequest();
     }
+
+    /**
+     * 获取 HttpServletRequest 对象
+     *
+     * @return
+     */
+    public static HttpServletRequest getRequest() {
+        ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        return servletRequestAttributes.getRequest();
+    }
 }
