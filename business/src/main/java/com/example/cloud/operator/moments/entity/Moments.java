@@ -1,0 +1,66 @@
+package com.example.cloud.operator.moments.entity;
+
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
+
+import java.io.Serializable;
+import java.time.LocalDateTime;
+
+/**
+ * 用户朋友圈信息
+ * @TableName moments
+ */
+@TableName(value ="moments")
+@Data
+public class Moments implements Serializable {
+    /**
+     * 
+     */
+    @TableId
+    private Long id;
+
+    /**
+     * 朋友圈所属用户id
+     */
+    private Long userId;
+
+    /**
+     * 发布的内容
+     */
+    private String context;
+
+    /**
+     * 点赞数
+     */
+    private Long likes;
+
+    /**
+     * 图片地址
+     */
+    private String images;
+
+    /**
+     * 视频地址
+     */
+    private String video;
+
+    /**
+     * 
+     */
+    private LocalDateTime createTime;
+
+    /**
+     * 
+     */
+    private LocalDateTime updateTime;
+
+    /**
+     * 
+     */
+    private String isDelete;
+
+    @TableField(exist = false)
+    private static final long serialVersionUID = 1L;
+}
