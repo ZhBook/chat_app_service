@@ -1,53 +1,40 @@
 package com.example.cloud.operator.moments.entity;
 
-
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 朋友圈留言
- * @TableName moments_comment
+ * 朋友圈点赞关系表
+ * @TableName moments_likes
  */
-@TableName(value ="moments_comment")
+@TableName(value ="moments_likes")
 @Data
-public class MomentsComment implements Serializable {
+public class MomentsLikes implements Serializable {
     /**
      * 
      */
     @TableId
-    private Long id;
-
-    /**
-     * 朋友圈信息id
-     */
-    private Long momentsId;
-
-    /**
-     * 留言用户id
-     */
-    private Long userId;
+    private Integer id;
 
     /**
      * 
      */
-    private String context;
+    private Integer momentsId;
 
     /**
      * 
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Integer userId;
+
+    /**
+     * 
+     */
     private Date createTime;
-
-    /**
-     * 
-     */
-    private String isDelete;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
