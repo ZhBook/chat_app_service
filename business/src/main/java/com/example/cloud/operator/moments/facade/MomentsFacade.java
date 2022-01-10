@@ -4,12 +4,15 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.cloud.data.request.moments.MomentsRequest;
+import com.example.cloud.data.response.moments.MomentsCommentResponse;
+import com.example.cloud.data.response.moments.MomentsLikesResponse;
 import com.example.cloud.data.response.moments.MomentsResponse;
 import com.example.cloud.enums.StateEnum;
 import com.example.cloud.operator.friends.entity.UserRelation;
 import com.example.cloud.operator.friends.service.UserRelationService;
 import com.example.cloud.operator.moments.entity.Moments;
 import com.example.cloud.operator.moments.entity.MomentsComment;
+import com.example.cloud.operator.moments.entity.MomentsLikes;
 import com.example.cloud.operator.moments.service.MomentsCommentService;
 import com.example.cloud.operator.moments.service.MomentsLikesService;
 import com.example.cloud.operator.moments.service.MomentsService;
@@ -58,20 +61,34 @@ public class MomentsFacade {
                 .orderByDesc(Moments::getCreateTime));
         List<Moments> momentsList = momentsIPage.getRecords();
 
-        ArrayList<MomentsResponse> responseLike = new ArrayList<>();
-        momentsList.forEach(moments -> {
+        List<MomentsResponse> responses = momentsList.stream().map(moments -> {
             MomentsResponse response = new MomentsResponse();
             Long momentsId = moments.getId();
+            BeanUtils.copyProperties(response, moments);
             // 朋友圈评论
             List<MomentsComment> commentLists = momentsCommentService.list(new LambdaQueryWrapper<MomentsComment>()
                     .eq(MomentsComment::getMomentsId, momentsId)
-                    .eq(MomentsComment::getIsDelete,StateEnum.ENABLED));
-
-            response.setMomentsLikesResponses();
+                    .eq(MomentsComment::getIsDelete, StateEnum.ENABLED));
+            List<MomentsCommentResponse> momentsCommentResponses = commentLists.stream().map(comment -> {
+                MomentsCommentResponse momentsCommentResponse = new MomentsCommentResponse();
+                BeanUtils.copyProperties(momentsCommentResponse, comment);
+                return momentsCommentResponse;
+            }).collect(Collectors.toList());
+            response.setMomentsCommentResponses(momentsCommentResponses);
             // 朋友圈点赞
+            List<MomentsLikes> momentsLikes = momentsLikesService.list(new LambdaQueryWrapper<MomentsLikes>()
+                    .eq(MomentsLikes::getMomentsId, moments));
+            List<MomentsLikesResponse> momentsLikesResponses = momentsLikes.stream().map(like -> {
+                MomentsLikesResponse momentsLikesResponse = new MomentsLikesResponse();
+                BeanUtils.copyProperties(momentsLikesResponse, like);
+                return momentsLikesResponse;
+            }).collect(Collectors.toList());
+            response.setMomentsLikesResponses(momentsLikesResponses);
+            return response;
+        }).collect(Collectors.toList());
 
-
-        });
-        return null;
+        Page<MomentsResponse> responsePage = new Page<>(momentsIPage.getCurrent(), momentsIPage.getSize(), momentsIPage.getTotal());
+        responsePage.setRecords(responses);
+        return responsePage;
     }
 }
