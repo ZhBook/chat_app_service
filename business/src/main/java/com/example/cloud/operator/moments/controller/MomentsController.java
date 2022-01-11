@@ -25,7 +25,7 @@ public class MomentsController {
      * @param request
      * @return
      */
-    @GetMapping
+    @PostMapping("/all")
     public PageResult<MomentsResponse> getMoments(MomentsPageRequest request) {
         return PageResult.pageSuccess(momentsFacade.getMoments(request));
     }
@@ -34,7 +34,7 @@ public class MomentsController {
      * 发布朋友圈信息
      * @return
      */
-    @PostMapping
+    @PostMapping("/publish")
     public BaseResult<Boolean> publishMoments(@RequestBody MomentsRequest request){
         return BaseResult.succeed(momentsFacade.publishMoments(request));
     }
