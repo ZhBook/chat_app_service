@@ -8,7 +8,6 @@
             <id property="id" column="id" jdbcType="BIGINT"/>
             <result property="userId" column="user_id" jdbcType="BIGINT"/>
             <result property="context" column="context" jdbcType="VARCHAR"/>
-            <result property="likes" column="likes" jdbcType="BIGINT"/>
             <result property="images" column="images" jdbcType="VARCHAR"/>
             <result property="video" column="video" jdbcType="VARCHAR"/>
             <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
@@ -18,7 +17,7 @@
 
     <sql id="Base_Column_List">
         id,user_id,context,
-        likes,images,video,
+        images,video,
         create_time,update_time,is_delete
     </sql>
 </mapper>

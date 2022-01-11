@@ -8,3 +8,6 @@ server:
 spring:
   application:
     name: example-cloud-oauth
+logging:
+  level:
+    root: info

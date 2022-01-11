@@ -27,11 +27,6 @@ public class MomentsResponse {
     private String context;
 
     /**
-     * 点赞数
-     */
-    private Long likes;
-
-    /**
      * 图片地址
      */
     private String images;

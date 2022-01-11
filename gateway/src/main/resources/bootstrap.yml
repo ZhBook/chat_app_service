@@ -3,3 +3,6 @@ server:
 spring:
   application:
     name: example-cloud-gateway
+logging:
+  level:
+    root: info
