@@ -3,6 +3,7 @@ package com.example.cloud.operator.moments.facade;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.example.cloud.data.request.moments.MomentsPageRequest;
 import com.example.cloud.data.request.moments.MomentsRequest;
 import com.example.cloud.data.response.moments.MomentsCommentResponse;
 import com.example.cloud.data.response.moments.MomentsLikesResponse;
@@ -21,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,7 +44,13 @@ public class MomentsFacade {
     @Autowired
     private MomentsCommentService momentsCommentService;
 
-    public IPage<MomentsResponse> getMoments(MomentsRequest request) {
+    /**
+     * 获取朋友圈信息
+     *
+     * @param request
+     * @return
+     */
+    public IPage<MomentsResponse> getMoments(MomentsPageRequest request) {
         Page<Moments> page = new Page<>(request.getPageIndex(), request.getPageSize());
         List<Long> ids = new ArrayList<>();
         ids.add(request.getId());
@@ -90,5 +98,17 @@ public class MomentsFacade {
         Page<MomentsResponse> responsePage = new Page<>(momentsIPage.getCurrent(), momentsIPage.getSize(), momentsIPage.getTotal());
         responsePage.setRecords(responses);
         return responsePage;
+    }
+
+    /**
+     * 发布朋友圈信息
+     * @return
+     */
+    public Boolean publishMoments(MomentsRequest request) {
+        Moments moments = new Moments();
+        BeanUtils.copyProperties(moments, request);
+        moments.setCreateTime(new Date());
+        momentsService.save(moments);
+        return Boolean.TRUE;
     }
 }
