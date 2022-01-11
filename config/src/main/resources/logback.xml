@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+    <!--<include resource="org/springframework/boot/logging/logback/base.xml"/>-->
+    <property name="LOG_PATH" value="${LOG_PATH:-.}"></property>
+
+    <appender name="projectAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>${LOG_PATH}/chat-app-service.log</File>
+        <encoder>
+            <Pattern>%date %-5level [%t] [%file:%line] %msg%n%ex</Pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>${LOG_PATH}/chat-app-service.log.%d{yyyy-MM-dd}</FileNamePattern>
+            <MaxHistory>10</MaxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="errorAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>${LOG_PATH}/chat-app-service_error.log</File>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+        <encoder>
+            <Pattern>%date %-5level [%t] [%file:%line] %msg%n%ex</Pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>${LOG_PATH}/chat-app-service_error.log.%d{yyyy-MM-dd}</FileNamePattern>
+            <MaxHistory>10</MaxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%date %-5level [%t] [%file:%line] %msg%n%ex</pattern>
+        </encoder>
+    </appender>
+
+    <root>
+        <level value="${logger.level.root}"/>
+        <appender-ref ref="projectAppender"/>
+        <appender-ref ref="errorAppender"/>
+        <appender-ref ref="STDOUT"/>
+    </root>
+</configuration>

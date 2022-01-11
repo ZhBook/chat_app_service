@@ -8,20 +8,21 @@ import com.example.cloud.operator.login.entity.UserInfo;
 import com.example.cloud.operator.login.mapper.UserInfoMapper;
 import com.example.cloud.operator.login.service.UserInfoService;
 import com.example.cloud.operator.utils.WebUtil;
+import com.nimbusds.jose.JWSObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Objects;
+import java.text.ParseException;
 
 /**
-*
-*/
+ *
+ */
 @Slf4j
 @Service
 public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
-implements UserInfoService{
+        implements UserInfoService {
 
     @Override
     public UserInfo getLoginUser() {
@@ -40,6 +41,7 @@ implements UserInfoService{
 
     /**
      * 通过用户名获取用户信息
+     *
      * @param username
      * @return
      */
@@ -52,31 +54,25 @@ implements UserInfoService{
 
     /**
      * 从request中获取用户信息
+     *
      * @param request
      * @return
      */
-    private UserInfo getFromRequest(HttpServletRequest request){
+    private UserInfo getFromRequest(HttpServletRequest request) throws ParseException {
         String accessToken = request.getHeader(WebUtil.ACCESS_TOKEN_KEY);
 
         if (StringUtils.isEmpty(accessToken)) {
             log.info("获取token为空");
             return null;
         }
-        //todo 需要修改成，从oauth中获取用户信息
-        UserInfo userInfo = (UserInfo) request.getAttribute(WebUtil.REQ_ATTR_LOGIN_USER_KEY);
+        String realToken = accessToken.replace("Bearer ", "");
+        JWSObject jwsObject = JWSObject.parse(realToken);
+        String userStr = jwsObject.getPayload().toString();
 
-        if (Objects.nonNull(userInfo)) {
-            return userInfo;
-        }
-        String userJson = request.getHeader("user");
-        if (StringUtils.isNotBlank(userJson)){
-            JSONObject jsonObject = JSONUtil.parseObj(userJson);
-            String username = jsonObject.getStr("user_name");
-            UserInfo user = this.getUserInfoByUsername(username);
-            //将结果先放入请求的attribute中，避免一次请求多次调用redis获取
-            request.setAttribute(WebUtil.REQ_ATTR_LOGIN_USER_KEY, user);
-            return user;
-        }
-        return null;
+        JSONObject jsonObject = JSONUtil.parseObj(userStr);
+        String username = jsonObject.getStr("user_name");
+        UserInfo user = this.getUserInfoByUsername(username);
+        request.setAttribute(WebUtil.REQ_ATTR_LOGIN_USER_KEY, user);
+        return user;
     }
 }

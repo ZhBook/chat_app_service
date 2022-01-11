@@ -55,31 +55,32 @@ public class MomentsFacade {
         List<Long> ids = new ArrayList<>();
         ids.add(request.getId());
 
+        List<Long> relationList = userRelationService.list(new LambdaQueryWrapper<UserRelation>()
+                        .eq(UserRelation::getUserId, request.getId()))
+                .stream().map(UserRelation::getFriendId).collect(Collectors.toList());
         // 查出所有的好友
-        ids.addAll(
-                userRelationService.list(new LambdaQueryWrapper<UserRelation>()
-                                .eq(UserRelation::getUserId, request.getId()))
-                        .stream().map(UserRelation::getFriendId).collect(Collectors.toList())
-        );
+        if (!relationList.isEmpty()){
+            ids.addAll(relationList);
+        }
 
         // 查出好友的前几条朋友圈信息
         IPage<Moments> momentsIPage = momentsService.page(page, new LambdaQueryWrapper<Moments>()
                 .in(Moments::getUserId, ids)
-                .eq(Moments::getIsDelete, StateEnum.ENABLED)
+                .eq(Moments::getIsDelete, StateEnum.ENABLED.getCode())
                 .orderByDesc(Moments::getCreateTime));
         List<Moments> momentsList = momentsIPage.getRecords();
 
         List<MomentsResponse> responses = momentsList.stream().map(moments -> {
             MomentsResponse response = new MomentsResponse();
             Long momentsId = moments.getId();
-            BeanUtils.copyProperties(response, moments);
+            BeanUtils.copyProperties(moments, response);
             // 朋友圈评论
             List<MomentsComment> commentLists = momentsCommentService.list(new LambdaQueryWrapper<MomentsComment>()
                     .eq(MomentsComment::getMomentsId, momentsId)
                     .eq(MomentsComment::getIsDelete, StateEnum.ENABLED));
             List<MomentsCommentResponse> momentsCommentResponses = commentLists.stream().map(comment -> {
                 MomentsCommentResponse momentsCommentResponse = new MomentsCommentResponse();
-                BeanUtils.copyProperties(momentsCommentResponse, comment);
+                BeanUtils.copyProperties(comment, momentsCommentResponse);
                 return momentsCommentResponse;
             }).collect(Collectors.toList());
             response.setMomentsCommentResponses(momentsCommentResponses);
@@ -88,7 +89,7 @@ public class MomentsFacade {
                     .eq(MomentsLikes::getMomentsId, moments));
             List<MomentsLikesResponse> momentsLikesResponses = momentsLikes.stream().map(like -> {
                 MomentsLikesResponse momentsLikesResponse = new MomentsLikesResponse();
-                BeanUtils.copyProperties(momentsLikesResponse, like);
+                BeanUtils.copyProperties(like, momentsLikesResponse);
                 return momentsLikesResponse;
             }).collect(Collectors.toList());
             response.setMomentsLikesResponses(momentsLikesResponses);
@@ -102,11 +103,15 @@ public class MomentsFacade {
 
     /**
      * 发布朋友圈信息
+     *
      * @return
      */
     public Boolean publishMoments(MomentsRequest request) {
         Moments moments = new Moments();
-        BeanUtils.copyProperties(moments, request);
+        moments.setUserId(request.getId());
+        moments.setContext(request.getContext());
+        moments.setImages(request.getImages());
+        moments.setVideo(request.getVideo());
         moments.setCreateTime(new Date());
         momentsService.save(moments);
         return Boolean.TRUE;

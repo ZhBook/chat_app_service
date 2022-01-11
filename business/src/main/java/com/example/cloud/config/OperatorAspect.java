@@ -36,7 +36,7 @@ public class OperatorAspect {
 
     @Pointcut("execution(* com.example.cloud.operator.*.controller..*.*(..))")
     public void pointCut() {
-        log.debug("调用了");
+        log.debug("切面被调用");
     }
 
     /**
@@ -50,10 +50,8 @@ public class OperatorAspect {
     public Object around(ProceedingJoinPoint pjp) throws Throwable {
         HttpServletRequest request = WebUtil.getRequest();
         String ip = IpAddressUtil.get(request);
-        Object result;
 
         Object[] args = pjp.getArgs();
-        result = pjp.proceed();
         long start = System.currentTimeMillis();
 
         List<Object> requestList = filterArgs(args);
@@ -69,23 +67,20 @@ public class OperatorAspect {
             }
             // 需要查询当前用户信息
             if (needUser) {
-                UserInfo loginUser = userInfoService.getLoginUser();
                 for (Object arg : args) {
                     if (arg instanceof UserBeanRequest) {
+                        UserInfo loginUser = userInfoService.getLoginUser();
                         UserBeanRequest userBeanRequest = (UserBeanRequest) arg;
                         if (null == loginUser) {
                             throw new BusinessException(403, "未登录");
                         }
                         BeanUtils.copyProperties(loginUser, userBeanRequest);
-                        userBeanRequest.setUsername(loginUser.getUsername());
                     }
                 }
             }
         }
         //返回日志
         String requestJsonStr = JSON.toJSONString(requestList);
-        //防止日志过长无法阅读
-        String responseJsonStr = JSON.toJSONString(result);
         long end = System.currentTimeMillis();
 
         log.info(" 处理请求 | IP:{} | url:{} | 耗时: {}ms | method:{} | args:{} | 返回:{}",
@@ -94,7 +89,7 @@ public class OperatorAspect {
                 end - start,
                 request.getMethod(),
                 requestJsonStr,
-                responseJsonStr
+                JSON.toJSONString(pjp.proceed())
         );
         return pjp.proceed();
     }
