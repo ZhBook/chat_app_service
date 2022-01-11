@@ -4,6 +4,7 @@ MAINTAINER zhooke
 WORKDIR /apps
 ADD target/oauth.jar /apps/
 RUN echo "Asia/Shanghai" > /etc/timezone
+VOLUME /apps/chat_app_service/oauth
 EXPOSE 8002
 CMD ["java","-jar","-Xmx128m","-Xms128m","oauth.jar"]
 # docker run --name micro-user \

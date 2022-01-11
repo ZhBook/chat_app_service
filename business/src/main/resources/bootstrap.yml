@@ -9,3 +9,5 @@ mybatis:
 logging:
   level:
     root: info
+  file:
+    path: /apps/chat_app_service/business
