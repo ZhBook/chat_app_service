@@ -1,6 +1,5 @@
 package com.example.cloud.data.response.moments;
 
-import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 
 import java.util.Date;
@@ -14,18 +13,17 @@ public class MomentsLikesResponse {
     /**
      *
      */
-    @TableId
-    private Integer id;
+    private Long id;
 
     /**
      *
      */
-    private Integer momentsId;
+    private Long momentsId;
 
     /**
      *
      */
-    private Integer userId;
+    private Long userId;
 
     /**
      *

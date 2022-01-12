@@ -20,17 +20,17 @@ public class MomentsLikes implements Serializable {
      * 
      */
     @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
+    private Long id;
 
     /**
      * 
      */
-    private Integer momentsId;
+    private Long momentsId;
 
     /**
      * 
      */
-    private Integer userId;
+    private Long userId;
 
     /**
      * 

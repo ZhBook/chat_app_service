@@ -80,18 +80,32 @@ public class OperatorAspect {
             }
         }
         //返回日志
+        Object proceed = null;
+        try {
+            proceed = pjp.proceed();
+        } catch (Exception e) {
+            long end = System.currentTimeMillis();
+            String requestJsonStr = JSON.toJSONString(requestList);
+            log.info(" 处理请求 | IP:{} | url:{} | 耗时: {}ms | method:{} | args:{} | 返回异常:"
+                    , ip
+                    , request.getRequestURI()
+                    , end - start
+                    , request.getMethod()
+                    , requestJsonStr
+            );
+            throw e;
+        }
         String requestJsonStr = JSON.toJSONString(requestList);
         long end = System.currentTimeMillis();
-
         log.info(" 处理请求 | IP:{} | url:{} | 耗时: {}ms | method:{} | args:{} | 返回:{}",
                 ip,
                 request.getRequestURI(),
                 end - start,
                 request.getMethod(),
                 requestJsonStr,
-                JSON.toJSONString(pjp.proceed())
+                JSON.toJSONString(proceed)
         );
-        return pjp.proceed();
+        return proceed;
     }
 
     /**

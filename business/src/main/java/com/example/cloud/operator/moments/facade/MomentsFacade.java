@@ -3,6 +3,8 @@ package com.example.cloud.operator.moments.facade;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.example.cloud.data.request.moments.CommentRequest;
+import com.example.cloud.data.request.moments.LikeRequest;
 import com.example.cloud.data.request.moments.MomentsPageRequest;
 import com.example.cloud.data.request.moments.MomentsRequest;
 import com.example.cloud.data.response.moments.MomentsCommentResponse;
@@ -24,6 +26,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -59,7 +62,7 @@ public class MomentsFacade {
                         .eq(UserRelation::getUserId, request.getId()))
                 .stream().map(UserRelation::getFriendId).collect(Collectors.toList());
         // 查出所有的好友
-        if (!relationList.isEmpty()){
+        if (!relationList.isEmpty()) {
             ids.addAll(relationList);
         }
 
@@ -77,7 +80,7 @@ public class MomentsFacade {
             // 朋友圈评论
             List<MomentsComment> commentLists = momentsCommentService.list(new LambdaQueryWrapper<MomentsComment>()
                     .eq(MomentsComment::getMomentsId, momentsId)
-                    .eq(MomentsComment::getIsDelete, StateEnum.ENABLED));
+                    .eq(MomentsComment::getIsDelete, StateEnum.ENABLED.getCode()));
             List<MomentsCommentResponse> momentsCommentResponses = commentLists.stream().map(comment -> {
                 MomentsCommentResponse momentsCommentResponse = new MomentsCommentResponse();
                 BeanUtils.copyProperties(comment, momentsCommentResponse);
@@ -86,7 +89,7 @@ public class MomentsFacade {
             response.setMomentsCommentResponses(momentsCommentResponses);
             // 朋友圈点赞
             List<MomentsLikes> momentsLikes = momentsLikesService.list(new LambdaQueryWrapper<MomentsLikes>()
-                    .eq(MomentsLikes::getMomentsId, moments));
+                    .eq(MomentsLikes::getMomentsId, momentsId));
             List<MomentsLikesResponse> momentsLikesResponses = momentsLikes.stream().map(like -> {
                 MomentsLikesResponse momentsLikesResponse = new MomentsLikesResponse();
                 BeanUtils.copyProperties(like, momentsLikesResponse);
@@ -114,6 +117,44 @@ public class MomentsFacade {
         moments.setVideo(request.getVideo());
         moments.setCreateTime(new Date());
         momentsService.save(moments);
+        return Boolean.TRUE;
+    }
+
+    /**
+     * 点赞朋友圈
+     *
+     * @param likeRequest
+     * @return
+     */
+    public Boolean likeMoments(LikeRequest likeRequest) {
+        MomentsLikes momentsLikes = momentsLikesService.getOne(new LambdaQueryWrapper<MomentsLikes>()
+                .eq(MomentsLikes::getMomentsId, likeRequest.getMomentsId())
+                .eq(MomentsLikes::getUserId, likeRequest.getId()));
+        if (Objects.nonNull(momentsLikes)) {
+            momentsLikesService.removeById(momentsLikes);
+            return Boolean.TRUE;
+        }
+        MomentsLikes likes = new MomentsLikes();
+        likes.setMomentsId(likeRequest.getMomentsId());
+        likes.setUserId(likeRequest.getId());
+        likes.setCreateTime(new Date());
+        momentsLikesService.save(likes);
+        return Boolean.TRUE;
+    }
+
+    /**
+     * 评论朋友圈信息
+     *
+     * @param request
+     * @return
+     */
+    public Boolean commentMoments(CommentRequest request) {
+        MomentsComment momentsComment = new MomentsComment();
+        momentsComment.setMomentsId(request.getMomentsId());
+        momentsComment.setContext(request.getContext());
+        momentsComment.setUserId(request.getId());
+        momentsComment.setCreateTime(new Date());
+        momentsCommentService.save(momentsComment);
         return Boolean.TRUE;
     }
 }
