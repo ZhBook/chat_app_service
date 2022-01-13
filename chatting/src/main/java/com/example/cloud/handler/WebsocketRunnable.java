@@ -9,6 +9,7 @@ import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 
 @Slf4j
@@ -28,8 +29,10 @@ public class WebsocketRunnable implements Runnable {
     @Override
     public void run() {
         try {
-            hashMap.put("PONG", LocalDateTime.now());
-            log.info(Thread.currentThread().getName() + "--" + LocalDateTime.now());
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            String now = LocalDateTime.now().format(dtf);
+            hashMap.put("PONG", now);
+            log.info(Thread.currentThread().getName() + "--" + now);
             String response = JSONUtil.toJsonStr(SocketResult.succeed(hashMap, MessageTypeEnum.PONG.getCode()));
             channelHandlerContext.channel().writeAndFlush(new TextWebSocketFrame(response));
         } catch (Exception e) {
