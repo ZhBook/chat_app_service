@@ -32,7 +32,7 @@ public class MomentsController {
      * @return
      */
     @PostMapping("/all")
-    public PageResult<MomentsResponse> getMoments(MomentsPageRequest request) {
+    public PageResult<MomentsResponse> getMoments(@RequestBody MomentsPageRequest request) {
         return PageResult.pageSuccess(momentsFacade.getMoments(request));
     }
 

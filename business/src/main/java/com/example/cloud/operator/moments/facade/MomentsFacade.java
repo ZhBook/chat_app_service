@@ -54,7 +54,7 @@ public class MomentsFacade {
      * @return
      */
     public IPage<MomentsResponse> getMoments(MomentsPageRequest request) {
-        Page<Moments> page = new Page<>(request.getPageIndex(), request.getPageSize());
+        IPage<Moments> page = new Page<>(request.getPageIndex(), request.getPageSize());
         List<Long> ids = new ArrayList<>();
         ids.add(request.getId());
 
@@ -67,11 +67,11 @@ public class MomentsFacade {
         }
 
         // 查出好友的前几条朋友圈信息
-        IPage<Moments> momentsIPage = momentsService.page(page, new LambdaQueryWrapper<Moments>()
+        page = momentsService.page(page, new LambdaQueryWrapper<Moments>()
                 .in(Moments::getUserId, ids)
                 .eq(Moments::getIsDelete, StateEnum.ENABLED.getCode())
                 .orderByDesc(Moments::getCreateTime));
-        List<Moments> momentsList = momentsIPage.getRecords();
+        List<Moments> momentsList = page.getRecords();
 
         List<MomentsResponse> responses = momentsList.stream().map(moments -> {
             MomentsResponse response = new MomentsResponse();
@@ -99,7 +99,7 @@ public class MomentsFacade {
             return response;
         }).collect(Collectors.toList());
 
-        Page<MomentsResponse> responsePage = new Page<>(momentsIPage.getCurrent(), momentsIPage.getSize(), momentsIPage.getTotal());
+        Page<MomentsResponse> responsePage = new Page<>(page.getCurrent(), page.getSize(), page.getTotal());
         responsePage.setRecords(responses);
         return responsePage;
     }
