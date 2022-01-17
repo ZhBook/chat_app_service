@@ -13,6 +13,6 @@ public class FriendsResponse {
     Long id;
     Long userId;
     Long friendId;
-    String friendNickname;
-    String friendHeadUrl;
+    String nickname;
+    String headImgUrl;
 }
