@@ -31,12 +31,12 @@ public class UserRelation implements Serializable {
     /**
      *
      */
-    private String friendNickname;
+    private String nickname;
 
     /**
      *
      */
-    private String friendHeadUrl;
+    private String headImgUrl;
 
     /**
      *
