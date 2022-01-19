@@ -74,14 +74,13 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketF
                 futureMap.put(key, future);
                 List<ChatMessage> chatMessages = messageMapper.selectList(new LambdaQueryWrapper<ChatMessage>()
                         .eq(ChatMessage::getFriendId, userId)
+                        //消息发送后，更改数据库消息状态为未读
                         .eq(ChatMessage::getHaveRead, HaveReadStateEnum.UNREAD.getCode())
                         .orderByAsc(ChatMessage::getCreateTime));
                 chatMessages.forEach(message ->{
                             channel.eventLoop().execute(() ->
                                     channel.writeAndFlush(new TextWebSocketFrame(JSONUtil.toJsonStr(message)
                                     )));
-                            //消息发送后，更改数据库消息状态为已读
-                            message.setHaveRead(HaveReadStateEnum.REDA.getCode());
                             messageMapper.updateById(message);
                         });
 
