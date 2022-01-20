@@ -7,6 +7,10 @@ spring:
   servlet:
     multipart:
       max-file-size: 50MB
+  cloud:
+    nacos:
+      discovery:
+        ip: hub.tensua.com
 upload:
   file:
     path: /data/file/images

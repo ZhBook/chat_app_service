@@ -4,3 +4,7 @@ spring:
     username: ${spring.datasource.username}
     password: ${spring.datasource.password}
     driver-class-name: com.mysql.cj.jdbc.Driver
+  cloud:
+    nacos:
+      discovery:
+        ip: hub.tensua.com
