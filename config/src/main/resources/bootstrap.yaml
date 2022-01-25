@@ -1,0 +1,29 @@
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  profiles:
+    active: dev
+  cloud:
+    nacos:
+      password: ${nacos.password}
+      server-addr: ${nacos.server-addr}
+      username: ${nacos.username}
+      config:
+        file-extension: yaml
+        namespace: ${nacos.namespace}
+        shared-configs:
+          - data-id: ${nacos.dataId}
+            group: ${nacos.group}
+            refresh: false
+      discovery:
+        ip: ${nacos.discovery.ip}
+        namespace: ${nacos.namespace}
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+# SpringBoot读取配置文件顺序：bootstrap.yml>bootstrap.yaml>bootstrap.properties>nacos的配置>application.yml>application.yaml>application.properties

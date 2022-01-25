@@ -9,4 +9,4 @@ logging:
   level:
     root: info
   file:
-    path: /apps/chat_app_service/chatting
+    path: chat_app_service/chatting

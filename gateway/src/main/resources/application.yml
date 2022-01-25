@@ -1,9 +1,6 @@
 spring:
   profiles: dev
   cloud:
-    nacos:
-      discovery:
-        ip: hub.tensua.com
     gateway:
       global-filter:
         adapt-cached-body:

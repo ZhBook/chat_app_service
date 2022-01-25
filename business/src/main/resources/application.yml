@@ -1,16 +1,12 @@
 spring:
   datasource:
-    url: jdbc:mysql://${spring.datasource.ip}/user-center
+    url: ${spring.datasource.ip}
     username: ${spring.datasource.username}
     password: ${spring.datasource.password}
     driver-class-name: com.mysql.cj.jdbc.Driver
   servlet:
     multipart:
       max-file-size: 50MB
-  cloud:
-    nacos:
-      discovery:
-        ip: hub.tensua.com
 upload:
   file:
     path: /data/file/images

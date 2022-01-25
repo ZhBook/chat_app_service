@@ -10,4 +10,4 @@ logging:
   level:
     root: info
   file:
-    path: /apps/chat_app_service/business
+    path: chat_app_service/business

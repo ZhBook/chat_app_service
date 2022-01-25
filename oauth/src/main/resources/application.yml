@@ -1,10 +1,14 @@
 spring:
   datasource:
-    url: jdbc:mysql://${spring.datasource.ip}/user-center?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai
+    url: ${spring.datasource.ip}
     username: ${spring.datasource.username}
     password: ${spring.datasource.password}
     driver-class-name: com.mysql.cj.jdbc.Driver
   cloud:
     nacos:
-      discovery:
-        ip: hub.tensua.com
+      config:
+        # 支持多个共享 Data Id 的配置，优先级小于extension-configs,自定义 Data Id 配置 属性是个集合，内部由 Config POJO 组成。Config 有 3 个属性，分别是 dataId, group 以及 refresh
+        shared-configs[0]:
+          data-id: application-dev.yaml # 配置文件名-Data Id
+          group: CHAT_APP_GROUP   # 默认为DEFAULT_GROUP
+          refresh: false   # 是否动态刷新，默认为false
