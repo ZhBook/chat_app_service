@@ -1,9 +1,9 @@
 package com.example.cloud.config;
 
+import com.example.cloud.handle.SecureLogoutSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,11 +22,17 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Slf4j
 @RequiredArgsConstructor
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+    /**
+     * ResourceServerConfigurerAdapter会和WebSecurityConfigurerAdapter产生冲突，导致一些请求失败，比如 注销
+     */
 
     @Autowired
     private UserDetailsService userDetailsService;
 
     private final UserDetailsService sysUserDetailsService;
+
+    @Autowired
+    private SecureLogoutSuccessHandler secureLogoutSuccessHandler;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -58,12 +64,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.
-                authorizeRequests()
-                .requestMatchers(EndpointRequest.toAnyEndpoint()).permitAll()
-                .and().authorizeRequests().antMatchers("/oauth/**").permitAll()
-                .antMatchers("/rsa/publicKey").permitAll()
-                .anyRequest().authenticated();
+        // 取消跨站请求伪造防护
+        http
+                .authorizeRequests()
+                .antMatchers("/oauth/**", "/rsa/publicKey","/resource/**").permitAll()
+                .anyRequest().authenticated()
+                .and()
+                .logout()
+                .logoutUrl("/oauth/logout")
+                .logoutSuccessHandler(secureLogoutSuccessHandler)
+                .and()
+                .csrf()
+                .disable();
 
         /**
          * access(String)	如果给定的SpEL表达式计算结果为true，则允许访问

@@ -78,5 +78,9 @@ public interface AuthConstants {
      */
     String SMS_CODE_PREFIX = "SMS_CODE:";
 
+    /**
+     * 默认编码
+     */
+    String UTF8 = "UTF-8";
 
 }
