@@ -1,4 +1,4 @@
-package com.example.cloud.entity;
+package com.example.cloud.data;
 
 public interface AuthConstants {
 
@@ -42,6 +42,8 @@ public interface AuthConstants {
      * 黑名单token前缀
      */
     String TOKEN_BLACKLIST_PREFIX = "auth:token:blacklist:";
+
+    String TOKEN_ACCESS_PREFIX = "access:";
 
     String USER_ID_KEY = "userId";
 

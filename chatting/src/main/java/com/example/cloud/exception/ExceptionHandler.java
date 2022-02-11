@@ -1,13 +1,13 @@
-package com.example.cloud.handler;
+package com.example.cloud.exception;
 
 import org.springframework.boot.autoconfigure.web.ErrorProperties;
 import org.springframework.boot.autoconfigure.web.ResourceProperties;
 import org.springframework.boot.autoconfigure.web.reactive.error.DefaultErrorWebExceptionHandler;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.reactive.error.ErrorAttributes;
-import org.springframework.cloud.gateway.support.NotFoundException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.reactive.function.server.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,8 +16,8 @@ import java.util.Map;
  * @author zhouhd
  * @since 2021/10/8 13:08
  **/
-public class JsonExceptionHandler extends DefaultErrorWebExceptionHandler {
-    public JsonExceptionHandler(ErrorAttributes errorAttributes, ResourceProperties resourceProperties, ErrorProperties errorProperties, ApplicationContext applicationContext) {
+public class ExceptionHandler extends DefaultErrorWebExceptionHandler {
+    public ExceptionHandler(ErrorAttributes errorAttributes, ResourceProperties resourceProperties, ErrorProperties errorProperties, ApplicationContext applicationContext) {
         super(errorAttributes, resourceProperties, errorProperties, applicationContext);
     }
 
@@ -31,7 +31,7 @@ public class JsonExceptionHandler extends DefaultErrorWebExceptionHandler {
     protected Map<String, Object> getErrorAttributes(ServerRequest request, ErrorAttributeOptions options) {
         int code = 500;
         Throwable error = super.getError(request);
-        if (error instanceof NotFoundException){
+        if (error instanceof ResponseStatusException){
             code =404;
         }
         return response(code, this.buildMessage(request, error));
@@ -67,7 +67,7 @@ public class JsonExceptionHandler extends DefaultErrorWebExceptionHandler {
         StringBuilder message = new StringBuilder("Failed to handle request [");
         message.append(request.methodName());
         message.append(" ");
-        message.append(request.uri());
+        message.append(request.uri().getPath());
         message.append("]");
         if (ex != null) {
             message.append(": ");

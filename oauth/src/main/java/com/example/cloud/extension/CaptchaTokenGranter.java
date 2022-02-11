@@ -2,7 +2,7 @@ package com.example.cloud.extension;
 
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.StrUtil;
-import com.example.cloud.entity.AuthConstants;
+import com.example.cloud.data.AuthConstants;
 import com.example.cloud.exception.BusinessException;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.authentication.*;

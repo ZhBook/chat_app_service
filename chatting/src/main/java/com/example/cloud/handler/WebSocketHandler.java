@@ -66,7 +66,7 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketF
             //用户信息不存在，加入队列，查之前未读消息，并且发送给用户
             if (!channelMap.containsKey(key)) {
                 //使用channel中的任务队列，做周期循环推送客户端消息，解决问题二和问题五
-                Future future = ctx.channel().eventLoop().scheduleAtFixedRate(new WebsocketRunnable(ctx, chatMessage), 0, 10, TimeUnit.SECONDS);
+                Future future = ctx.channel().eventLoop().scheduleAtFixedRate(new WebsocketRunnable(ctx, chatMessage), 0, 30, TimeUnit.SECONDS);
                 //存储客户端和服务的通信的Chanel
                 Channel channel = ctx.channel();
                 channelMap.put(key, channel);

@@ -2,7 +2,7 @@ package com.example.cloud.handle;
 
 import cn.hutool.json.JSONUtil;
 import com.example.cloud.data.BaseResult;
-import com.example.cloud.entity.AuthConstants;
+import com.example.cloud.data.AuthConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;

@@ -1,6 +1,5 @@
-package com.example.cloud.config;
+package com.example.cloud.exception;
 
-import com.example.cloud.handler.JsonExceptionHandler;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -58,7 +57,7 @@ public class ErrorHandlerConfiguration {
     @Bean
     @Order(Ordered.HIGHEST_PRECEDENCE)
     public ErrorWebExceptionHandler errorWebExceptionHandler(ErrorAttributes errorAttributes) {
-        JsonExceptionHandler exceptionHandler = new JsonExceptionHandler(
+        ExceptionHandler exceptionHandler = new ExceptionHandler(
                 errorAttributes,
                 this.resourceProperties,
                 this.serverProperties.getError(),
