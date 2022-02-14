@@ -26,6 +26,7 @@ public class JsonExceptionHandler extends DefaultErrorWebExceptionHandler {
 
     /**
      * BusinessException 业务异常处理
+     *
      * @param request
      * @param options
      * @return
@@ -34,8 +35,9 @@ public class JsonExceptionHandler extends DefaultErrorWebExceptionHandler {
     protected Map<String, Object> getErrorAttributes(ServerRequest request, ErrorAttributeOptions options) {
         int code = 500;
         Throwable error = super.getError(request);
-        if (error instanceof NotFoundException){
-            code =404;
+        String message = error.getMessage();
+        if (message.contains("404") || error instanceof NotFoundException) {
+            code = 404;
         }
         return response(code, this.buildMessage(request, error));
     }
@@ -52,6 +54,7 @@ public class JsonExceptionHandler extends DefaultErrorWebExceptionHandler {
 
     /**
      * 根据code获取对应的HttpStatus
+     *
      * @param errorAttributes
      */
     @Override
