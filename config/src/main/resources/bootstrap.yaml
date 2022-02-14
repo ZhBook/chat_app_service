@@ -19,11 +19,10 @@ spring:
         ip: ${nacos.discovery.ip}
         namespace: ${nacos.namespace}
 management:
-  endpoint:
-    health:
-      show-details: always
   endpoints:
     web:
       exposure:
-        include: '*'
+#        include: '*'
+        include: health,refresh,info
+    enabled-by-default: true
 # SpringBoot读取配置文件顺序：bootstrap.yml>bootstrap.yaml>bootstrap.properties>nacos的配置>application.yml>application.yaml>application.properties
