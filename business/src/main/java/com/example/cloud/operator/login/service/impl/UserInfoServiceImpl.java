@@ -4,6 +4,8 @@ import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.example.cloud.data.AuthConstants;
+import com.example.cloud.exception.BusinessException;
 import com.example.cloud.operator.login.entity.UserInfo;
 import com.example.cloud.operator.login.mapper.UserInfoMapper;
 import com.example.cloud.operator.login.service.UserInfoService;
@@ -65,7 +67,13 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
             log.info("获取token为空");
             return null;
         }
-        String realToken = accessToken.replace("Bearer ", "");
+        if (accessToken.contains(AuthConstants.BASIC_PREFIX)){
+            throw new BusinessException("当前用户未登录");
+        }
+        String realToken = accessToken.replace(AuthConstants.JWT_PREFIX, "");
+        if (StringUtils.isBlank(realToken)){
+            throw new BusinessException("当前用户未登录");
+        }
         JWSObject jwsObject = JWSObject.parse(realToken);
         String userStr = jwsObject.getPayload().toString();
 

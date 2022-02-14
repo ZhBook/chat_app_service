@@ -42,7 +42,7 @@ public class AuthGlobalFilter implements GlobalFilter, Ordered {
             String realToken = token.replace("Bearer ", "");
             JWSObject jwsObject = JWSObject.parse(realToken);
             String userStr = jwsObject.getPayload().toString();
-            log.info("AuthGlobalFilter.filter() user:{}", userStr);
+            log.info("过滤器中获取的用户user:{}", userStr);
             ServerHttpRequest request = exchange.getRequest().mutate().header("user", userStr).build();
             log.info(exchange.getAttributes().toString());
             exchange = exchange.mutate().request(request).build();

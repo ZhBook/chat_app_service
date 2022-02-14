@@ -1,5 +1,6 @@
 package com.example.cloud.exception;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.web.ErrorProperties;
 import org.springframework.boot.autoconfigure.web.ResourceProperties;
 import org.springframework.boot.autoconfigure.web.reactive.error.DefaultErrorWebExceptionHandler;
@@ -16,7 +17,9 @@ import java.util.Map;
  * @author zhouhd
  * @since 2021/10/8 13:08
  **/
+@Slf4j
 public class JsonExceptionHandler extends DefaultErrorWebExceptionHandler {
+    //启动时候加载
     public JsonExceptionHandler(ErrorAttributes errorAttributes, ResourceProperties resourceProperties, ErrorProperties errorProperties, ApplicationContext applicationContext) {
         super(errorAttributes, resourceProperties, errorProperties, applicationContext);
     }
@@ -36,6 +39,7 @@ public class JsonExceptionHandler extends DefaultErrorWebExceptionHandler {
         }
         return response(code, this.buildMessage(request, error));
     }
+
     /**
      * 指定响应处理方法为JSON处理的方法
      *

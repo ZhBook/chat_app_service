@@ -9,7 +9,7 @@
             <Pattern>%date %-5level [%t] [%file:%line] %msg%n%ex</Pattern>
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <FileNamePattern>${LOG_PATH}/chat-app-service.log.%d{yyyy-MM-dd}</FileNamePattern>
+            <FileNamePattern>${LOG_PATH}/chat-app-service.%d{yyyy-MM-dd}.log</FileNamePattern>
             <MaxHistory>10</MaxHistory>
         </rollingPolicy>
     </appender>
@@ -23,7 +23,7 @@
             <Pattern>%date %-5level [%t] [%file:%line] %msg%n%ex</Pattern>
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <FileNamePattern>${LOG_PATH}/chat-app-service_error.log.%d{yyyy-MM-dd}</FileNamePattern>
+            <FileNamePattern>${LOG_PATH}/chat-app-service_error.%d{yyyy-MM-dd}.log</FileNamePattern>
             <MaxHistory>10</MaxHistory>
         </rollingPolicy>
     </appender>
