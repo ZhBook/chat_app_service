@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * 处理404错误
  * @author zhooke
  * @since 2022/2/14 14:32
  **/
