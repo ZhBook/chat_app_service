@@ -1,4 +1,4 @@
-package com.example.cloud.data.response.blogconfig;
+package com.example.cloud.data.response.blog;
 
 import lombok.Data;
 
