@@ -1,4 +1,4 @@
-package com.example.cloud.operator.blogconfig.entity;
+package com.example.cloud.operator.blog.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;

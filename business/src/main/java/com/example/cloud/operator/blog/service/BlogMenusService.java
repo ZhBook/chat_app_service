@@ -1,6 +1,6 @@
-package com.example.cloud.operator.blogconfig.service;
+package com.example.cloud.operator.blog.service;
 
-import com.example.cloud.operator.blogconfig.entity.BlogMenus;
+import com.example.cloud.operator.blog.entity.BlogMenus;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**

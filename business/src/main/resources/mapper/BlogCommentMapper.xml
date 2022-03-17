@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.cloud.operator.blog.mapper.BlogCommentMapper">
+
+    <resultMap id="BaseResultMap" type="com.example.cloud.operator.blog.entity.BlogComment">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="blogId" column="blog_id" jdbcType="BIGINT"/>
+            <result property="comment" column="comment" jdbcType="VARCHAR"/>
+            <result property="version" column="version" jdbcType="TINYINT"/>
+            <result property="email" column="email" jdbcType="VARCHAR"/>
+            <result property="isDelete" column="is_delete" jdbcType="TINYINT"/>
+            <result property="createUserId" column="create_user_id" jdbcType="BIGINT"/>
+            <result property="createUserName" column="create_user_name" jdbcType="VARCHAR"/>
+            <result property="createDate" column="create_date" jdbcType="TIMESTAMP"/>
+            <result property="updateUserId" column="update_user_id" jdbcType="BIGINT"/>
+            <result property="updateUserName" column="update_user_name" jdbcType="INTEGER"/>
+            <result property="updateDate" column="update_date" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,blog_id,comment,
+        version,email,is_delete,
+        create_user_id,create_user_name,create_date,
+        update_user_id,update_user_name,update_date
+    </sql>
+</mapper>

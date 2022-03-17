@@ -1,8 +1,8 @@
-package com.example.cloud.operator.blogconfig.controller;
+package com.example.cloud.operator.blog.controller;
 
 import com.example.cloud.data.BaseResult;
 import com.example.cloud.data.response.blogconfig.BlogConfigResponse;
-import com.example.cloud.operator.blogconfig.facade.BlogConfigFacade;
+import com.example.cloud.operator.blog.facade.BlogFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,13 +16,17 @@ import java.util.List;
  **/
 @RestController
 @RequestMapping("/blog")
-public class BlogConfigController {
+public class BlogController {
 
     @Autowired
-    private BlogConfigFacade blogConfigFacade;
+    private BlogFacade blogFacade;
 
+    /**
+     * 获取后台菜单列表
+     * @return
+     */
     @GetMapping("menus")
     public BaseResult<List<BlogConfigResponse>> getMenusList(){
-        return BaseResult.succeed(blogConfigFacade.getMenusList());
+        return BaseResult.succeed(blogFacade.getMenusList());
     }
 }
