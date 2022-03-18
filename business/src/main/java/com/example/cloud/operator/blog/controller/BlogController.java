@@ -6,6 +6,7 @@ import com.example.cloud.data.request.blog.BlogListRequest;
 import com.example.cloud.data.request.blog.BlogRequest;
 import com.example.cloud.data.response.blog.BlogConfigResponse;
 import com.example.cloud.data.response.blog.BlogListResponse;
+import com.example.cloud.data.response.blog.BlogResponse;
 import com.example.cloud.operator.blog.facade.BlogFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -53,5 +54,15 @@ public class BlogController {
     @PostMapping("/add")
     public BaseResult<Boolean> addBlog(@RequestBody BlogRequest request) {
         return BaseResult.succeed(blogFacade.addBlog(request));
+    }
+
+    /**
+     * 获取blog正文
+     * @param blogId
+     * @return
+     */
+    @GetMapping("/{blogId}")
+    public BaseResult<BlogResponse> getBlogById(@PathVariable("blogId") Long blogId){
+        return BaseResult.succeed(blogFacade.getBlogById(blogId));
     }
 }

@@ -7,8 +7,10 @@ import com.example.cloud.data.request.blog.BlogListRequest;
 import com.example.cloud.data.request.blog.BlogRequest;
 import com.example.cloud.data.response.blog.BlogConfigResponse;
 import com.example.cloud.data.response.blog.BlogListResponse;
+import com.example.cloud.data.response.blog.BlogResponse;
 import com.example.cloud.enums.IsDeleteEnum;
 import com.example.cloud.enums.StateEnum;
+import com.example.cloud.exception.BusinessException;
 import com.example.cloud.operator.blog.entity.BlogComment;
 import com.example.cloud.operator.blog.entity.BlogList;
 import com.example.cloud.operator.blog.entity.BlogMenus;
@@ -111,5 +113,23 @@ public class BlogFacade {
         blogList.setUpdateUserId(request.getId());
         blogList.setVersion(1);
         return blogListService.save(blogList);
+    }
+
+    /**
+     * 获取blog正文
+     *
+     * @param blogId
+     * @return
+     */
+    public BlogResponse getBlogById(Long blogId) {
+        BlogList blog = blogListService.getById(blogId);
+        if (Objects.isNull(blog)){
+            throw new BusinessException("博客不存在");
+        }
+        BlogResponse blogResponse = new BlogResponse();
+        BeanUtils.copyProperties(blog, blogResponse);
+        blog.setBlogBrowse(blog.getBlogBrowse() + 1);
+        blogListService.updateById(blog);
+        return blogResponse;
     }
 }

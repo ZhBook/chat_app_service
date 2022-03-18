@@ -1,6 +1,7 @@
 package com.example.cloud.config;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.example.cloud.exception.BusinessException;
 import com.example.cloud.operator.login.entity.UserInfo;
 import com.example.cloud.operator.login.service.UserInfoService;
@@ -81,8 +82,11 @@ public class OperatorAspect {
         }
         //返回日志
         Object proceed = null;
+        JSONObject jsonObject = null;
         try {
             proceed = pjp.proceed();
+            jsonObject = JSON.parseObject(JSON.toJSONString(proceed));
+            jsonObject.put("data",jsonObject.getString("data").substring(0,200));
         } catch (Exception e) {
             long end = System.currentTimeMillis();
             String requestJsonStr = JSON.toJSONString(requestList);
@@ -102,18 +106,18 @@ public class OperatorAspect {
                 request.getRequestURI(),
                 end - start,
                 request.getMethod(),
-                requestJsonStr,
-                JSON.toJSONString(proceed)
+                jsonObject
         );
         return proceed;
     }
 
     /**
-     *  接口参数过滤HttpServletRequest、HttpServletResponse、MultipartFile
+     * 接口参数过滤HttpServletRequest、HttpServletResponse、MultipartFile
+     *
      * @param args
      * @return
      */
-    private List<Object> filterArgs(Object[] args){
+    private List<Object> filterArgs(Object[] args) {
         return Lists.newArrayList(args).stream()
                 .filter(arg -> !(arg instanceof HttpServletRequest || arg instanceof HttpServletResponse
                         || arg instanceof MultipartFile))

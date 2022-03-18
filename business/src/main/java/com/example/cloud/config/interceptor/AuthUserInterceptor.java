@@ -34,7 +34,7 @@ public class AuthUserInterceptor extends HandlerInterceptorAdapter {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String accessToken = request.getHeader(WebUtil.ACCESS_TOKEN_KEY);
-        log.info("accessToken：" + accessToken);
+//        log.info("accessToken：" + accessToken);
 
         //IP信息
         String ip = IpAddressUtil.get(request);
