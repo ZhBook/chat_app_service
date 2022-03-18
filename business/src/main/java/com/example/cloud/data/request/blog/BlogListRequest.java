@@ -1,6 +1,5 @@
 package com.example.cloud.data.request.blog;
 
-import com.example.cloud.system.PagingUserBaseRequest;
 import lombok.Data;
 
 /**
@@ -8,7 +7,7 @@ import lombok.Data;
  * @since 2022/3/17 17:39
  **/
 @Data
-public class BlogListRequest extends PagingUserBaseRequest {
+public class BlogListRequest{
     /**
      *
      */
@@ -43,4 +42,14 @@ public class BlogListRequest extends PagingUserBaseRequest {
      * 是否原创 0否 1是
      */
     private Integer isOriginal;
+
+    /**
+     * 默认第一页
+     */
+    Integer pageIndex = 1;
+
+    /**
+     * 默认每页10条
+     */
+    Integer pageSize = 10;
 }

@@ -33,7 +33,5 @@ public abstract class UserBeanRequest implements Serializable {
 
     private Date createTime;
 
-    private int isDelete;
-
     private int isEnabled;
 }

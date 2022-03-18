@@ -9,8 +9,10 @@ import com.example.cloud.data.response.blog.BlogConfigResponse;
 import com.example.cloud.data.response.blog.BlogListResponse;
 import com.example.cloud.enums.IsDeleteEnum;
 import com.example.cloud.enums.StateEnum;
+import com.example.cloud.operator.blog.entity.BlogComment;
 import com.example.cloud.operator.blog.entity.BlogList;
 import com.example.cloud.operator.blog.entity.BlogMenus;
+import com.example.cloud.operator.blog.service.BlogCommentService;
 import com.example.cloud.operator.blog.service.BlogListService;
 import com.example.cloud.operator.blog.service.BlogMenusService;
 import org.apache.commons.lang3.StringUtils;
@@ -35,6 +37,9 @@ public class BlogFacade {
 
     @Autowired
     private BlogListService blogListService;
+
+    @Autowired
+    private BlogCommentService blogCommentService;
 
     /**
      * 获取后台菜单列表
@@ -68,21 +73,25 @@ public class BlogFacade {
         String title = request.getTitle();
         Integer isPrivate = request.getIsPrivate();
         IPage<BlogList> page = new Page<>(request.getPageIndex(), request.getPageSize());
-        page = blogListService.page(page, new LambdaQueryWrapper<BlogList>()
+        IPage<BlogList> listIPage = blogListService.page(page, new LambdaQueryWrapper<BlogList>()
                 .eq(Objects.nonNull(id), BlogList::getId, id)
                 .eq(Objects.nonNull(isOriginal), BlogList::getIsOriginal, isOriginal)
                 .like(StringUtils.isNotBlank(title), BlogList::getTitle, title)
                 .eq(Objects.nonNull(isPrivate), BlogList::getIsPrivate, isPrivate)
-                .eq(BlogList::getIsDelete, IsDeleteEnum.NO.getCode()));
-        List<BlogList> blogLists = page.getRecords();
+                .eq(BlogList::getIsDelete, IsDeleteEnum.NO.getCode())
+                .orderByDesc(BlogList::getCreateDate));
+        List<BlogList> blogLists = listIPage.getRecords();
         List<BlogListResponse> collect = blogLists.stream().map(blog -> {
             BlogListResponse blogListResponse = new BlogListResponse();
             BeanUtils.copyProperties(blog, blogListResponse);
+            int comment = blogCommentService.count(new LambdaQueryWrapper<BlogComment>()
+                    .eq(BlogComment::getBlogId, blog.getId()));
+            blogListResponse.setCommentNum(comment);
             return blogListResponse;
         }).collect(Collectors.toList());
         Page<BlogListResponse> responsePage = new Page<>(request.getPageIndex(), request.getPageSize());
         responsePage.setRecords(collect);
-        responsePage.setTotal(page.getTotal());
+        responsePage.setTotal(listIPage.getTotal());
         return responsePage;
     }
 

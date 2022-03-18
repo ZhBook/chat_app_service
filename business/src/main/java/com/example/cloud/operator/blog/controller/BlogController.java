@@ -5,6 +5,7 @@ import com.example.cloud.data.PageResult;
 import com.example.cloud.data.request.blog.BlogListRequest;
 import com.example.cloud.data.request.blog.BlogRequest;
 import com.example.cloud.data.response.blog.BlogConfigResponse;
+import com.example.cloud.data.response.blog.BlogListResponse;
 import com.example.cloud.operator.blog.facade.BlogFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -39,7 +40,7 @@ public class BlogController {
      * @return
      */
     @PostMapping("/list")
-    public PageResult getBlogList(@RequestBody BlogListRequest request) {
+    public PageResult<BlogListResponse> getBlogList(@RequestBody BlogListRequest request) {
         return PageResult.pageSuccess(blogFacade.getBlogList(request));
     }
 
