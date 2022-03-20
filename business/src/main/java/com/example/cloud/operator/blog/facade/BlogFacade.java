@@ -1,10 +1,14 @@
 package com.example.cloud.operator.blog.facade;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.example.cloud.data.request.blog.BlogCommentListRequest;
+import com.example.cloud.data.request.blog.BlogCommentRequest;
 import com.example.cloud.data.request.blog.BlogListRequest;
 import com.example.cloud.data.request.blog.BlogRequest;
+import com.example.cloud.data.response.blog.BlogCommentListResponse;
 import com.example.cloud.data.response.blog.BlogConfigResponse;
 import com.example.cloud.data.response.blog.BlogListResponse;
 import com.example.cloud.data.response.blog.BlogResponse;
@@ -123,7 +127,7 @@ public class BlogFacade {
      */
     public BlogResponse getBlogById(Long blogId) {
         BlogList blog = blogListService.getById(blogId);
-        if (Objects.isNull(blog)){
+        if (Objects.isNull(blog)) {
             throw new BusinessException("博客不存在");
         }
         BlogResponse blogResponse = new BlogResponse();
@@ -131,5 +135,51 @@ public class BlogFacade {
         blog.setBlogBrowse(blog.getBlogBrowse() + 1);
         blogListService.updateById(blog);
         return blogResponse;
+    }
+
+    /**
+     * 通过blogId获取评论
+     * @param request
+     * @return
+     */
+    public List<BlogCommentListResponse> getBlogComment(BlogCommentListRequest request) {
+        IPage<BlogComment> page = new Page<>(request.getPageIndex(), request.getPageSize());
+
+        page = blogCommentService.page(page, new LambdaQueryWrapper<BlogComment>()
+                .eq(BlogComment::getBlogId, request.getBlogId())
+                .eq(BlogComment::getIsDelete, StateEnum.ENABLED.getCode()));
+        List<BlogComment> blogCommentList = page.getRecords();
+        if (Objects.isNull(page) || CollectionUtil.isEmpty(blogCommentList)) {
+            return CollectionUtil.newArrayList();
+        }
+        List<BlogCommentListResponse> responses = blogCommentList.stream().map(comment -> {
+            BlogCommentListResponse blogCommentListResponse = new BlogCommentListResponse();
+            BeanUtils.copyProperties(comment, blogCommentListResponse);
+            return blogCommentListResponse;
+        }).collect(Collectors.toList());
+        return responses;
+    }
+
+    /**
+     * 通过blogId进行评论
+     *
+     * @param request
+     * @return
+     */
+    public Boolean blogComment(BlogCommentRequest request) {
+        Long blogId = request.getBlogId();
+        BlogList blog = blogListService.getById(blogId);
+        if (Objects.isNull(blog)){
+            throw new BusinessException("博客不存在");
+        }
+        Date date = new Date();
+        BlogComment blogComment = new BlogComment();
+        blogComment.setBlogId(blogId);
+        blog.setContent(request.getComment());
+        blog.setCreateDate(date);
+        blog.setCreateUserId(request.getUserId());
+        blog.setAuthorId(request.getUserId());
+        blog.setAuthorName(request.getNickname());
+        return blogCommentService.save(blogComment);
     }
 }

@@ -7,6 +7,7 @@ import com.example.cloud.operator.login.entity.UserInfo;
 import com.example.cloud.operator.login.service.UserInfoService;
 import com.example.cloud.operator.utils.IpAddressUtil;
 import com.example.cloud.operator.utils.WebUtil;
+import com.example.cloud.system.BlogUserRequest;
 import com.example.cloud.system.UserBeanRequest;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
@@ -70,9 +71,11 @@ public class OperatorAspect {
             // 需要查询当前用户信息
             if (needUser) {
                 for (Object arg : args) {
-                    if (arg instanceof UserBeanRequest) {
+                    if (arg instanceof UserBeanRequest || arg instanceof BlogUserRequest) {
                         UserInfo loginUser = userInfoService.getLoginUser();
                         UserBeanRequest userBeanRequest = (UserBeanRequest) arg;
+                        BlogUserRequest blogUserRequest = (BlogUserRequest) arg;
+                        blogUserRequest.setUserId(userBeanRequest.getId());
                         if (null == loginUser) {
                             throw new BusinessException(403, "未登录");
                         }

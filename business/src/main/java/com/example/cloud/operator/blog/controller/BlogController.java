@@ -2,8 +2,11 @@ package com.example.cloud.operator.blog.controller;
 
 import com.example.cloud.data.BaseResult;
 import com.example.cloud.data.PageResult;
+import com.example.cloud.data.request.blog.BlogCommentListRequest;
+import com.example.cloud.data.request.blog.BlogCommentRequest;
 import com.example.cloud.data.request.blog.BlogListRequest;
 import com.example.cloud.data.request.blog.BlogRequest;
+import com.example.cloud.data.response.blog.BlogCommentListResponse;
 import com.example.cloud.data.response.blog.BlogConfigResponse;
 import com.example.cloud.data.response.blog.BlogListResponse;
 import com.example.cloud.data.response.blog.BlogResponse;
@@ -58,11 +61,34 @@ public class BlogController {
 
     /**
      * 获取blog正文
+     *
      * @param blogId
      * @return
      */
     @GetMapping("/{blogId}")
-    public BaseResult<BlogResponse> getBlogById(@PathVariable("blogId") Long blogId){
+    public BaseResult<BlogResponse> getBlogById(@PathVariable("blogId") Long blogId) {
         return BaseResult.succeed(blogFacade.getBlogById(blogId));
+    }
+
+    /**
+     * 通过blogId获取评论
+     *
+     * @param request
+     * @return
+     */
+    @PostMapping("/comment:list")
+    public PageResult<BlogCommentListResponse> getBlogComment(@RequestBody BlogCommentListRequest request) {
+        return PageResult.pageSuccess(blogFacade.getBlogComment(request));
+    }
+
+    /**
+     * 通过blogId进行评论
+     *
+     * @param request
+     * @return
+     */
+    @PostMapping("/comment")
+    public BaseResult<Boolean> blogComment(BlogCommentRequest request) {
+        return BaseResult.succeed(blogFacade.blogComment(request));
     }
 }
