@@ -181,6 +181,7 @@ public class BlogFacade {
         blogComment.setCreateUserId(request.getUserId());
         blogComment.setCreateUserName(request.getNickname());
         blogComment.setEmail(request.getEMail());
+        blogComment.setHeadImgUrl(request.getHeadImgUrl());
         return blogCommentService.save(blogComment);
     }
 }

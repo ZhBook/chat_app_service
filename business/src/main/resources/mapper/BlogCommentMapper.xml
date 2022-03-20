@@ -14,6 +14,7 @@
             <result property="createUserId" column="create_user_id" jdbcType="BIGINT"/>
             <result property="createUserName" column="create_user_name" jdbcType="VARCHAR"/>
             <result property="createDate" column="create_date" jdbcType="TIMESTAMP"/>
+            <result property="headImgUrl" column="head_img_url" jdbcType="VARCHAR"/>
             <result property="updateUserId" column="update_user_id" jdbcType="BIGINT"/>
             <result property="updateUserName" column="update_user_name" jdbcType="INTEGER"/>
             <result property="updateDate" column="update_date" jdbcType="TIMESTAMP"/>

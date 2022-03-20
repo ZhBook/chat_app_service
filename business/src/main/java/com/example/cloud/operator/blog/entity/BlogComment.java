@@ -63,6 +63,11 @@ public class BlogComment implements Serializable {
     private Date createDate;
 
     /**
+     *
+     */
+    private String headImgUrl;
+
+    /**
      * 
      */
     private Long updateUserId;

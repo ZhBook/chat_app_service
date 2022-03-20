@@ -1,5 +1,6 @@
 package com.example.cloud.data.response.blog;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.util.Date;
@@ -44,5 +45,11 @@ public class BlogCommentListResponse {
     /**
      *
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createDate;
+
+    /**
+     *
+     */
+    private String headImgUrl;
 }
