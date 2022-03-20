@@ -10,6 +10,7 @@ import com.example.cloud.operator.utils.WebUtil;
 import com.example.cloud.system.UserBeanRequest;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -86,7 +87,10 @@ public class OperatorAspect {
         try {
             proceed = pjp.proceed();
             jsonObject = JSON.parseObject(JSON.toJSONString(proceed));
-            jsonObject.put("data",jsonObject.getString("data").substring(0,200));
+            String data = jsonObject.getString("data");
+            if (StringUtils.isNotBlank(data) && data.length() > 200) {
+                jsonObject.put("data", data.substring(0, 200));
+            }
         } catch (Exception e) {
             long end = System.currentTimeMillis();
             String requestJsonStr = JSON.toJSONString(requestList);
