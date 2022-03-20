@@ -71,15 +71,21 @@ public class OperatorAspect {
             // 需要查询当前用户信息
             if (needUser) {
                 for (Object arg : args) {
-                    if (arg instanceof UserBeanRequest || arg instanceof BlogUserRequest) {
+                    if (arg instanceof UserBeanRequest) {
                         UserInfo loginUser = userInfoService.getLoginUser();
                         UserBeanRequest userBeanRequest = (UserBeanRequest) arg;
-                        BlogUserRequest blogUserRequest = (BlogUserRequest) arg;
-                        blogUserRequest.setUserId(userBeanRequest.getId());
                         if (null == loginUser) {
                             throw new BusinessException(403, "未登录");
                         }
                         BeanUtils.copyProperties(loginUser, userBeanRequest);
+                    }else if (arg instanceof BlogUserRequest){
+                        UserInfo loginUser = userInfoService.getLoginUser();
+                        BlogUserRequest blogUserRequest = (BlogUserRequest) arg;
+                        blogUserRequest.setUserId(loginUser.getId());
+                        if (null == loginUser) {
+                            throw new BusinessException(403, "未登录");
+                        }
+                        BeanUtils.copyProperties(loginUser, blogUserRequest);
                     }
                 }
             }
