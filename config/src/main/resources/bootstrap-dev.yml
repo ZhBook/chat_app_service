@@ -1,9 +1,11 @@
 nacos:
   dataId: application-dev.yaml
+  # 部署服务的内网或外网ip
   discovery:
     ip: hub.tensua.com
   group: CHAT_APP_GROUP
-  namespace: 40f771e2-365f-43f3-a665-a5faf6b21886
+  namespace: 45cc4c94-9fb8-4e40-88ab-a8477fb11a84
   password: chat_app
-  server-addr: 101.43.11.226:8848
+  #nacos服务绑定的ip
+  server-addr: 81.69.54.235:8848
   username: chat_app
