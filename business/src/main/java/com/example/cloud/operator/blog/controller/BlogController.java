@@ -88,7 +88,7 @@ public class BlogController {
      * @return
      */
     @PostMapping("/comment")
-    public BaseResult<Boolean> blogComment(BlogCommentRequest request) {
+    public BaseResult<Boolean> blogComment(@RequestBody BlogCommentRequest request) {
         return BaseResult.succeed(blogFacade.blogComment(request));
     }
 }

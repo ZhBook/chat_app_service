@@ -66,6 +66,9 @@ public class OperatorAspect {
                 if (arg instanceof UserBeanRequest) {
                     needUser = true;
                     break;
+                } else if (arg instanceof BlogUserRequest) {
+                    needUser = true;
+                    break;
                 }
             }
             // 需要查询当前用户信息
@@ -78,7 +81,7 @@ public class OperatorAspect {
                             throw new BusinessException(403, "未登录");
                         }
                         BeanUtils.copyProperties(loginUser, userBeanRequest);
-                    }else if (arg instanceof BlogUserRequest){
+                    } else if (arg instanceof BlogUserRequest) {
                         UserInfo loginUser = userInfoService.getLoginUser();
                         BlogUserRequest blogUserRequest = (BlogUserRequest) arg;
                         blogUserRequest.setUserId(loginUser.getId());

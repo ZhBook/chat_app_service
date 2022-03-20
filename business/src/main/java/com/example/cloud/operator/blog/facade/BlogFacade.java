@@ -147,7 +147,8 @@ public class BlogFacade {
 
         page = blogCommentService.page(page, new LambdaQueryWrapper<BlogComment>()
                 .eq(BlogComment::getBlogId, request.getBlogId())
-                .eq(BlogComment::getIsDelete, StateEnum.ENABLED.getCode()));
+                .eq(BlogComment::getIsDelete, IsDeleteEnum.NO.getCode())
+                .orderByDesc(BlogComment::getCreateDate));
         List<BlogComment> blogCommentList = page.getRecords();
         if (Objects.isNull(page) || CollectionUtil.isEmpty(blogCommentList)) {
             return CollectionUtil.newArrayList();
@@ -175,11 +176,11 @@ public class BlogFacade {
         Date date = new Date();
         BlogComment blogComment = new BlogComment();
         blogComment.setBlogId(blogId);
-        blog.setContent(request.getComment());
-        blog.setCreateDate(date);
-        blog.setCreateUserId(request.getUserId());
-        blog.setAuthorId(request.getUserId());
-        blog.setAuthorName(request.getNickname());
+        blogComment.setComment(request.getComment());
+        blogComment.setCreateDate(date);
+        blogComment.setCreateUserId(request.getUserId());
+        blogComment.setCreateUserName(request.getNickname());
+        blogComment.setEmail(request.getEMail());
         return blogCommentService.save(blogComment);
     }
 }
