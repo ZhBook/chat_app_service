@@ -11,6 +11,8 @@ import com.example.cloud.data.response.blog.BlogConfigResponse;
 import com.example.cloud.data.response.blog.BlogListResponse;
 import com.example.cloud.data.response.blog.BlogResponse;
 import com.example.cloud.operator.blog.facade.BlogFacade;
+import com.example.cloud.system.NoParamsBlogUserRequest;
+import com.example.cloud.system.PagingBlogRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -90,5 +92,25 @@ public class BlogController {
     @PostMapping("/comment")
     public BaseResult<Boolean> blogComment(@RequestBody BlogCommentRequest request) {
         return BaseResult.succeed(blogFacade.blogComment(request));
+    }
+
+    /**
+     * 获取最新评论列表
+     * @param request
+     * @return
+     */
+    @GetMapping("/comment/newest")
+    public BaseResult<List<BlogCommentListResponse>> blogCommentNewest(PagingBlogRequest request){
+        return BaseResult.succeed(blogFacade.blogCommentNewest(request));
+    }
+
+    /**
+     * 获取博客访问前5
+     * @param request
+     * @return
+     */
+    @GetMapping("/top5")
+    public BaseResult<List<BlogListResponse>> blogTOP5(NoParamsBlogUserRequest request){
+        return BaseResult.succeed(blogFacade.blogTOP5(request));
     }
 }

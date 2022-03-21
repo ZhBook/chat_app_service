@@ -21,6 +21,8 @@ import com.example.cloud.operator.blog.entity.BlogMenus;
 import com.example.cloud.operator.blog.service.BlogCommentService;
 import com.example.cloud.operator.blog.service.BlogListService;
 import com.example.cloud.operator.blog.service.BlogMenusService;
+import com.example.cloud.system.NoParamsBlogUserRequest;
+import com.example.cloud.system.PagingBlogRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -139,6 +141,7 @@ public class BlogFacade {
 
     /**
      * 通过blogId获取评论
+     *
      * @param request
      * @return
      */
@@ -170,7 +173,7 @@ public class BlogFacade {
     public Boolean blogComment(BlogCommentRequest request) {
         Long blogId = request.getBlogId();
         BlogList blog = blogListService.getById(blogId);
-        if (Objects.isNull(blog)){
+        if (Objects.isNull(blog)) {
             throw new BusinessException("博客不存在");
         }
         Date date = new Date();
@@ -183,5 +186,53 @@ public class BlogFacade {
         blogComment.setEmail(request.getEMail());
         blogComment.setHeadImgUrl(request.getHeadImgUrl());
         return blogCommentService.save(blogComment);
+    }
+
+    /**
+     * 获取最新评论列表
+     *
+     * @param request
+     * @return
+     */
+    public List<BlogCommentListResponse> blogCommentNewest(PagingBlogRequest request) {
+        IPage<BlogComment> page = new Page<>(request.getPageIndex(), request.getPageSize());
+
+        page = blogCommentService.page(page, new LambdaQueryWrapper<BlogComment>()
+                .eq(Objects.nonNull(request), BlogComment::getCreateUserId, request.getUserId())
+                .orderByDesc(BlogComment::getCreateDate));
+        List<BlogComment> records = page.getRecords();
+        if (Objects.isNull(records)) {
+            return CollectionUtil.newArrayList();
+        }
+        List<BlogCommentListResponse> responseList = records.stream().map(record -> {
+            BlogCommentListResponse blogCommentListResponse = new BlogCommentListResponse();
+            BeanUtils.copyProperties(record, blogCommentListResponse);
+            return blogCommentListResponse;
+        }).collect(Collectors.toList());
+        return responseList;
+    }
+
+    /**
+     * 获取博客访问前5
+     *
+     * @param request
+     * @return
+     */
+    public List<BlogListResponse> blogTOP5(NoParamsBlogUserRequest request) {
+        IPage<BlogList> page = new Page<>(1, 5);
+        page = blogListService.page(page, new LambdaQueryWrapper<BlogList>()
+                .eq(Objects.nonNull(request.getUserId()), BlogList::getCreateUserId, request.getUserId())
+                .orderByDesc(BlogList::getBlogBrowse)
+                .orderByDesc(BlogList::getCreateDate));
+        List<BlogList> records = page.getRecords();
+        if (Objects.isNull(records)) {
+            return CollectionUtil.newArrayList();
+        }
+        List<BlogListResponse> responseList = records.stream().map(record -> {
+            BlogListResponse blogListResponse = new BlogListResponse();
+            BeanUtils.copyProperties(record, blogListResponse);
+            return blogListResponse;
+        }).collect(Collectors.toList());
+        return responseList;
     }
 }

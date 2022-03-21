@@ -85,9 +85,9 @@ public class OperatorAspect {
                     } else if (arg instanceof BlogUserRequest) {
                         UserInfo loginUser = userInfoService.getLoginUser();
                         BlogUserRequest blogUserRequest = (BlogUserRequest) arg;
-                        blogUserRequest.setUserId(loginUser.getId());
                         if (Objects.nonNull(loginUser)) {
                             BeanUtils.copyProperties(loginUser, blogUserRequest);
+                            blogUserRequest.setUserId(loginUser.getId());
                         }
                     }
                 }
