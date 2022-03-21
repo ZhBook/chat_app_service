@@ -24,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -85,10 +86,9 @@ public class OperatorAspect {
                         UserInfo loginUser = userInfoService.getLoginUser();
                         BlogUserRequest blogUserRequest = (BlogUserRequest) arg;
                         blogUserRequest.setUserId(loginUser.getId());
-                        if (null == loginUser) {
-                            throw new BusinessException(403, "未登录");
+                        if (Objects.nonNull(loginUser)) {
+                            BeanUtils.copyProperties(loginUser, blogUserRequest);
                         }
-                        BeanUtils.copyProperties(loginUser, blogUserRequest);
                     }
                 }
             }

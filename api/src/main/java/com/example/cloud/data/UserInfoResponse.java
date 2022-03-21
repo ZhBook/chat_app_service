@@ -2,6 +2,8 @@ package com.example.cloud.data;
 
 import lombok.Data;
 
+import java.util.Date;
+
 /**
  * @author zhouhd
  * @since 2021/10/19 10:01
@@ -23,4 +25,6 @@ public class UserInfoResponse {
     private int sex;
 
     private String address;
+
+    private Date createTime;
 }

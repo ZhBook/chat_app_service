@@ -15,3 +15,4 @@ secure:
     urls: #配置白名单路径,该白名单用来验证是否需要通过token认证，仍然需要gateway验证
       - "/users/register"
       - "/upload"
+      - "/blog/**"

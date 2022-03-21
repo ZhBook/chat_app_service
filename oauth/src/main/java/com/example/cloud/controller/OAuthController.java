@@ -3,10 +3,10 @@ package com.example.cloud.controller;
 import cn.hutool.core.lang.Validator;
 import cn.hutool.json.JSONUtil;
 import com.example.cloud.api.UserFeignClient;
+import com.example.cloud.data.BaseResult;
 import com.example.cloud.data.UserInfoResponse;
 import com.example.cloud.entity.AccessToken;
 import com.example.cloud.entity.UserInfo;
-import com.example.cloud.data.BaseResult;
 import com.example.cloud.utils.RequestUtils;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
@@ -89,7 +89,7 @@ public class OAuthController {
         AccessToken result = new AccessToken();
         UserInfoResponse userInfoResponse = new UserInfoResponse();
         BeanUtils.copyProperties(baseResult.getData(), userInfoResponse);
-        result.setAccess_token(accessToken.getValue());
+        result.setAccessToken(accessToken.getValue());
         result.setUserInfoResponse(userInfoResponse);
         return BaseResult.succeed(result);
     }

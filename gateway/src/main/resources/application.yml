@@ -51,6 +51,7 @@ secure:
       - "/api-business/api/v1/users/**"
       - "/api-business/resources/**"
       - "/api-business/api/v1/upload/**"
+      - "/api-business/api/v1/blog/**"
 feign:
   httpclient:
     connection-timeout: 5000

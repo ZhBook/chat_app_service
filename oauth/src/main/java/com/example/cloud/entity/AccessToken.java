@@ -12,6 +12,8 @@ import lombok.experimental.FieldDefaults;
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AccessToken {
-    String access_token;
+
+    String accessToken;
+
     UserInfoResponse userInfoResponse;
 }
