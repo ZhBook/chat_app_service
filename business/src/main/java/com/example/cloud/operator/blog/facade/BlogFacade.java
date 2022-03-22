@@ -4,29 +4,20 @@ import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.example.cloud.data.request.blog.BlogCommentListRequest;
-import com.example.cloud.data.request.blog.BlogCommentRequest;
-import com.example.cloud.data.request.blog.BlogListRequest;
-import com.example.cloud.data.request.blog.BlogRequest;
-import com.example.cloud.data.response.blog.BlogCommentListResponse;
-import com.example.cloud.data.response.blog.BlogConfigResponse;
-import com.example.cloud.data.response.blog.BlogListResponse;
-import com.example.cloud.data.response.blog.BlogResponse;
+import com.example.cloud.data.request.blog.*;
+import com.example.cloud.data.response.blog.*;
 import com.example.cloud.enums.IsDeleteEnum;
 import com.example.cloud.enums.StateEnum;
 import com.example.cloud.exception.BusinessException;
-import com.example.cloud.operator.blog.entity.BlogComment;
-import com.example.cloud.operator.blog.entity.BlogList;
-import com.example.cloud.operator.blog.entity.BlogMenus;
-import com.example.cloud.operator.blog.service.BlogCommentService;
-import com.example.cloud.operator.blog.service.BlogListService;
-import com.example.cloud.operator.blog.service.BlogMenusService;
+import com.example.cloud.operator.blog.entity.*;
+import com.example.cloud.operator.blog.service.*;
 import com.example.cloud.system.NoParamsBlogUserRequest;
 import com.example.cloud.system.PagingBlogRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -48,6 +39,12 @@ public class BlogFacade {
 
     @Autowired
     private BlogCommentService blogCommentService;
+
+    @Autowired
+    private BlogTagService blogTagService;
+
+    @Autowired
+    private BlogTagRelationService blogTagRelationService;
 
     /**
      * 获取后台菜单列表
@@ -109,6 +106,7 @@ public class BlogFacade {
      * @param request
      * @return
      */
+    @Transactional
     public Boolean addBlog(BlogRequest request) {
         BlogList blogList = new BlogList();
         BeanUtils.copyProperties(request, blogList);
@@ -118,7 +116,24 @@ public class BlogFacade {
         blogList.setUpdateDate(date);
         blogList.setUpdateUserId(request.getId());
         blogList.setVersion(1);
-        return blogListService.save(blogList);
+        blogListService.save(blogList);
+
+        if (StringUtils.isNotBlank(request.getTags())) {
+            String[] tags = request.getTags().split(",");
+            List<BlogTag> blogTags = blogTagService.list(new LambdaQueryWrapper<BlogTag>()
+                    .in(Objects.nonNull(tags), BlogTag::getId, tags));
+            List<BlogTagRelation> relations = blogTags.stream().map(tag -> {
+                BlogTagRelation tagRelation = new BlogTagRelation();
+                tagRelation.setTagId(tag.getId());
+                tagRelation.setBlogId(blogList.getId());
+                tagRelation.setTagName(tag.getName());
+                tagRelation.setCreateUserId(request.getAuthorId());
+                tagRelation.setCreateDatetime(date);
+                return tagRelation;
+            }).collect(Collectors.toList());
+            blogTagRelationService.saveBatch(relations);
+        }
+        return Boolean.TRUE;
     }
 
     /**
@@ -145,7 +160,7 @@ public class BlogFacade {
      * @param request
      * @return
      */
-    public List<BlogCommentListResponse> getBlogComment(BlogCommentListRequest request) {
+    public IPage<BlogCommentListResponse> getBlogComment(BlogCommentListRequest request) {
         IPage<BlogComment> page = new Page<>(request.getPageIndex(), request.getPageSize());
 
         page = blogCommentService.page(page, new LambdaQueryWrapper<BlogComment>()
@@ -153,15 +168,16 @@ public class BlogFacade {
                 .eq(BlogComment::getIsDelete, IsDeleteEnum.NO.getCode())
                 .orderByDesc(BlogComment::getCreateDate));
         List<BlogComment> blogCommentList = page.getRecords();
-        if (Objects.isNull(page) || CollectionUtil.isEmpty(blogCommentList)) {
-            return CollectionUtil.newArrayList();
-        }
+
+        Page<BlogCommentListResponse> responsePage = new Page<>(request.getPageIndex(), request.getPageSize());
         List<BlogCommentListResponse> responses = blogCommentList.stream().map(comment -> {
             BlogCommentListResponse blogCommentListResponse = new BlogCommentListResponse();
             BeanUtils.copyProperties(comment, blogCommentListResponse);
             return blogCommentListResponse;
         }).collect(Collectors.toList());
-        return responses;
+        responsePage.setRecords(responses);
+        responsePage.setTotal(page.getTotal());
+        return responsePage;
     }
 
     /**
@@ -232,6 +248,55 @@ public class BlogFacade {
             BlogListResponse blogListResponse = new BlogListResponse();
             BeanUtils.copyProperties(record, blogListResponse);
             return blogListResponse;
+        }).collect(Collectors.toList());
+        return responseList;
+    }
+
+    /**
+     * 创建tag
+     *
+     * @param request
+     * @return
+     */
+    public Boolean createTag(BlogTagRequest request) {
+        BlogTag blogTag = new BlogTag();
+        blogTag.setName(request.getName());
+        blogTag.setCreateDate(new Date());
+        blogTag.setCreateUserId(request.getUserId());
+        return blogTagService.save(blogTag);
+    }
+
+    /**
+     * 获取tag列表
+     *
+     * @return
+     */
+    public List<BlogTagListResponse> getTag(NoParamsBlogUserRequest request) {
+        List<BlogTag> list = blogTagService.list(new LambdaQueryWrapper<BlogTag>()
+                .eq(BlogTag::getCreateUserId, request.getUserId())
+                .eq(BlogTag::getIsDelete, IsDeleteEnum.NO));
+        List<BlogTagListResponse> responseList = list.stream().map(tag -> {
+            BlogTagListResponse blogTagListResponse = new BlogTagListResponse();
+            BeanUtils.copyProperties(tag, blogTagListResponse);
+            return blogTagListResponse;
+        }).collect(Collectors.toList());
+        return responseList;
+    }
+
+    /**
+     * 获取blog对应的tag
+     *
+     * @param blogId
+     * @return
+     */
+    public List<BlogTagListResponse> getBlogTag(Long blogId) {
+        List<BlogTagRelation> relationList = blogTagRelationService.list(new LambdaQueryWrapper<BlogTagRelation>()
+                .eq(BlogTagRelation::getBlogId, blogId));
+        List<BlogTagListResponse> responseList = relationList.stream().map(relation -> {
+            BlogTagListResponse blogTagListResponse = new BlogTagListResponse();
+            blogTagListResponse.setId(relation.getId());
+            blogTagListResponse.setName(relation.getTagName());
+            return blogTagListResponse;
         }).collect(Collectors.toList());
         return responseList;
     }

@@ -2,14 +2,8 @@ package com.example.cloud.operator.blog.controller;
 
 import com.example.cloud.data.BaseResult;
 import com.example.cloud.data.PageResult;
-import com.example.cloud.data.request.blog.BlogCommentListRequest;
-import com.example.cloud.data.request.blog.BlogCommentRequest;
-import com.example.cloud.data.request.blog.BlogListRequest;
-import com.example.cloud.data.request.blog.BlogRequest;
-import com.example.cloud.data.response.blog.BlogCommentListResponse;
-import com.example.cloud.data.response.blog.BlogConfigResponse;
-import com.example.cloud.data.response.blog.BlogListResponse;
-import com.example.cloud.data.response.blog.BlogResponse;
+import com.example.cloud.data.request.blog.*;
+import com.example.cloud.data.response.blog.*;
 import com.example.cloud.operator.blog.facade.BlogFacade;
 import com.example.cloud.system.NoParamsBlogUserRequest;
 import com.example.cloud.system.PagingBlogRequest;
@@ -96,21 +90,55 @@ public class BlogController {
 
     /**
      * 获取最新评论列表
+     *
      * @param request
      * @return
      */
     @GetMapping("/comment/newest")
-    public BaseResult<List<BlogCommentListResponse>> blogCommentNewest(PagingBlogRequest request){
+    public BaseResult<List<BlogCommentListResponse>> blogCommentNewest(PagingBlogRequest request) {
         return BaseResult.succeed(blogFacade.blogCommentNewest(request));
     }
 
     /**
      * 获取博客访问前5
+     *
      * @param request
      * @return
      */
     @GetMapping("/top5")
-    public BaseResult<List<BlogListResponse>> blogTOP5(NoParamsBlogUserRequest request){
+    public BaseResult<List<BlogListResponse>> blogTOP5(NoParamsBlogUserRequest request) {
         return BaseResult.succeed(blogFacade.blogTOP5(request));
+    }
+
+    /**
+     * 创建tag
+     *
+     * @param request
+     * @return
+     */
+    @PostMapping("/tag")
+    public BaseResult<Boolean> createTag(@RequestBody BlogTagRequest request) {
+        return BaseResult.succeed(blogFacade.createTag(request));
+    }
+
+    /**
+     * 获取tag列表
+     *
+     * @return
+     */
+    @GetMapping("/tag")
+    public BaseResult<List<BlogTagListResponse>> getTag(NoParamsBlogUserRequest request) {
+        return BaseResult.succeed(blogFacade.getTag(request));
+    }
+
+    /**
+     * 获取blog对应的tag
+     *
+     * @param blogId
+     * @return
+     */
+    @GetMapping("/tag/relation/{blogId}")
+    public BaseResult<List<BlogTagListResponse>> getBlogTag(@PathVariable("blogId") Long blogId) {
+        return BaseResult.succeed(blogFacade.getBlogTag(blogId));
     }
 }

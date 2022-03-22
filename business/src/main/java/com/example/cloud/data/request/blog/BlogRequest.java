@@ -42,6 +42,11 @@ public class BlogRequest extends UserBeanRequest {
     private String picture;
 
     /**
+     * tag集合 用逗号分割
+     */
+    private String tags;
+
+    /**
      * 是否置顶：0 否 1是
      */
     private Integer isTop;
