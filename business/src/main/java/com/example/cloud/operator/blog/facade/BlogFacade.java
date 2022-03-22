@@ -46,6 +46,8 @@ public class BlogFacade {
     @Autowired
     private BlogTagRelationService blogTagRelationService;
 
+    final private Integer tagMax = 10;
+
     /**
      * 获取后台菜单列表
      *
@@ -259,10 +261,17 @@ public class BlogFacade {
      * @return
      */
     public Boolean createTag(BlogTagRequest request) {
+        Long userId = request.getUserId();
+        int count = blogTagService.count(new LambdaQueryWrapper<BlogTag>()
+                .eq(BlogTag::getCreateUserId, userId)
+                .eq(BlogTag::getIsDelete, IsDeleteEnum.NO));
+        if (count >= tagMax) {
+            throw new BusinessException("最多可创建10个标签");
+        }
         BlogTag blogTag = new BlogTag();
         blogTag.setName(request.getName());
         blogTag.setCreateDate(new Date());
-        blogTag.setCreateUserId(request.getUserId());
+        blogTag.setCreateUserId(userId);
         return blogTagService.save(blogTag);
     }
 
