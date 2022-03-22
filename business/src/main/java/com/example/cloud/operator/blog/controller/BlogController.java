@@ -141,4 +141,15 @@ public class BlogController {
     public BaseResult<List<BlogTagListResponse>> getBlogTag(@PathVariable("blogId") Long blogId) {
         return BaseResult.succeed(blogFacade.getBlogTag(blogId));
     }
+
+    /**
+     * 获取用户信息
+     *
+     * @param request
+     * @return
+     */
+    @GetMapping("/user")
+    public BaseResult<BlogUserInfoResponse> getBlogUserInfo(NoParamsBlogUserRequest request) {
+        return BaseResult.succeed(blogFacade.getBlogUserInfo(request));
+    }
 }

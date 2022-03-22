@@ -1,6 +1,7 @@
 package com.example.cloud.operator.blog.facade;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -283,7 +284,7 @@ public class BlogFacade {
     public List<BlogTagListResponse> getTag(NoParamsBlogUserRequest request) {
         List<BlogTag> list = blogTagService.list(new LambdaQueryWrapper<BlogTag>()
                 .eq(BlogTag::getCreateUserId, request.getUserId())
-                .eq(BlogTag::getIsDelete, IsDeleteEnum.NO));
+                .eq(BlogTag::getIsDelete, IsDeleteEnum.NO.getCode()));
         List<BlogTagListResponse> responseList = list.stream().map(tag -> {
             BlogTagListResponse blogTagListResponse = new BlogTagListResponse();
             BeanUtils.copyProperties(tag, blogTagListResponse);
@@ -308,5 +309,38 @@ public class BlogFacade {
             return blogTagListResponse;
         }).collect(Collectors.toList());
         return responseList;
+    }
+
+    /**
+     * 获取用户信息
+     *
+     * @param request
+     * @return
+     */
+    public BlogUserInfoResponse getBlogUserInfo(NoParamsBlogUserRequest request) {
+        BlogUserInfoResponse response = new BlogUserInfoResponse();
+        Long userId = request.getUserId();
+        Date createTime = request.getCreateTime();
+        Date date = new Date();
+        long betweenYear = DateUtil.betweenYear(date, createTime, false);
+        long betweenMonth = DateUtil.betweenMonth(date, createTime, false);
+        if (betweenYear <= 0) {
+            response.setRunningDay(betweenMonth + "个月");
+        } else {
+            response.setRunningDay(betweenYear + "年" + betweenMonth + "个月");
+        }
+        int blogCount = blogListService.count(new LambdaQueryWrapper<BlogList>()
+                .eq(BlogList::getCreateUserId, userId)
+                .eq(BlogList::getIsDelete, IsDeleteEnum.NO.getCode()));
+        int commentCount = blogCommentService.count(new LambdaQueryWrapper<BlogComment>()
+                .eq(BlogComment::getCreateUserId, userId)
+                .eq(BlogComment::getIsDelete, IsDeleteEnum.NO.getCode()));
+
+        response.setNickname(request.getNickname());
+        response.setCommentCount(commentCount);
+        response.setBlogCount(blogCount);
+        // todo 添加粉丝数量
+        response.setFollowCount(0);
+        return response;
     }
 }
