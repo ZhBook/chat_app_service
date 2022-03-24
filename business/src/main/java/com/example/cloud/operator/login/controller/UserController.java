@@ -1,7 +1,8 @@
 package com.example.cloud.operator.login.controller;
 
-import com.example.cloud.data.response.login.UserInfoResponse;
 import com.example.cloud.data.BaseResult;
+import com.example.cloud.data.request.user.UserInfoRequest;
+import com.example.cloud.data.response.login.UserInfoResponse;
 import com.example.cloud.operator.login.entity.UserInfo;
 import com.example.cloud.operator.login.facade.UserFacade;
 import lombok.RequiredArgsConstructor;
@@ -59,6 +60,16 @@ public class UserController {
     @PostMapping("/register")
     public BaseResult<UserInfoResponse> registerUser(@RequestBody @Validated UserInfo userInfo) {
         return BaseResult.succeed(userFacade.registerUser(userInfo),"注册成功");
+    }
+
+    /**
+     * 修改用户信息
+     * @param request
+     * @return
+     */
+    @PutMapping
+    public BaseResult<Boolean> updateUserInfo(@RequestBody UserInfoRequest request ){
+        return BaseResult.succeed(userFacade.updateUserInfo(request));
     }
 
     @PostMapping("/test")

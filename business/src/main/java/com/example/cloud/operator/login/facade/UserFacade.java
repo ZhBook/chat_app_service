@@ -2,6 +2,7 @@ package com.example.cloud.operator.login.facade;
 
 import cn.hutool.core.util.RandomUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.example.cloud.data.request.user.UserInfoRequest;
 import com.example.cloud.data.response.login.UserInfoResponse;
 import com.example.cloud.exception.BusinessException;
 import com.example.cloud.operator.login.entity.UserInfo;
@@ -89,11 +90,33 @@ public class UserFacade {
 
     /**
      * 通过手机号码查询用户信息
+     *
      * @param mobile
      * @return
      */
     public UserInfo getUserByMobile(String mobile) {
         return userInfoMapper.selectOne(new LambdaQueryWrapper<UserInfo>()
-                .eq(UserInfo::getMobile,mobile));
+                .eq(UserInfo::getMobile, mobile));
+    }
+
+    /**
+     * 修改用户信息
+     *
+     * @param request
+     * @return
+     */
+    public Boolean updateUserInfo(UserInfoRequest request) {
+        Long id = request.getId();
+        UserInfo userInfo = userInfoService.getById(id);
+        if (Objects.isNull(userInfo)) {
+            throw new BusinessException("用户不存在");
+        }
+        userInfo.setNickname(request.getNewNickname());
+        userInfo.setMobile(request.getNewMobile());
+        userInfo.setEMail(request.getNewEMail());
+        userInfo.setHeadImgUrl(request.getNewHeadImgUrl());
+        userInfo.setSex(request.getNewSex());
+        userInfo.setAddress(request.getNewAddress());
+        return userInfoService.updateById(userInfo);
     }
 }
