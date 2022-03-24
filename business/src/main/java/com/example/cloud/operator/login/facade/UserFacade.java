@@ -105,7 +105,7 @@ public class UserFacade {
      * @param request
      * @return
      */
-    public Boolean updateUserInfo(UserInfoRequest request) {
+    public UserInfoResponse updateUserInfo(UserInfoRequest request) {
         Long id = request.getId();
         UserInfo userInfo = userInfoService.getById(id);
         if (Objects.isNull(userInfo)) {
@@ -117,6 +117,9 @@ public class UserFacade {
         userInfo.setHeadImgUrl(request.getNewHeadImgUrl());
         userInfo.setSex(request.getNewSex());
         userInfo.setAddress(request.getNewAddress());
-        return userInfoService.updateById(userInfo);
+        userInfoService.updateById(userInfo);
+        UserInfoResponse userInfoResponse = new UserInfoResponse();
+        BeanUtils.copyProperties(userInfo, userInfoResponse);
+        return userInfoResponse;
     }
 }

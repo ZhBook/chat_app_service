@@ -117,12 +117,13 @@ public class OperatorAspect {
         }
         String requestJsonStr = JSON.toJSONString(requestList);
         long end = System.currentTimeMillis();
-        log.info(" 处理请求 | IP:{} | url:{} | 耗时: {}ms | method:{} | args:{} | 返回:{}",
+        log.info(" 处理请求 | IP:{} | url:{} | 耗时: {}ms | method:{} | 返回:{} | args:{}",
                 ip,
                 request.getRequestURI(),
                 end - start,
                 request.getMethod(),
-                jsonObject
+                jsonObject,
+                requestJsonStr
         );
         return proceed;
     }

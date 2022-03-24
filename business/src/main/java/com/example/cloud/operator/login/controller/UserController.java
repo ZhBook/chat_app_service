@@ -68,7 +68,7 @@ public class UserController {
      * @return
      */
     @PutMapping
-    public BaseResult<Boolean> updateUserInfo(@RequestBody UserInfoRequest request ){
+    public BaseResult<UserInfoResponse> updateUserInfo(@RequestBody UserInfoRequest request ){
         return BaseResult.succeed(userFacade.updateUserInfo(request));
     }
 
