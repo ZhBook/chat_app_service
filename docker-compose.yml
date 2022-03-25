@@ -1,0 +1,32 @@
+business:
+  image: business
+  hostname: business
+  ports:
+    - "0.0.0.0:8001:8001"
+  volumes:
+    - "/apps/chat_app_service/business:/apps/chat_app_service/business"
+
+chatting:
+  image: chatting
+  hostname: chatting
+  ports:
+    - "0.0.0.0:9001:9001"
+    - "0.0.0.0:58080:58080"
+  volumes:
+    - "/apps/chat_app_service/chatting:/apps/chat_app_service/chatting"
+
+gateway:
+  image: gateway
+  hostname: gateway
+  ports:
+    - "0.0.0.0:8008:8008"
+  volumes:
+    - "/apps/chat_app_service/gateway:/apps/chat_app_service/gateway"
+
+oauth:
+  image: oauth
+  hostname: oauth
+  ports:
+    - "0.0.0.0:8002:8002"
+  volumes:
+    - "/apps/chat_app_service/oauth:/apps/chat_app_service/oauth"
