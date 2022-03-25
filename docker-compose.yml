@@ -1,6 +1,7 @@
 business:
   image: business
   hostname: business
+  container_name: business
   ports:
     - "0.0.0.0:8001:8001"
   volumes:
@@ -9,6 +10,7 @@ business:
 chatting:
   image: chatting
   hostname: chatting
+  container_name: chatting
   ports:
     - "0.0.0.0:9001:9001"
     - "0.0.0.0:58080:58080"
@@ -18,6 +20,7 @@ chatting:
 gateway:
   image: gateway
   hostname: gateway
+  container_name: gateway
   ports:
     - "0.0.0.0:8008:8008"
   volumes:
@@ -26,6 +29,7 @@ gateway:
 oauth:
   image: oauth
   hostname: oauth
+  container_name: gateway
   ports:
     - "0.0.0.0:8002:8002"
   volumes:
