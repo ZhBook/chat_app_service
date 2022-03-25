@@ -5,5 +5,5 @@ set -eo pipefail
 modules=( business chatting gateway oauth )
 
 for module in "${modules[@]}"; do
-    docker build -t "${module}:latest" ${module}
+    docker build -t "${module}:latest" ${module}/
 done
