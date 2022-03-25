@@ -29,7 +29,7 @@ gateway:
 oauth:
   image: oauth
   hostname: oauth
-  container_name: gateway
+  container_name: oauth
   ports:
     - "0.0.0.0:8002:8002"
   volumes:
