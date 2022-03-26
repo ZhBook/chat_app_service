@@ -12,6 +12,8 @@ import com.example.cloud.enums.StateEnum;
 import com.example.cloud.exception.BusinessException;
 import com.example.cloud.operator.blog.entity.*;
 import com.example.cloud.operator.blog.service.*;
+import com.example.cloud.operator.login.entity.UserInfo;
+import com.example.cloud.operator.login.service.UserInfoService;
 import com.example.cloud.system.NoParamsBlogUserRequest;
 import com.example.cloud.system.PagingBlogRequest;
 import org.apache.commons.lang3.StringUtils;
@@ -46,6 +48,9 @@ public class BlogFacade {
 
     @Autowired
     private BlogTagRelationService blogTagRelationService;
+
+    @Autowired
+    private UserInfoService userInfoService;
 
     final private Integer tagMax = 10;
 
@@ -320,6 +325,13 @@ public class BlogFacade {
     public BlogUserInfoResponse getBlogUserInfo(NoParamsBlogUserRequest request) {
         BlogUserInfoResponse response = new BlogUserInfoResponse();
         Long userId = request.getUserId();
+        // todo 待优化
+        if (Objects.isNull(userId)) {
+            UserInfo userInfo = userInfoService.getById("100011");
+            userId = userInfo.getId();
+            BeanUtils.copyProperties(userInfo, request);
+            request.setUserId(userInfo.getId());
+        }
         Date createTime = request.getCreateTime();
         Date date = new Date();
         long betweenYear = DateUtil.betweenYear(date, createTime, false);
@@ -342,5 +354,29 @@ public class BlogFacade {
         // todo 添加粉丝数量
         response.setFollowCount(0);
         return response;
+    }
+
+    /**
+     * 删除tag标签
+     *
+     * @param tagId
+     * @param request
+     * @return
+     */
+    @Transactional
+    public Boolean delTag(Long tagId, NoParamsBlogUserRequest request) {
+        BlogTag blogTag = blogTagService.getOne(new LambdaQueryWrapper<BlogTag>()
+                .eq(BlogTag::getId, tagId)
+                .eq(BlogTag::getCreateUserId, request.getUserId())
+                .eq(BlogTag::getIsDelete, IsDeleteEnum.NO.getCode()));
+        if (Objects.isNull(blogTag)) {
+            throw new BusinessException("标签不存在");
+        }
+        blogTag.setIsDelete(IsDeleteEnum.YES.getCode());
+        blogTagService.updateById(blogTag);
+        blogTagRelationService.remove(new LambdaQueryWrapper<BlogTagRelation>()
+                .eq(BlogTagRelation::getTagId, tagId)
+                .eq(BlogTagRelation::getCreateUserId, request.getUserId()));
+        return Boolean.TRUE;
     }
 }

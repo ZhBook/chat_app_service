@@ -152,4 +152,15 @@ public class BlogController {
     public BaseResult<BlogUserInfoResponse> getBlogUserInfo(NoParamsBlogUserRequest request) {
         return BaseResult.succeed(blogFacade.getBlogUserInfo(request));
     }
+
+    /**
+     * 删除tag标签
+     * @param tagId
+     * @param request
+     * @return
+     */
+    @DeleteMapping("/tag/{tagId}")
+    public BaseResult<Boolean> delTag(@PathVariable("tagId") Long tagId, NoParamsBlogUserRequest request) {
+        return BaseResult.succeed(blogFacade.delTag(tagId, request));
+    }
 }
