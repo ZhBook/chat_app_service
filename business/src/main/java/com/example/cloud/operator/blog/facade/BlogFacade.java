@@ -169,7 +169,9 @@ public class BlogFacade {
      * @return
      */
     public BlogResponse getBlogById(Long blogId) {
-        BlogList blog = blogListService.getById(blogId);
+        BlogList blog = blogListService.getOne(new LambdaQueryWrapper<BlogList>()
+                .eq(BlogList::getId, blogId)
+                .eq(BlogList::getIsDelete, IsDeleteEnum.NO.getCode()));
         if (Objects.isNull(blog)) {
             throw new BusinessException("博客不存在");
         }
@@ -411,8 +413,10 @@ public class BlogFacade {
                 .eq(BlogList::getCreateUserId, request.getUserId())
                 .eq(BlogList::getIsDelete, IsDeleteEnum.NO.getCode()));
         if (Objects.isNull(blog)) {
-            throw new BusinessException("博客不存在");
+            throw new BusinessException("删除博客失败");
         }
+        blog.setUpdateDate(new Date());
+        blog.setUpdateUserId(request.getUserId());
         blog.setIsDelete(IsDeleteEnum.YES.getCode());
         return blogListService.updateById(blog);
     }
