@@ -19,6 +19,11 @@ public class BlogListRequest{
     private String title;
 
     /**
+     * 作者id
+     */
+    private Long userId;
+
+    /**
      *
      */
     private String authorName;

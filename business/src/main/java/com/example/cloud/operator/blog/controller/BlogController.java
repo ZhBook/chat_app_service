@@ -67,6 +67,18 @@ public class BlogController {
     }
 
     /**
+     * 删除blog
+     *
+     * @param blogId
+     * @param request
+     * @return
+     */
+    @DeleteMapping("/{blogId}")
+    public BaseResult<Boolean> deleteBlogById(@PathVariable("blogId") Long blogId, NoParamsBlogUserRequest request) {
+        return BaseResult.succeed(blogFacade.deleteBlogById(blogId, request));
+    }
+
+    /**
      * 通过blogId获取评论
      *
      * @param request
@@ -155,6 +167,7 @@ public class BlogController {
 
     /**
      * 删除tag标签
+     *
      * @param tagId
      * @param request
      * @return

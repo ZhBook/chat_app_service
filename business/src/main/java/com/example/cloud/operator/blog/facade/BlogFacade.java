@@ -3,6 +3,7 @@ package com.example.cloud.operator.blog.facade;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.cloud.data.request.blog.*;
@@ -22,10 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -85,21 +83,41 @@ public class BlogFacade {
         Integer isOriginal = request.getIsOriginal();
         String title = request.getTitle();
         Integer isPrivate = request.getIsPrivate();
+        Long userId = request.getUserId();
         IPage<BlogList> page = new Page<>(request.getPageIndex(), request.getPageSize());
         IPage<BlogList> listIPage = blogListService.page(page, new LambdaQueryWrapper<BlogList>()
                 .eq(Objects.nonNull(id), BlogList::getId, id)
+                .eq(Objects.nonNull(userId), BlogList::getCreateUserId, userId)
                 .eq(Objects.nonNull(isOriginal), BlogList::getIsOriginal, isOriginal)
                 .like(StringUtils.isNotBlank(title), BlogList::getTitle, title)
                 .eq(Objects.nonNull(isPrivate), BlogList::getIsPrivate, isPrivate)
                 .eq(BlogList::getIsDelete, IsDeleteEnum.NO.getCode())
                 .orderByDesc(BlogList::getCreateDate));
         List<BlogList> blogLists = listIPage.getRecords();
+        List<Long> BlogIds = blogLists.stream().map(BlogList::getId).collect(Collectors.toList());
+        List<Long> userIds = blogLists.stream().map(BlogList::getCreateUserId).collect(Collectors.toList());
+        // 获取所有评论数量
+        List<Map<String, Object>> commentListMap = blogCommentService.listMaps(new QueryWrapper<BlogComment>()
+                .select("blog_id as blogId, count(1) as total ")
+                .in("blog_id", BlogIds)
+                .eq("is_delete", IsDeleteEnum.NO.getCode())
+                .groupBy("blog_id"));
+        HashMap<String, String> commentHashMap = new HashMap<>();
+        commentListMap.forEach(map -> commentHashMap.put(map.get("blogId").toString(), map.get("total").toString()));
+
+        // 获取所有的用户名
+        List<Map<String, Object>> userListMap = userInfoService.listMaps(new QueryWrapper<UserInfo>()
+                .select("id,nickname")
+                .in("id", userIds));
+        HashMap<String, String> userHashMap = new HashMap<>();
+        userListMap.forEach(map -> userHashMap.put(map.get("id").toString(), map.get("nickname").toString()));
+
         List<BlogListResponse> collect = blogLists.stream().map(blog -> {
             BlogListResponse blogListResponse = new BlogListResponse();
             BeanUtils.copyProperties(blog, blogListResponse);
-            int comment = blogCommentService.count(new LambdaQueryWrapper<BlogComment>()
-                    .eq(BlogComment::getBlogId, blog.getId()));
-            blogListResponse.setCommentNum(comment);
+            int commentTotal = Integer.parseInt(Objects.isNull(commentHashMap.get(blog.getId().toString())) ? "0" : commentHashMap.get(blog.getId().toString()));
+            blogListResponse.setCommentNum(commentTotal);
+            blogListResponse.setAuthorName(userHashMap.get(blog.getCreateUserId().toString()));
             return blogListResponse;
         }).collect(Collectors.toList());
         Page<BlogListResponse> responsePage = new Page<>(request.getPageIndex(), request.getPageSize());
@@ -378,5 +396,24 @@ public class BlogFacade {
                 .eq(BlogTagRelation::getTagId, tagId)
                 .eq(BlogTagRelation::getCreateUserId, request.getUserId()));
         return Boolean.TRUE;
+    }
+
+    /**
+     * 删除blog
+     *
+     * @param blogId
+     * @param request
+     * @return
+     */
+    public Boolean deleteBlogById(Long blogId, NoParamsBlogUserRequest request) {
+        BlogList blog = blogListService.getOne(new LambdaQueryWrapper<BlogList>()
+                .eq(BlogList::getId, blogId)
+                .eq(BlogList::getCreateUserId, request.getUserId())
+                .eq(BlogList::getIsDelete, IsDeleteEnum.NO.getCode()));
+        if (Objects.isNull(blog)) {
+            throw new BusinessException("博客不存在");
+        }
+        blog.setIsDelete(IsDeleteEnum.YES.getCode());
+        return blogListService.updateById(blog);
     }
 }
