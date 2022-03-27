@@ -14,7 +14,7 @@ public class BaseResult<T> implements Serializable {
 
     private T data;
     private Integer code;
-    private String msg;
+    private String message;
 
     public static <T> BaseResult<T> succeed(String msg) {
         return of(null, ResultCodeEnum.SUCCESS.getCode(), msg);

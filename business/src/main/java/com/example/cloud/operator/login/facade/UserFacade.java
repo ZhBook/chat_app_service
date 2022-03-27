@@ -2,6 +2,7 @@ package com.example.cloud.operator.login.facade;
 
 import cn.hutool.core.util.RandomUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.example.cloud.data.request.user.RegisterUserRequest;
 import com.example.cloud.data.request.user.UserInfoRequest;
 import com.example.cloud.data.response.login.UserInfoResponse;
 import com.example.cloud.exception.BusinessException;
@@ -60,16 +61,18 @@ public class UserFacade {
     /**
      * 用户注册接口
      *
-     * @param userInfo
+     * @param request
      * @return
      */
-    public UserInfoResponse registerUser(UserInfo userInfo) {
+    public UserInfoResponse registerUser(RegisterUserRequest request) {
         Integer num = userInfoMapper.selectCount(new LambdaQueryWrapper<UserInfo>()
-                .eq(UserInfo::getMobile, userInfo.getMobile())
+                .eq(UserInfo::getMobile, request.getMobile())
         );
         if (num == 0) {
+            UserInfo userInfo = new UserInfo();
+            BeanUtils.copyProperties(request,userInfo);
             BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-            userInfo.setPassword(bCryptPasswordEncoder.encode(userInfo.getPassword()));
+            userInfo.setPassword(bCryptPasswordEncoder.encode(request.getPassword()));
             String randomName;
             for (; ; ) {
                 randomName = RandomUtil.randomString(18);

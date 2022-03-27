@@ -32,7 +32,7 @@ public class PageResult<T> extends BaseResult implements Serializable{
     public static <T> PageResult<T> pageSuccess(IPage<T> body) {
         PageResult result = new PageResult();
         result.setCode(ResultCodeEnum.SUCCESS.getCode());
-        result.setMsg(ResultCodeEnum.SUCCESS.getMessage());
+        result.setMessage(ResultCodeEnum.SUCCESS.getMessage());
         result.setPageIndex((int) body.getCurrent());
         result.setPageSize((int) body.getSize());
         result.setTotal(body.getTotal());
@@ -43,7 +43,7 @@ public class PageResult<T> extends BaseResult implements Serializable{
     public static <T> PageResult pageSuccess(List<T> body) {
         PageResult result = new PageResult();
         result.setCode(ResultCodeEnum.SUCCESS.getCode());
-        result.setMsg(ResultCodeEnum.SUCCESS.getMessage());
+        result.setMessage(ResultCodeEnum.SUCCESS.getMessage());
         result.setPageIndex(0);
         result.setPageSize(100);
         result.setTotal(body.size());

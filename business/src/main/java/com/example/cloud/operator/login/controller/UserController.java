@@ -1,6 +1,7 @@
 package com.example.cloud.operator.login.controller;
 
 import com.example.cloud.data.BaseResult;
+import com.example.cloud.data.request.user.RegisterUserRequest;
 import com.example.cloud.data.request.user.UserInfoRequest;
 import com.example.cloud.data.response.login.UserInfoResponse;
 import com.example.cloud.operator.login.entity.UserInfo;
@@ -54,12 +55,12 @@ public class UserController {
 
     /**
      * 用户注册接口
-     * @param userInfo
+     * @param request
      * @return
      */
     @PostMapping("/register")
-    public BaseResult<UserInfoResponse> registerUser(@RequestBody @Validated UserInfo userInfo) {
-        return BaseResult.succeed(userFacade.registerUser(userInfo),"注册成功");
+    public BaseResult<UserInfoResponse> registerUser(@RequestBody @Validated RegisterUserRequest request) {
+        return BaseResult.succeed(userFacade.registerUser(request));
     }
 
     /**
