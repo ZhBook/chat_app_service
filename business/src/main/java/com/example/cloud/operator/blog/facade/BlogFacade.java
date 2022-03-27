@@ -17,6 +17,7 @@ import com.example.cloud.operator.login.entity.UserInfo;
 import com.example.cloud.operator.login.service.UserInfoService;
 import com.example.cloud.system.NoParamsBlogUserRequest;
 import com.example.cloud.system.PagingBlogRequest;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -99,7 +100,7 @@ public class BlogFacade {
 
         // 获取所有评论数量
         HashMap<String, String> commentHashMap = new HashMap<>();
-        if(Objects.nonNull(BlogIds)){
+        if(CollectionUtils.isNotEmpty(BlogIds)){
             List<Map<String, Object>> commentListMap = blogCommentService.listMaps(new QueryWrapper<BlogComment>()
                     .select("blog_id as blogId, count(1) as total ")
                     .in("blog_id", BlogIds)
@@ -109,7 +110,7 @@ public class BlogFacade {
         }
         // 获取所有的用户名
         HashMap<String, String> userHashMap = new HashMap<>();
-        if (Objects.nonNull(userIds)){
+        if (CollectionUtils.isNotEmpty(userIds)){
             List<Map<String, Object>> userListMap = userInfoService.listMaps(new QueryWrapper<UserInfo>()
                     .select("id,nickname")
                     .in("id", userIds));
