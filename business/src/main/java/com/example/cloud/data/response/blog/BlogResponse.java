@@ -26,6 +26,8 @@ public class BlogResponse {
      */
     private String content;
 
+    private Long createUserId;
+
     /**
      *
      */
