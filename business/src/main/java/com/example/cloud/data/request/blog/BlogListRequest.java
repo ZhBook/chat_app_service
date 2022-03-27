@@ -14,7 +14,7 @@ public class BlogListRequest{
     private Long id;
 
     /**
-     *
+     * 标题
      */
     private String title;
 
