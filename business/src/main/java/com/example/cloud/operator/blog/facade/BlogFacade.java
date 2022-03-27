@@ -96,21 +96,25 @@ public class BlogFacade {
         List<BlogList> blogLists = listIPage.getRecords();
         List<Long> BlogIds = blogLists.stream().map(BlogList::getId).collect(Collectors.toList());
         List<Long> userIds = blogLists.stream().map(BlogList::getCreateUserId).collect(Collectors.toList());
-        // 获取所有评论数量
-        List<Map<String, Object>> commentListMap = blogCommentService.listMaps(new QueryWrapper<BlogComment>()
-                .select("blog_id as blogId, count(1) as total ")
-                .in("blog_id", BlogIds)
-                .eq("is_delete", IsDeleteEnum.NO.getCode())
-                .groupBy("blog_id"));
-        HashMap<String, String> commentHashMap = new HashMap<>();
-        commentListMap.forEach(map -> commentHashMap.put(map.get("blogId").toString(), map.get("total").toString()));
 
+        // 获取所有评论数量
+        HashMap<String, String> commentHashMap = new HashMap<>();
+        if(Objects.nonNull(BlogIds)){
+            List<Map<String, Object>> commentListMap = blogCommentService.listMaps(new QueryWrapper<BlogComment>()
+                    .select("blog_id as blogId, count(1) as total ")
+                    .in("blog_id", BlogIds)
+                    .eq("is_delete", IsDeleteEnum.NO.getCode())
+                    .groupBy("blog_id"));
+            commentListMap.forEach(map -> commentHashMap.put(map.get("blogId").toString(), map.get("total").toString()));
+        }
         // 获取所有的用户名
-        List<Map<String, Object>> userListMap = userInfoService.listMaps(new QueryWrapper<UserInfo>()
-                .select("id,nickname")
-                .in("id", userIds));
         HashMap<String, String> userHashMap = new HashMap<>();
-        userListMap.forEach(map -> userHashMap.put(map.get("id").toString(), map.get("nickname").toString()));
+        if (Objects.nonNull(userIds)){
+            List<Map<String, Object>> userListMap = userInfoService.listMaps(new QueryWrapper<UserInfo>()
+                    .select("id,nickname")
+                    .in("id", userIds));
+            userListMap.forEach(map -> userHashMap.put(map.get("id").toString(), map.get("nickname").toString()));
+        }
 
         List<BlogListResponse> collect = blogLists.stream().map(blog -> {
             BlogListResponse blogListResponse = new BlogListResponse();
