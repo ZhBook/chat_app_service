@@ -33,6 +33,8 @@ public class BlogListResponse {
      */
     private String authorName;
 
+    private Long createUserId;
+
     /**
      * 是否置顶：0 否 1是
      */
