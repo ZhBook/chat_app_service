@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 public class BlogListRequest{
     /**
-     *
+     * 主键
      */
     private Long id;
 
