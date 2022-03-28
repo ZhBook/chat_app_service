@@ -1,10 +1,10 @@
 package com.example.cloud.secruity.service;
 
 import com.example.cloud.api.UserFeignClient;
+import com.example.cloud.data.UserInfo;
+import com.example.cloud.utils.PatternUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.AccountExpiredException;
-import org.springframework.security.authentication.DisabledException;
-import org.springframework.security.authentication.LockedException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -14,6 +14,7 @@ import java.util.Objects;
 /**
  * Security 用户服务实现
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class SecureUserService implements UserDetailsService {
@@ -26,18 +27,20 @@ public class SecureUserService implements UserDetailsService {
     @Override
     public UserInfo loadUserByUsername(String username) throws UsernameNotFoundException {
         // 查询数据库操作
-        UserInfo userInfo = userFeignClient.getUserByMobile(username).getData();
-        if (Objects.nonNull(userInfo)){
-            return userInfo;
+        UserInfo userInfo;
+        log.info("当前用户名：{}",username);
+        if (PatternUtil.checkMobile(username)) {
+            userInfo = userFeignClient.getUserByMobile(username).getData();
+            if (Objects.isNull(userInfo)){
+                userInfo = userFeignClient.getUserByUsername(username).getData();
+            }
+        } else {
+            userInfo = userFeignClient.getUserByUsername(username).getData();
         }
-        else if (!userInfo.isEnabled()) {
-            throw new DisabledException("该账户已被禁用!");
-        } else if (!userInfo.isAccountNonLocked()) {
-            throw new LockedException("该账号已被锁定!");
-        } else if (!userInfo.isAccountNonExpired()) {
-            throw new AccountExpiredException("该账号已过期!");
+        if (Objects.isNull(userInfo)){
+            throw new UsernameNotFoundException("账户不存在");
         }
-        throw new UsernameNotFoundException("该账号已过期!");
+        return userInfo;
     }
 
 //    /**

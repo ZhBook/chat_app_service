@@ -6,12 +6,12 @@ public interface SecurityConstant {
     /**
      * 根据项目配置
      */
-    String SERVLET_CONTEXT_PATH = "/";
+    String SERVLET_CONTEXT_PATH = "/oauth";
 
     /**
      * 默认的登录接口
      */
-    String LOGIN_URL = "/login";
+    String LOGIN_URL = SERVLET_CONTEXT_PATH + "/login";
 
     /**
      * SMS短信登陆接口

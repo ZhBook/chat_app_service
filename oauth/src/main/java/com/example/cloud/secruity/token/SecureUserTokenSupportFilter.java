@@ -4,7 +4,8 @@ package com.example.cloud.secruity.token;
 import com.example.cloud.constant.SecurityConstant;
 import com.example.cloud.context.SpringBeanContext;
 import com.example.cloud.data.BaseResult;
-import com.example.cloud.secruity.service.UserInfo;
+import com.example.cloud.data.SecureUserToken;
+import com.example.cloud.data.UserInfo;
 import com.example.cloud.enums.ResultCodeEnum;
 import com.example.cloud.exception.TokenValidationException;
 import com.example.cloud.secruity.provider.token.UsernameAuthenticationToken;
@@ -52,7 +53,6 @@ public class SecureUserTokenSupportFilter extends OncePerRequestFilter {
             WebUtil.writeJson(BaseResult.fail(ResultCodeEnum.TOKEN_EXPIRED));
             return;
         }
-        // return UsernameAuthenticationToken
         UsernameAuthenticationToken authentication = new UsernameAuthenticationToken(secureUser, secureUser.getId(), secureUser.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
         chain.doFilter(request, response);

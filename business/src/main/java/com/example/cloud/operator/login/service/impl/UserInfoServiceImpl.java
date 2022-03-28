@@ -1,22 +1,26 @@
 package com.example.cloud.operator.login.service.impl;
 
-import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.cloud.data.AuthConstants;
+import com.example.cloud.data.RedisKeyGenerator;
+import com.example.cloud.data.SecureUserToken;
 import com.example.cloud.exception.BusinessException;
 import com.example.cloud.operator.login.entity.UserInfo;
 import com.example.cloud.operator.login.mapper.UserInfoMapper;
 import com.example.cloud.operator.login.service.UserInfoService;
 import com.example.cloud.operator.utils.WebUtil;
-import com.nimbusds.jose.JWSObject;
+import com.example.cloud.utils.JwtUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
+import java.util.Objects;
 
 /**
  *
@@ -25,6 +29,9 @@ import java.text.ParseException;
 @Service
 public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
         implements UserInfoService {
+
+    @Resource
+    private RedisTemplate<String, SecureUserToken> redisTemplate;
 
     @Override
     public UserInfo getLoginUser() {
@@ -67,20 +74,37 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
             log.info("获取token为空");
             return null;
         }
-        if (accessToken.contains(AuthConstants.BASIC_PREFIX)){
-            throw new BusinessException("当前用户未登录");
-        }
-        String realToken = accessToken.replace(AuthConstants.JWT_PREFIX, "");
-        if (StringUtils.isBlank(realToken)){
-            throw new BusinessException("当前用户未登录");
-        }
-        JWSObject jwsObject = JWSObject.parse(realToken);
-        String userStr = jwsObject.getPayload().toString();
+        String tokenKey = request.getHeader(AuthConstants.TOKEN_HEADER_KEY);
+        SecureUserToken secureUserToken = verifyToken(tokenKey, accessToken.replace(AuthConstants.JWT_PREFIX, ""));
 
-        JSONObject jsonObject = JSONUtil.parseObj(userStr);
-        String username = jsonObject.getStr("user_name");
-        UserInfo user = this.getUserInfoByUsername(username);
-        request.setAttribute(WebUtil.REQ_ATTR_LOGIN_USER_KEY, user);
-        return user;
+        com.example.cloud.data.UserInfo secureUser = secureUserToken.getSecureUser();
+        if (Objects.isNull(secureUser)) {
+            throw new BusinessException("用户信息不存在");
+        }
+        UserInfo userInfo = new UserInfo();
+        BeanUtils.copyProperties(secureUser, userInfo);
+        return userInfo;
+    }
+
+    /**
+     * 获取 Token
+     */
+    public SecureUserToken taskToken(String key) {
+        return redisTemplate.opsForValue().get(RedisKeyGenerator.getLoginTokenKey(key));
+    }
+
+    /**
+     * 验证 Token
+     */
+    public SecureUserToken verifyToken(String key, String token) {
+        SecureUserToken secureUserToken = taskToken(key);
+        if (null == secureUserToken) {
+            throw new BusinessException("token expired");
+        }
+        if (!Objects.equals(secureUserToken.getToken(), token)) {
+            throw new BusinessException("jwt token mismatching");
+        }
+        JwtUtil.parse(secureUserToken.getToken());
+        return secureUserToken;
     }
 }

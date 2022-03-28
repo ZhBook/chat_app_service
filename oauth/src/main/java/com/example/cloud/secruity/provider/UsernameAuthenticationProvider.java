@@ -1,9 +1,9 @@
 package com.example.cloud.secruity.provider;
 
-import com.example.cloud.secruity.service.UserInfo;
-import com.example.cloud.secruity.encoder.CustomerPasswordEncoder;
+import com.example.cloud.data.UserInfo;
 import com.example.cloud.secruity.provider.token.UsernameAuthenticationToken;
 import com.example.cloud.secruity.service.SecureUserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -12,11 +12,13 @@ import org.springframework.security.authentication.InternalAuthenticationService
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 /**
  * 用户名密码登陆
  */
+@Slf4j
 @Component
 public class UsernameAuthenticationProvider implements AuthenticationProvider {
 
@@ -46,9 +48,9 @@ public class UsernameAuthenticationProvider implements AuthenticationProvider {
             String password = (String) authentication.getCredentials();
             UserInfo secureUser = secureUserService.loadUserByUsername(username);
             //对加密密码进行验证
-            CustomerPasswordEncoder passwordEncoder = new CustomerPasswordEncoder(username);
+            BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
-            if (passwordEncoder.matches(password, secureUser.getPassword())) {
+            if (bCryptPasswordEncoder.matches(password, secureUser.getPassword())) {
                 return new UsernameAuthenticationToken(secureUser, password, secureUser.getAuthorities());
             } else {
                 throw new BadCredentialsException("密码错误");
@@ -83,5 +85,17 @@ public class UsernameAuthenticationProvider implements AuthenticationProvider {
     @Override
     public boolean supports(Class<?> authentication) {
         return UsernameAuthenticationToken.class.isAssignableFrom(authentication);
+    }
+
+    public static void main(String[] args) {
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        String encode = bCryptPasswordEncoder.encode("123");
+        log.info("第一次加密后：{}",encode);
+        BCryptPasswordEncoder bCryptPasswordEncoder2 = new BCryptPasswordEncoder();
+
+        String encode2 = bCryptPasswordEncoder2.encode("123");
+        log.info("第二次加密后：{}",encode2);
+        boolean matches = bCryptPasswordEncoder.matches("123",encode);
+        log.info("匹配结果：{}",matches);
     }
 }

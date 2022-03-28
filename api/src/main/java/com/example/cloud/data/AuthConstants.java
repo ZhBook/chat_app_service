@@ -18,6 +18,11 @@ public interface AuthConstants {
      */
     String BASIC_PREFIX = "Basic ";
 
+
+    String TOKEN_HEADER_KEY = "Access-Token-Key";
+
+    String USER_INFO = "userinfo";
+
     /**
      * JWT载体key
      */

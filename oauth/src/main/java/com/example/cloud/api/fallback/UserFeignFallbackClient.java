@@ -1,8 +1,8 @@
 package com.example.cloud.api.fallback;
 
 import com.example.cloud.api.UserFeignClient;
-import com.example.cloud.secruity.service.UserInfo;
 import com.example.cloud.data.BaseResult;
+import com.example.cloud.data.UserInfo;
 import com.example.cloud.enums.ResultCodeEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

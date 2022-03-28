@@ -1,4 +1,4 @@
-package com.example.cloud.utils;
+package com.example.cloud.data;
 
 
 public class RedisKeyGenerator {

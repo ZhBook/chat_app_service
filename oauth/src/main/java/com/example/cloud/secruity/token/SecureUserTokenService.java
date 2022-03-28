@@ -2,10 +2,11 @@ package com.example.cloud.secruity.token;
 
 import cn.hutool.core.util.IdUtil;
 import com.example.cloud.constant.SecurityConstant;
-import com.example.cloud.secruity.service.UserInfo;
+import com.example.cloud.data.RedisKeyGenerator;
+import com.example.cloud.data.SecureUserToken;
+import com.example.cloud.data.UserInfo;
 import com.example.cloud.exception.TokenValidationException;
 import com.example.cloud.utils.JwtUtil;
-import com.example.cloud.utils.RedisKeyGenerator;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
