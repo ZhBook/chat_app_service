@@ -1,23 +1,27 @@
-package com.example.cloud.entity;
+package com.example.cloud.secruity.service;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
+import lombok.experimental.Accessors;
+import org.springframework.security.core.CredentialsContainer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
-import java.util.Collection;
 import java.util.Date;
+import java.util.Objects;
+import java.util.Set;
 
 /**
  * @TableName user_info
  */
 @Data
-public class UserInfo implements UserDetails {
+@Accessors(chain = true)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
+public class UserInfo implements UserDetails, CredentialsContainer {
 
     private static final long serialVersionUID = 1L;
 
@@ -35,14 +39,12 @@ public class UserInfo implements UserDetails {
     /**
      * 昵称
      */
-    @NotBlank(message = "用户名不能为空")
     private String nickname;
 
     /**
      *
      */
 //    @JsonIgnore
-    @NotBlank(message = "密码不能为空")
     private String password;
 
     /**
@@ -53,14 +55,11 @@ public class UserInfo implements UserDetails {
     /**
      *
      */
-    @Email(message = "邮箱地址不正确")
     private String EMail;
 
     /**
      *
      */
-    @Pattern(regexp = "^1(3|4|5|7|8)\\d{9}$",message = "手机号码格式错误")
-    @NotBlank(message = "手机号码不能为空")
     private String mobile;
 
     /**
@@ -89,34 +88,50 @@ public class UserInfo implements UserDetails {
      */
     private int isEnabled;
 
+    /**
+     * 权限
+     */
+    private Set<? extends GrantedAuthority> authorities;
+
+
     @Override
-    public boolean isAccountNonExpired() {
-        return true;
+    public String getUsername() {
+        return this.username;
     }
 
+    @Override
+    public String getPassword() {
+        return this.password;
+    }
+
+    @JsonIgnore
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return false;
     }
 
+    @JsonIgnore
+    @Override
+    public boolean isEnabled() {
+        return Objects.equals(isEnabled, 0);
+    }
+
+    @JsonIgnore
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
+    @JsonIgnore
     @Override
-    public boolean isEnabled() {
-        if (isEnabled == 0) {
-            return true;
-        } else {
-            return false;
-        }
+    public boolean isAccountNonExpired() {
+        return true;
     }
 
-
+    @JsonIgnore
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+    public void eraseCredentials() {
+        this.password = null;
     }
 
 

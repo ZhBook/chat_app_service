@@ -37,7 +37,7 @@
         <druid-starter>1.1.22</druid-starter>
         <jasypt.version>1.14</jasypt.version>
         <sharding-sphere.version>3.1.0</sharding-sphere.version>
-        <security-oauth2.version>2.3.8.RELEASE</security-oauth2.version>
+        <security-oauth2.version>2.5.1.RELEASE</security-oauth2.version>
         <security-jwt.version>1.1.0.RELEASE</security-jwt.version>
         <redisson-starter.version>3.14.1</redisson-starter.version>
         <easyCaptcha.version>1.6.2</easyCaptcha.version>
@@ -75,6 +75,8 @@
         <docker.image.prefix>hub.tensua.com</docker.image.prefix>
         <docker.java.security.egd>-Djava.security.egd=file:/dev/./urandom</docker.java.security.egd>
         <docker.java.opts>-Xms128m -Xmx128m</docker.java.opts>
+        <token.version>0.9.1</token.version>
+        <captcha.version>1.6.2</captcha.version>
     </properties>
 
     <dependencies>
@@ -314,6 +316,7 @@
                 <artifactId>fastjson</artifactId>
                 <version>${fastjson.version}</version>
                 <type>pom</type>
+                <scope>import</scope>
             </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
@@ -347,6 +350,19 @@
                 <groupId>com.aliyun.oss</groupId>
                 <artifactId>aliyun-sdk-oss</artifactId>
                 <version>${aliyun-sdk-oss}</version>
+            </dependency>
+            <!-- TOKEN 处 理 -->
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt</artifactId>
+                <version>${token.version}</version>
+            </dependency>
+
+            <!-- 验 证 码 -->
+            <dependency>
+                <groupId>com.github.whvcse</groupId>
+                <artifactId>easy-captcha</artifactId>
+                <version>${captcha.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

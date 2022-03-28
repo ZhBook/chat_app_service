@@ -27,6 +27,9 @@ public class BaseResult<T> implements Serializable {
     public static <T> BaseResult<T> succeed(T model) {
         return of(model, ResultCodeEnum.SUCCESS.getCode(), "");
     }
+    public static <T> BaseResult<T> succeed() {
+        return succeed("success");
+    }
 
     public static <T> BaseResult<T> of(T data, Integer code, String msg) {
         return new BaseResult<>(data, code, msg);
@@ -34,6 +37,10 @@ public class BaseResult<T> implements Serializable {
 
     public static <T> BaseResult<T> failed(String msg) {
         return of(null, ResultCodeEnum.FAILED.getCode(), msg);
+    }
+
+    public static BaseResult fail(ResultCodeEnum resultCode) {
+        return failed(resultCode.getCode(), resultCode.getMessage());
     }
 
     public static <T> BaseResult<T> failed(T model, String msg) {
