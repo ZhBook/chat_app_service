@@ -2,9 +2,9 @@ package com.example.cloud.secruity.handler;
 
 import com.example.cloud.constant.SecurityConstant;
 import com.example.cloud.data.BaseResult;
-import com.example.cloud.data.SecureUserToken;
-import com.example.cloud.data.UserInfo;
-import com.example.cloud.data.UserInfoResponse;
+import com.example.cloud.data.security.SecureUserToken;
+import com.example.cloud.data.security.UserInfo;
+import com.example.cloud.data.response.user.UserInfoResponse;
 import com.example.cloud.secruity.token.SecureUserTokenService;
 import com.example.cloud.utils.IpAddressUtil;
 import com.example.cloud.utils.WebUtil;

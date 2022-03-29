@@ -1,7 +1,7 @@
 package com.example.cloud.secruity.service;
 
 import com.example.cloud.api.UserFeignClient;
-import com.example.cloud.data.UserInfo;
+import com.example.cloud.data.security.UserInfo;
 import com.example.cloud.utils.PatternUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

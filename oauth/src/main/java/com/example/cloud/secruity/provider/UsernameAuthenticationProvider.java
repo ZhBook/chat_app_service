@@ -1,6 +1,6 @@
 package com.example.cloud.secruity.provider;
 
-import com.example.cloud.data.UserInfo;
+import com.example.cloud.data.security.UserInfo;
 import com.example.cloud.secruity.provider.token.UsernameAuthenticationToken;
 import com.example.cloud.secruity.service.SecureUserService;
 import lombok.extern.slf4j.Slf4j;

@@ -1,4 +1,4 @@
-package com.example.cloud.data;
+package com.example.cloud.data.security;
 
 
 public class RedisKeyGenerator {
@@ -20,7 +20,6 @@ public class RedisKeyGenerator {
      */
     public static final String CAPTCHA_PREFIX = "captcha:";
 
-
     /**
      * 获取登录用户次数redis key
      *
@@ -33,7 +32,6 @@ public class RedisKeyGenerator {
         return newBuilder(64).append(LOGIN_TIMES_KEY).append(clintCode).append(SEPARATOR).append(tenantId).append(SEPARATOR).append(loginName).toString();
     }
 
-
     /**
      * 获取登陆用户信息的缓存key
      *
@@ -44,7 +42,6 @@ public class RedisKeyGenerator {
         return newBuilder(64).append(TOKEN_PREFIX).append(loginToken).toString();
     }
 
-
     /**
      * 获取验证码缓存key
      *
@@ -54,9 +51,6 @@ public class RedisKeyGenerator {
     public static String getCaptchaKey(String captchaKey) {
         return newBuilder(64).append(CAPTCHA_PREFIX).append(captchaKey).toString();
     }
-
-
-
 
     /**
      * 统一用这个方法来new StringBuilder，必须预估字符串长度

@@ -1,6 +1,6 @@
 package com.example.cloud.handler;
 
-import com.example.cloud.data.AuthConstants;
+import com.example.cloud.constant.AuthConstants;
 import com.example.cloud.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;

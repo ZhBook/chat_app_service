@@ -2,7 +2,7 @@ package com.example.cloud.utils;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.example.cloud.data.BaseConstant;
+import com.example.cloud.constant.BaseConstant;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

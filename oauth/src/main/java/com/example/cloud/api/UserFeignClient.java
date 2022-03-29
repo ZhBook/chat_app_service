@@ -2,7 +2,7 @@ package com.example.cloud.api;
 
 import com.example.cloud.api.fallback.UserFeignFallbackClient;
 import com.example.cloud.data.BaseResult;
-import com.example.cloud.data.UserInfo;
+import com.example.cloud.data.security.UserInfo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

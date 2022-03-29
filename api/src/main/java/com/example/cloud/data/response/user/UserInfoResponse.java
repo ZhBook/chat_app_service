@@ -1,4 +1,4 @@
-package com.example.cloud.data;
+package com.example.cloud.data.response.user;
 
 import lombok.Data;
 

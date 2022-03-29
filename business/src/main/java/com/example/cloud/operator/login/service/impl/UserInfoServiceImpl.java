@@ -2,9 +2,9 @@ package com.example.cloud.operator.login.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.example.cloud.data.AuthConstants;
-import com.example.cloud.data.RedisKeyGenerator;
-import com.example.cloud.data.SecureUserToken;
+import com.example.cloud.constant.AuthConstants;
+import com.example.cloud.data.security.RedisKeyGenerator;
+import com.example.cloud.data.security.SecureUserToken;
 import com.example.cloud.exception.BusinessException;
 import com.example.cloud.operator.login.entity.UserInfo;
 import com.example.cloud.operator.login.mapper.UserInfoMapper;
@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.text.ParseException;
 import java.util.Objects;
 
 /**
@@ -56,7 +55,6 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
      */
     @Override
     public UserInfo getUserInfoByUsername(String username) {
-
         return this.getOne(new LambdaQueryWrapper<UserInfo>()
                 .eq(UserInfo::getUsername, username));
     }
@@ -67,7 +65,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
      * @param request
      * @return
      */
-    private UserInfo getFromRequest(HttpServletRequest request) throws ParseException {
+    private UserInfo getFromRequest(HttpServletRequest request) {
         String accessToken = request.getHeader(WebUtil.ACCESS_TOKEN_KEY);
 
         if (StringUtils.isEmpty(accessToken)) {
@@ -77,12 +75,11 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
         String tokenKey = request.getHeader(AuthConstants.TOKEN_HEADER_KEY);
         SecureUserToken secureUserToken = verifyToken(tokenKey, accessToken.replace(AuthConstants.JWT_PREFIX, ""));
 
-        com.example.cloud.data.UserInfo secureUser = secureUserToken.getSecureUser();
-        if (Objects.isNull(secureUser)) {
+        if (Objects.isNull(secureUserToken.getSecureUser())) {
             throw new BusinessException("用户信息不存在");
         }
         UserInfo userInfo = new UserInfo();
-        BeanUtils.copyProperties(secureUser, userInfo);
+        BeanUtils.copyProperties(secureUserToken.getSecureUser(), userInfo);
         return userInfo;
     }
 

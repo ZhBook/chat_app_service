@@ -3,7 +3,7 @@ package com.example.cloud.secruity.captcha;
 import com.example.cloud.constant.SecurityConstant;
 import com.example.cloud.data.response.captcha.SecureCaptcha;
 import com.example.cloud.exception.CaptchaValidationException;
-import com.example.cloud.data.RedisKeyGenerator;
+import com.example.cloud.data.security.RedisKeyGenerator;
 import com.wf.captcha.SpecCaptcha;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;

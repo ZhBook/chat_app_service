@@ -1,4 +1,4 @@
-package com.example.cloud.data;
+package com.example.cloud.data.security;
 
 import lombok.Data;
 

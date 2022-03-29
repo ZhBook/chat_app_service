@@ -1,7 +1,10 @@
 package com.example.cloud.filter;
 
-import cn.hutool.core.util.StrUtil;
-import com.example.cloud.data.AuthConstants;
+import com.example.cloud.config.IgnoreUrlsConfig;
+import com.example.cloud.constant.AuthConstants;
+import com.example.cloud.data.security.RedisKeyGenerator;
+import com.example.cloud.exception.BusinessException;
+import com.example.cloud.utils.PatternUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectProvider;
@@ -11,11 +14,15 @@ import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.Ordered;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+import javax.annotation.Resource;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -26,15 +33,26 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class AuthGlobalFilter implements GlobalFilter, Ordered {
 
+    @Resource
+    private RedisTemplate<String, Object> redisTemplate;
+
+    @Resource
+    private IgnoreUrlsConfig ignoreUrlsConfig;
+
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-        String token = exchange.getRequest().getHeaders().getFirst(AuthConstants.AUTHORIZATION_KEY);
-        String tokenKey = exchange.getRequest().getHeaders().getFirst(AuthConstants.TOKEN_HEADER_KEY);
-
-        if (StrUtil.isEmpty(token)) {
+        ServerHttpRequest request = exchange.getRequest();
+        String tokenKey = request.getHeaders().getFirst(AuthConstants.TOKEN_HEADER_KEY);
+        String path = request.getPath().value();
+        // url拦截过滤
+        if (PatternUtil.matches(ignoreUrlsConfig.getUrls(), path)) {
             return chain.filter(exchange);
         }
-        //todo 添加token是否过期认证
+        // 简单的token认证
+        Object tokenObj = taskToken(tokenKey);
+        if (Objects.isNull(tokenObj)){
+            throw new BusinessException("当前用户未登录");
+        }
         return chain.filter(exchange);
     }
 
@@ -49,4 +67,10 @@ public class AuthGlobalFilter implements GlobalFilter, Ordered {
         return new HttpMessageConverters(converters.orderedStream().collect(Collectors.toList()));
     }
 
+    /**
+     * 获取 Token
+     */
+    public Object taskToken(String key) {
+        return redisTemplate.opsForValue().get(RedisKeyGenerator.getLoginTokenKey(key));
+    }
 }
