@@ -1,6 +1,5 @@
 package com.example.cloud.secruity.token;
 
-import cn.hutool.core.util.IdUtil;
 import com.example.cloud.constant.SecurityConstant;
 import com.example.cloud.data.security.RedisKeyGenerator;
 import com.example.cloud.data.security.SecureUserToken;
@@ -9,6 +8,7 @@ import com.example.cloud.exception.TokenValidationException;
 import com.example.cloud.utils.JwtUtil;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.util.DigestUtils;
 
 import javax.annotation.Resource;
 import java.util.Objects;
@@ -38,7 +38,9 @@ public class SecureUserTokenService {
      * 存储 Token
      */
     public String saveToken(SecureUserToken userToken) {
-        String key = IdUtil.fastSimpleUUID();
+        // 使用用户名的md5作为唯一token的key
+        String username = userToken.getSecureUser().getUsername();
+        String key = DigestUtils.md5DigestAsHex(username.getBytes());
         redisTemplate.opsForValue().set(RedisKeyGenerator.getLoginTokenKey(key), userToken, SecurityConstant.TOKEN_EXPIRE_TIME_SECOND, TimeUnit.SECONDS);
         return key;
     }
