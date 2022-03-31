@@ -80,11 +80,11 @@ public interface SecurityConstant {
     long TOKEN_EXPIRE_TIME_SECOND = 60 * 60 * 12;
 
 
-    String TOKEN_HEADER = "Access-Token";
+    String TOKEN_HEADER = "AccessToken";
 
     String USER_INFO = "UserInfo";
 
-    String TOKEN_HEADER_KEY = "Access-Token-Key";
+    String TOKEN_HEADER_KEY = "AccessTokenKey";
 
     String TOKEN_PREFIX = "Bearer ";
 

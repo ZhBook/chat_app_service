@@ -3,6 +3,7 @@ package com.example.cloud.operator.login.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.cloud.constant.AuthConstants;
+import com.example.cloud.constant.SecurityConstant;
 import com.example.cloud.data.security.RedisKeyGenerator;
 import com.example.cloud.data.security.SecureUserToken;
 import com.example.cloud.exception.BusinessException;
@@ -72,7 +73,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
             log.info("获取token为空");
             return null;
         }
-        String tokenKey = request.getHeader(AuthConstants.TOKEN_HEADER_KEY);
+        String tokenKey = request.getHeader(SecurityConstant.TOKEN_HEADER_KEY);
         SecureUserToken secureUserToken = verifyToken(tokenKey, accessToken.replace(AuthConstants.JWT_PREFIX, ""));
 
         if (Objects.isNull(secureUserToken.getSecureUser())) {
