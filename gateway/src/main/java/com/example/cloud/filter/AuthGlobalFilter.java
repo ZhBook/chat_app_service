@@ -1,7 +1,7 @@
 package com.example.cloud.filter;
 
 import com.example.cloud.config.IgnoreUrlsConfig;
-import com.example.cloud.constant.AuthConstants;
+import com.example.cloud.constant.SecurityConstant;
 import com.example.cloud.data.security.RedisKeyGenerator;
 import com.example.cloud.exception.BusinessException;
 import com.example.cloud.utils.PatternUtil;
@@ -42,7 +42,7 @@ public class AuthGlobalFilter implements GlobalFilter, Ordered {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
-        String tokenKey = request.getHeaders().getFirst(AuthConstants.TOKEN_HEADER_KEY);
+        String tokenKey = request.getHeaders().getFirst(SecurityConstant.TOKEN_HEADER_KEY);
         String path = request.getPath().value();
         // url拦截过滤
         if (PatternUtil.matches(ignoreUrlsConfig.getUrls(), path)) {
@@ -50,7 +50,7 @@ public class AuthGlobalFilter implements GlobalFilter, Ordered {
         }
         // 简单的token认证
         Object tokenObj = taskToken(tokenKey);
-        if (Objects.isNull(tokenObj)){
+        if (Objects.isNull(tokenObj)) {
             throw new BusinessException("当前用户未登录");
         }
         return chain.filter(exchange);

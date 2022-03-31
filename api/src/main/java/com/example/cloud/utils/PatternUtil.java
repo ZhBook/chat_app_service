@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 public class PatternUtil {
 
     public static boolean matches(String pattern,String content){
-        return Pattern.matches(getRegPath(pattern), content);
+        return Pattern.matches(pattern, content);
     }
 
     public static boolean matches(String pattern, List<String> content){
