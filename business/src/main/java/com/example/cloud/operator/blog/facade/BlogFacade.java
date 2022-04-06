@@ -51,6 +51,9 @@ public class BlogFacade {
     @Autowired
     private UserInfoService userInfoService;
 
+    @Autowired
+    private BlogConfigService blogConfigService;
+
     final private Integer tagMax = 10;
 
     /**
@@ -350,9 +353,12 @@ public class BlogFacade {
     public BlogUserInfoResponse getBlogUserInfo(NoParamsBlogUserRequest request) {
         BlogUserInfoResponse response = new BlogUserInfoResponse();
         Long userId = request.getUserId();
-        // todo 待优化
+        // 从blog配置文件中获取默认blog user id
         if (Objects.isNull(userId)) {
-            UserInfo userInfo = userInfoService.getById("100011");
+            BlogConfig blog_user_id = blogConfigService.getOne(new LambdaQueryWrapper<BlogConfig>()
+                    .eq(BlogConfig::getTypeName, "blog_user_id")
+                    .eq(BlogConfig::getIsDelete, IsDeleteEnum.NO.getCode()));
+            UserInfo userInfo = userInfoService.getById(blog_user_id.getTypeValue());
             userId = userInfo.getId();
             BeanUtils.copyProperties(userInfo, request);
             request.setUserId(userInfo.getId());
