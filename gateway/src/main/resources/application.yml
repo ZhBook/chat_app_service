@@ -44,5 +44,6 @@ secure:
       - "/api-business/api/v1/oauth/**"
       - "/api-business/api/v1/users/**"
       - "/api-business/resources/**"
+      - "/api-business/api/v1/upload"
       - "/api-business/api/v1/upload/**"
       - "/api-business/api/v1/blog/**"
