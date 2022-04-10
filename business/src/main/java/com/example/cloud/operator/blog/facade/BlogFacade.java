@@ -13,6 +13,8 @@ import com.example.cloud.enums.StateEnum;
 import com.example.cloud.exception.BusinessException;
 import com.example.cloud.operator.blog.entity.*;
 import com.example.cloud.operator.blog.service.*;
+import com.example.cloud.operator.file.entity.FileInfo;
+import com.example.cloud.operator.file.service.FileInfoService;
 import com.example.cloud.operator.login.entity.UserInfo;
 import com.example.cloud.operator.login.service.UserInfoService;
 import com.example.cloud.system.NoParamsBlogUserRequest;
@@ -53,6 +55,9 @@ public class BlogFacade {
 
     @Autowired
     private BlogConfigService blogConfigService;
+
+    @Autowired
+    private FileInfoService fileInfoService;
 
     final private Integer tagMax = 10;
 
@@ -103,7 +108,7 @@ public class BlogFacade {
 
         // 获取所有评论数量
         HashMap<String, String> commentHashMap = new HashMap<>();
-        if(CollectionUtils.isNotEmpty(BlogIds)){
+        if (CollectionUtils.isNotEmpty(BlogIds)) {
             List<Map<String, Object>> commentListMap = blogCommentService.listMaps(new QueryWrapper<BlogComment>()
                     .select("blog_id as blogId, count(1) as total ")
                     .in("blog_id", BlogIds)
@@ -113,7 +118,7 @@ public class BlogFacade {
         }
         // 获取所有的用户名
         HashMap<String, String> userHashMap = new HashMap<>();
-        if (CollectionUtils.isNotEmpty(userIds)){
+        if (CollectionUtils.isNotEmpty(userIds)) {
             List<Map<String, Object>> userListMap = userInfoService.listMaps(new QueryWrapper<UserInfo>()
                     .select("id,nickname")
                     .in("id", userIds));
@@ -150,6 +155,10 @@ public class BlogFacade {
         blogList.setUpdateDate(date);
         blogList.setUpdateUserId(request.getId());
         blogList.setVersion(1);
+        if (StringUtils.isBlank(blogList.getPicture())) {
+            List<FileInfo> pictures = fileInfoService.getBlogCoverPicture();
+            blogList.setPicture(pictures.get(new Random(pictures.size()).nextInt()).getUrl());
+        }
         blogListService.save(blogList);
 
         if (StringUtils.isNotBlank(request.getTags())) {
