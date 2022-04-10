@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 /**
@@ -157,7 +158,8 @@ public class BlogFacade {
         blogList.setVersion(1);
         if (StringUtils.isBlank(blogList.getPicture())) {
             List<FileInfo> pictures = fileInfoService.getBlogCoverPicture();
-            blogList.setPicture(pictures.get(new Random(pictures.size()).nextInt()).getUrl());
+            ThreadLocalRandom random = ThreadLocalRandom.current();
+            blogList.setPicture(pictures.get(random.nextInt(pictures.size())).getUrl());
         }
         blogListService.save(blogList);
 
