@@ -33,6 +33,11 @@ public class BlogListResponse {
      */
     private String authorName;
 
+    /**
+     *
+     */
+    private String picture;
+
     private Long createUserId;
 
     /**
