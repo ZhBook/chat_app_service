@@ -52,6 +52,11 @@ public class BlogRequest extends UserBeanRequest {
     private Integer isTop;
 
     /**
+     * 是否草稿：0 否 1 是，默认0
+     */
+    private Integer isDraft;
+
+    /**
      * 是否私密 0否 1是
      */
     private Integer isPrivate;
