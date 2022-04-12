@@ -46,6 +46,11 @@ public class BlogListResponse {
     private Integer isTop;
 
     /**
+     * 是否草稿：0 否 1 是，默认0
+     */
+    private Integer isDraft;
+
+    /**
      * 浏览次数，每次访问+1
      */
     private Integer blogBrowse;

@@ -34,6 +34,11 @@ public class BlogListRequest{
     private Integer isTop;
 
     /**
+     * 是否草稿：0 否 1 是，默认0
+     */
+    private Integer isDraft;
+
+    /**
      *
      */
     private Integer isDelete;
