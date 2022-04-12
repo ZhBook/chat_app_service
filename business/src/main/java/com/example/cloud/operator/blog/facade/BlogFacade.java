@@ -450,11 +450,12 @@ public class BlogFacade {
      * @param request
      * @return
      */
-    public IPage<BlogDraftListResponse> getBlogDraftList(BlogPageRequest request) {
+    public IPage<BlogDraftListResponse> getBlogDraftList(BlogDraftRequest request) {
         IPage<BlogList> page = new Page<>(request.getPageIndex(), request.getPageSize());
         IPage<BlogList> listIPage = blogListService.page(page, new LambdaQueryWrapper<BlogList>()
                 .eq(BlogList::getIsDraft, 1)
                 .eq(BlogList::getIsDelete, IsDeleteEnum.NO.getCode())
+                .eq(BlogList::getCreateUserId, request.getUserId())
                 .orderByDesc(BlogList::getCreateDate));
         List<BlogList> blogLists = listIPage.getRecords();
 

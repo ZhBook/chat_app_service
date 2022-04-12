@@ -51,7 +51,7 @@ public class BlogController {
      * @return
      */
     @PostMapping("/draft")
-    public PageResult<BlogDraftListResponse> getBlogDraftList(@RequestBody BlogPageRequest request) {
+    public PageResult<BlogDraftListResponse> getBlogDraftList(@RequestBody BlogDraftRequest request) {
         return PageResult.pageSuccess(blogFacade.getBlogDraftList(request));
     }
 
