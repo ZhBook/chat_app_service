@@ -5,7 +5,10 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.example.cloud.data.request.user.RegisterUserRequest;
 import com.example.cloud.data.request.user.UserInfoRequest;
 import com.example.cloud.data.response.login.UserInfoResponse;
+import com.example.cloud.enums.IsDeleteEnum;
 import com.example.cloud.exception.BusinessException;
+import com.example.cloud.operator.blog.entity.InviteCode;
+import com.example.cloud.operator.blog.service.InviteCodeService;
 import com.example.cloud.operator.login.entity.UserInfo;
 import com.example.cloud.operator.login.mapper.UserInfoMapper;
 import com.example.cloud.operator.login.service.UserInfoService;
@@ -13,8 +16,10 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -27,6 +32,9 @@ public class UserFacade {
 
     @Resource
     private UserInfoMapper userInfoMapper;
+
+    @Autowired
+    private InviteCodeService inviteCodeService;
 
     /**
      * 用户登录验证接口
@@ -64,7 +72,15 @@ public class UserFacade {
      * @param request
      * @return
      */
+    @Transactional
     public UserInfoResponse registerUser(RegisterUserRequest request) {
+        String inviteCode = request.getInviteCode();
+        InviteCode invite = inviteCodeService.getOne(new LambdaQueryWrapper<InviteCode>()
+                .eq(InviteCode::getCode, inviteCode)
+                .eq(InviteCode::getIsDelete, IsDeleteEnum.NO.getCode()));
+        if (Objects.nonNull(invite.getUserId())){
+            throw new BusinessException("邀请码已被使用");
+        }
         Integer num = userInfoMapper.selectCount(new LambdaQueryWrapper<UserInfo>()
                 .eq(UserInfo::getMobile, request.getMobile())
         );
@@ -84,6 +100,9 @@ public class UserFacade {
             userInfo.setUsername(randomName);
             userInfoService.save(userInfo);
 
+            invite.setUserId(userInfo.getId());
+            invite.setUpdateDatetime(new Date());
+            inviteCodeService.updateById(invite);
             UserInfoResponse userInfoResponse = new UserInfoResponse();
             BeanUtils.copyProperties(userInfo, userInfoResponse);
             return userInfoResponse;

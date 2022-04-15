@@ -58,4 +58,6 @@ public class RegisterUserRequest {
      *
      */
     private String address;
+
+    private String inviteCode;
 }
