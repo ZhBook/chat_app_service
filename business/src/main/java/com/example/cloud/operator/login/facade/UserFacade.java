@@ -78,15 +78,15 @@ public class UserFacade {
         InviteCode invite = inviteCodeService.getOne(new LambdaQueryWrapper<InviteCode>()
                 .eq(InviteCode::getCode, inviteCode)
                 .eq(InviteCode::getIsDelete, IsDeleteEnum.NO.getCode()));
-        if (Objects.nonNull(invite.getUserId())){
-            throw new BusinessException("邀请码已被使用");
+        if (Objects.isNull(invite) || Objects.nonNull(invite.getUserId())) {
+            throw new BusinessException("邀请码不正确");
         }
         Integer num = userInfoMapper.selectCount(new LambdaQueryWrapper<UserInfo>()
                 .eq(UserInfo::getMobile, request.getMobile())
         );
         if (num == 0) {
             UserInfo userInfo = new UserInfo();
-            BeanUtils.copyProperties(request,userInfo);
+            BeanUtils.copyProperties(request, userInfo);
             BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
             userInfo.setPassword(bCryptPasswordEncoder.encode(request.getPassword()));
             String randomName;
