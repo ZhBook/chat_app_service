@@ -1,5 +1,4 @@
 spring:
-  profiles: dev
   cloud:
     gateway:
       global-filter:
