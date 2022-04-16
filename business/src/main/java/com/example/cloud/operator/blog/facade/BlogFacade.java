@@ -99,6 +99,7 @@ public class BlogFacade {
                 .eq(Objects.nonNull(id), BlogList::getId, id)
                 .eq(Objects.nonNull(userId), BlogList::getCreateUserId, userId)
                 .eq(Objects.nonNull(isOriginal), BlogList::getIsOriginal, isOriginal)
+                .eq(BlogList::getIsDraft, 0)
                 .like(StringUtils.isNotBlank(title), BlogList::getTitle, title)
                 .eq(Objects.nonNull(isPrivate), BlogList::getIsPrivate, isPrivate)
                 .eq(BlogList::getIsDelete, IsDeleteEnum.NO.getCode())
@@ -441,5 +442,31 @@ public class BlogFacade {
         blog.setUpdateUserId(request.getUserId());
         blog.setIsDelete(IsDeleteEnum.YES.getCode());
         return blogListService.updateById(blog);
+    }
+
+    /**
+     * 获取博客草稿箱
+     *
+     * @param request
+     * @return
+     */
+    public IPage<BlogDraftListResponse> getBlogDraftList(BlogDraftRequest request) {
+        IPage<BlogList> page = new Page<>(request.getPageIndex(), request.getPageSize());
+        IPage<BlogList> listIPage = blogListService.page(page, new LambdaQueryWrapper<BlogList>()
+                .eq(BlogList::getIsDraft, 1)
+                .eq(BlogList::getIsDelete, IsDeleteEnum.NO.getCode())
+                .eq(BlogList::getCreateUserId, request.getUserId())
+                .orderByDesc(BlogList::getCreateDate));
+        List<BlogList> blogLists = listIPage.getRecords();
+
+        List<BlogDraftListResponse> draftListResponses = blogLists.stream().map(blog -> {
+            BlogDraftListResponse blogDraftListResponse = new BlogDraftListResponse();
+            BeanUtils.copyProperties(blog, blogDraftListResponse);
+            return blogDraftListResponse;
+        }).collect(Collectors.toList());
+        Page<BlogDraftListResponse> responsePage = new Page<>(request.getPageIndex(), request.getPageSize());
+        responsePage.setRecords(draftListResponses);
+        responsePage.setTotal(listIPage.getTotal());
+        return responsePage;
     }
 }

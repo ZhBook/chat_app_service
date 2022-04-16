@@ -4,9 +4,10 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
+
 import java.io.Serializable;
 import java.util.Date;
-import lombok.Data;
 
 /**
  * 博客
@@ -57,12 +58,17 @@ public class BlogList implements Serializable {
     private Integer blogBrowse;
 
     /**
+     * 是否草稿：0 否 1 是，默认0
+     */
+    private Integer isDraft;
+
+    /**
      * 是否置顶：0 否 1是
      */
     private Integer isTop;
 
     /**
-     * 
+     * 0正常 1删除
      */
     private Integer isDelete;
 
@@ -72,7 +78,7 @@ public class BlogList implements Serializable {
     private Integer isPrivate;
 
     /**
-     * 是否原创 0否 1是
+     * 文章来源 1原创 2转摘 3翻译
      */
     private Integer isOriginal;
 

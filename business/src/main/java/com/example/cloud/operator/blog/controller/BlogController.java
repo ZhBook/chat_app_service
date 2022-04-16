@@ -45,6 +45,17 @@ public class BlogController {
     }
 
     /**
+     * 获取博客草稿箱
+     *
+     * @param request
+     * @return
+     */
+    @PostMapping("/draft")
+    public PageResult<BlogDraftListResponse> getBlogDraftList(@RequestBody BlogDraftRequest request) {
+        return PageResult.pageSuccess(blogFacade.getBlogDraftList(request));
+    }
+
+    /**
      * 添加博客
      *
      * @param request

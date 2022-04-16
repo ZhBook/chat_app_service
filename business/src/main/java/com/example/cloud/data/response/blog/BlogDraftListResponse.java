@@ -7,10 +7,10 @@ import java.util.Date;
 
 /**
  * @author zhooke
- * @since 2022/3/17 17:55
+ * @since 2022/4/12 10:39
  **/
 @Data
-public class BlogListResponse {
+public class BlogDraftListResponse {
     /**
      *
      */
@@ -39,24 +39,9 @@ public class BlogListResponse {
     private Long createUserId;
 
     /**
-     * 是否置顶：0 否 1是
-     */
-    private Integer isTop;
-
-    /**
      * 是否草稿：0 否 1 是，默认0
      */
     private Integer isDraft;
-
-    /**
-     * 浏览次数，每次访问+1
-     */
-    private Integer blogBrowse;
-
-    /**
-     * 评论条数
-     */
-    private Integer commentNum;
 
     /**
      * 是否私密 0否 1是
@@ -73,5 +58,4 @@ public class BlogListResponse {
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createDate;
-
 }
