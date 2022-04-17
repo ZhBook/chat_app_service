@@ -1,6 +1,7 @@
 package com.example.cloud.operator.blog.facade;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.date.BetweenFormater;
 import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -376,14 +377,8 @@ public class BlogFacade {
             request.setUserId(userInfo.getId());
         }
         Date createTime = request.getCreateTime();
-        Date date = new Date();
-        long betweenYear = DateUtil.betweenYear(date, createTime, false);
-        long betweenMonth = DateUtil.betweenMonth(date, createTime, false);
-        if (betweenYear <= 0) {
-            response.setRunningDay(betweenMonth + "个月");
-        } else {
-            response.setRunningDay(betweenYear + "年" + betweenMonth + "个月");
-        }
+        String betweenDay = DateUtil.formatBetween(new Date(), createTime, BetweenFormater.Level.SECOND);
+        response.setRunningDay(betweenDay);
         int blogCount = blogListService.count(new LambdaQueryWrapper<BlogList>()
                 .eq(BlogList::getCreateUserId, userId)
                 .eq(BlogList::getIsDelete, IsDeleteEnum.NO.getCode()));
