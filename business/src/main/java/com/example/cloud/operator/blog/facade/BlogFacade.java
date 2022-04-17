@@ -377,7 +377,7 @@ public class BlogFacade {
             request.setUserId(userInfo.getId());
         }
         Date createTime = request.getCreateTime();
-        String betweenDay = DateUtil.formatBetween(new Date(), createTime, BetweenFormater.Level.SECOND);
+        String betweenDay = DateUtil.formatBetween(new Date(), createTime, BetweenFormater.Level.MINUTE);
         response.setRunningDay(betweenDay);
         int blogCount = blogListService.count(new LambdaQueryWrapper<BlogList>()
                 .eq(BlogList::getCreateUserId, userId)

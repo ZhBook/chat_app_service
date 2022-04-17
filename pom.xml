@@ -21,6 +21,7 @@
     <!-- 依赖版本管理 -->
     <!-- spring-cloud版本可以去 https://start.spring.io 根据springBoot自己查看 -->
     <properties>
+        <skipTests>true</skipTests>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
