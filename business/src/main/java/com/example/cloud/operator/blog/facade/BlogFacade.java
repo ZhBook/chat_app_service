@@ -104,7 +104,7 @@ public class BlogFacade {
                 .like(StringUtils.isNotBlank(title), BlogList::getTitle, title)
                 .eq(Objects.nonNull(isPrivate), BlogList::getIsPrivate, isPrivate)
                 .eq(BlogList::getIsDelete, IsDeleteEnum.NO.getCode())
-                .orderByAsc(BlogList::getIsTop)
+                .orderByDesc(BlogList::getIsTop)
                 .orderByDesc(BlogList::getCreateDate));
         List<BlogList> blogLists = listIPage.getRecords();
         List<Long> BlogIds = blogLists.stream().map(BlogList::getId).collect(Collectors.toList());
