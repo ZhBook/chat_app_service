@@ -265,6 +265,7 @@ public class BlogFacade {
 
         page = blogCommentService.page(page, new LambdaQueryWrapper<BlogComment>()
                 .eq(Objects.nonNull(request), BlogComment::getCreateUserId, request.getUserId())
+                .eq(BlogComment::getIsDelete, IsDeleteEnum.NO.getCode())
                 .orderByDesc(BlogComment::getCreateDate));
         List<BlogComment> records = page.getRecords();
         if (Objects.isNull(records)) {
@@ -288,6 +289,7 @@ public class BlogFacade {
         IPage<BlogList> page = new Page<>(1, 5);
         page = blogListService.page(page, new LambdaQueryWrapper<BlogList>()
                 .eq(Objects.nonNull(request.getUserId()), BlogList::getCreateUserId, request.getUserId())
+                .eq(BlogList::getIsDelete, IsDeleteEnum.NO.getCode())
                 .orderByDesc(BlogList::getBlogBrowse)
                 .orderByDesc(BlogList::getCreateDate));
         List<BlogList> records = page.getRecords();
