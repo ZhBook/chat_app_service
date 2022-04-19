@@ -14,6 +14,12 @@ import javax.validation.constraints.NotNull;
 public class BlogRequest extends UserBeanRequest {
 
     /**
+     * blogId
+     */
+    @NotNull(message = "博客id不能为空")
+    private Long blogId;
+
+    /**
      *
      */
     @NotNull(message = "作者id不能为空")

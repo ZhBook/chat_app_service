@@ -380,7 +380,7 @@ public class BlogFacade {
             request.setUserId(userInfo.getId());
         }
         Date createTime = request.getCreateTime();
-        String betweenDay = DateUtil.formatBetween(new Date(), createTime, BetweenFormater.Level.MINUTE);
+        String betweenDay = DateUtil.formatBetween(new Date(), createTime, BetweenFormater.Level.HOUR);
         response.setRunningDay(betweenDay);
         int blogCount = blogListService.count(new LambdaQueryWrapper<BlogList>()
                 .eq(BlogList::getCreateUserId, userId)
@@ -466,5 +466,53 @@ public class BlogFacade {
         responsePage.setRecords(draftListResponses);
         responsePage.setTotal(listIPage.getTotal());
         return responsePage;
+    }
+
+    /**
+     * 更新blog
+     *
+     * @param request
+     * @return
+     */
+    @Transactional
+    public Boolean updateBlog(BlogRequest request) {
+        BlogList blogList = blogListService.getById(request.getBlogId());
+        if (Objects.isNull(blogList)) {
+            throw new BusinessException("博客不存在");
+        }
+        Date date = new Date();
+        blogList.setContent(request.getContent());
+        blogList.setTitle(request.getTitle());
+        blogList.setIsDraft(request.getIsDraft());
+        blogList.setIsOriginal(request.getIsOriginal());
+        blogList.setIsPrivate(request.getIsPrivate());
+        blogList.setUpdateDate(date);
+        blogList.setUpdateUserId(request.getId());
+        blogList.setVersion(blogList.getVersion() + 1);
+        if (StringUtils.isBlank(blogList.getPicture())) {
+            List<FileInfo> pictures = fileInfoService.getBlogCoverPicture();
+            ThreadLocalRandom random = ThreadLocalRandom.current();
+            blogList.setPicture(pictures.get(random.nextInt(pictures.size())).getUrl());
+        }
+        blogListService.updateById(blogList);
+
+        if (StringUtils.isNotBlank(request.getTags())) {
+            String[] tags = request.getTags().split(",");
+            List<BlogTag> blogTags = blogTagService.list(new LambdaQueryWrapper<BlogTag>()
+                    .in(Objects.nonNull(tags), BlogTag::getId, tags));
+            List<BlogTagRelation> relations = blogTags.stream().map(tag -> {
+                BlogTagRelation tagRelation = new BlogTagRelation();
+                tagRelation.setTagId(tag.getId());
+                tagRelation.setBlogId(blogList.getId());
+                tagRelation.setTagName(tag.getName());
+                tagRelation.setCreateUserId(request.getAuthorId());
+                tagRelation.setCreateDatetime(date);
+                return tagRelation;
+            }).collect(Collectors.toList());
+            blogTagRelationService.remove(new LambdaQueryWrapper<BlogTagRelation>()
+                    .eq(BlogTagRelation::getBlogId, blogList.getId()));
+            blogTagRelationService.saveBatch(relations);
+        }
+        return Boolean.TRUE;
     }
 }

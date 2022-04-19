@@ -67,6 +67,16 @@ public class BlogController {
     }
 
     /**
+     * 更新blog
+     * @param request
+     * @return
+     */
+    @PostMapping("/update")
+    public BaseResult<Boolean> updateBlog(@RequestBody BlogRequest request) {
+        return BaseResult.succeed(blogFacade.updateBlog(request));
+    }
+
+    /**
      * 获取blog正文
      *
      * @param blogId
