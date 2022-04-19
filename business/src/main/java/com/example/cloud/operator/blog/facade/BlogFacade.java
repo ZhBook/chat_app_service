@@ -331,8 +331,17 @@ public class BlogFacade {
      * @return
      */
     public List<BlogTagListResponse> getTag(NoParamsBlogUserRequest request) {
+        String userId = "";
+        if (Objects.isNull(request) || Objects.isNull(request.getUserId())) {
+            BlogConfig blog_user_id = blogConfigService.getOne(new LambdaQueryWrapper<BlogConfig>()
+                    .eq(BlogConfig::getTypeName, "blog_user_id")
+                    .eq(BlogConfig::getIsDelete, IsDeleteEnum.NO.getCode()));
+            userId = blog_user_id.getTypeValue();
+        } else {
+            userId = request.getUserId().toString();
+        }
         List<BlogTag> list = blogTagService.list(new LambdaQueryWrapper<BlogTag>()
-                .eq(BlogTag::getCreateUserId, request.getUserId())
+                .eq(BlogTag::getCreateUserId, userId)
                 .eq(BlogTag::getIsDelete, IsDeleteEnum.NO.getCode()));
         List<BlogTagListResponse> responseList = list.stream().map(tag -> {
             BlogTagListResponse blogTagListResponse = new BlogTagListResponse();
