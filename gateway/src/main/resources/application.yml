@@ -46,3 +46,4 @@ secure:
       - "/api-business/api/v1/upload"
       - "/api-business/api/v1/upload/**"
       - "/api-business/api/v1/blog/**"
+      - "/api-business/api/v1/system/**"

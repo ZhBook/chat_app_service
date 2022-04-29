@@ -16,3 +16,4 @@ secure:
       - "/users/register"
       - "/upload"
       - "/blog/**"
+      - "/system/**"
