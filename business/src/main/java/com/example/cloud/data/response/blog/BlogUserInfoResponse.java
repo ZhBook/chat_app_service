@@ -12,13 +12,28 @@ import lombok.experimental.FieldDefaults;
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class BlogUserInfoResponse {
+    /**
+     * 博主名称
+     */
     String nickname;
 
+    /**
+     * 运行天数
+     */
     String runningDay;
 
+    /**
+     * blog统计
+     */
     Integer blogCount;
 
+    /**
+     * 评论统计
+     */
     Integer commentCount;
 
+    /**
+     * 粉丝数
+     */
     Integer followCount;
 }

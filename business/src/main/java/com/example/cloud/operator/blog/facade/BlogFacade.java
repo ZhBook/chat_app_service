@@ -244,6 +244,7 @@ public class BlogFacade {
         }
         Date date = new Date();
         BlogComment blogComment = new BlogComment();
+        blogComment.setBlogAuthorId(request.getBlogAuthorId());
         blogComment.setBlogId(blogId);
         blogComment.setComment(request.getComment());
         blogComment.setCreateDate(date);
@@ -395,7 +396,7 @@ public class BlogFacade {
                 .eq(BlogList::getCreateUserId, userId)
                 .eq(BlogList::getIsDelete, IsDeleteEnum.NO.getCode()));
         int commentCount = blogCommentService.count(new LambdaQueryWrapper<BlogComment>()
-                .eq(BlogComment::getCreateUserId, userId)
+                .eq(BlogComment::getBlogAuthorId, userId)
                 .eq(BlogComment::getIsDelete, IsDeleteEnum.NO.getCode()));
 
         response.setNickname(request.getNickname());

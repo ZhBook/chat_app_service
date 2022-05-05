@@ -28,6 +28,11 @@ public class BlogComment implements Serializable {
     private Long blogId;
 
     /**
+     * 博客作者id
+     */
+    private Long blogAuthorId;
+
+    /**
      * 
      */
     private String comment;
@@ -50,6 +55,11 @@ public class BlogComment implements Serializable {
     /**
      * 
      */
+    private String headImgUrl;
+
+    /**
+     * 
+     */
     private Long createUserId;
 
     /**
@@ -61,11 +71,6 @@ public class BlogComment implements Serializable {
      * 
      */
     private Date createDate;
-
-    /**
-     *
-     */
-    private String headImgUrl;
 
     /**
      * 

@@ -24,4 +24,10 @@ public class BlogCommentRequest extends BlogUserRequest {
      */
     @NotBlank(message = "评论内容不能为空")
     private String comment;
+
+    /**
+     *
+     */
+    @NotBlank(message = "博主id不能为空")
+    private Long blogAuthorId;
 }
