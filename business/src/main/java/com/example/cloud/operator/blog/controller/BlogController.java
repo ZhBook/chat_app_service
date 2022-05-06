@@ -6,7 +6,6 @@ import com.example.cloud.data.request.blog.*;
 import com.example.cloud.data.response.blog.*;
 import com.example.cloud.operator.blog.facade.BlogFacade;
 import com.example.cloud.system.NoParamsBlogUserRequest;
-import com.example.cloud.system.PagingBlogRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -128,7 +127,7 @@ public class BlogController {
      * @return
      */
     @GetMapping("/comment/newest")
-    public BaseResult<List<BlogCommentListResponse>> blogCommentNewest(PagingBlogRequest request) {
+    public BaseResult<List<BlogCommentListResponse>> blogCommentNewest(BlogCommentNewestRequest request) {
         return BaseResult.succeed(blogFacade.blogCommentNewest(request));
     }
 

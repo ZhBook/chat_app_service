@@ -19,7 +19,6 @@ import com.example.cloud.operator.file.service.FileInfoService;
 import com.example.cloud.operator.login.entity.UserInfo;
 import com.example.cloud.operator.login.service.UserInfoService;
 import com.example.cloud.system.NoParamsBlogUserRequest;
-import com.example.cloud.system.PagingBlogRequest;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -261,11 +260,11 @@ public class BlogFacade {
      * @param request
      * @return
      */
-    public List<BlogCommentListResponse> blogCommentNewest(PagingBlogRequest request) {
+    public List<BlogCommentListResponse> blogCommentNewest(BlogCommentNewestRequest request) {
         IPage<BlogComment> page = new Page<>(request.getPageIndex(), request.getPageSize());
 
         page = blogCommentService.page(page, new LambdaQueryWrapper<BlogComment>()
-                .eq(Objects.nonNull(request), BlogComment::getCreateUserId, request.getUserId())
+                .eq(Objects.nonNull(request), BlogComment::getBlogAuthorId, request.getBlogAuthorId())
                 .eq(BlogComment::getIsDelete, IsDeleteEnum.NO.getCode())
                 .orderByDesc(BlogComment::getCreateDate));
         List<BlogComment> records = page.getRecords();

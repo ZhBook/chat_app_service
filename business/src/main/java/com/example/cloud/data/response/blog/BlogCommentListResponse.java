@@ -43,6 +43,10 @@ public class BlogCommentListResponse {
     private String createUserName;
 
     /**
+     * blog所属作者id
+     */
+    private Long blogAuthorId;
+    /**
      *
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
