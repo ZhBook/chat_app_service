@@ -121,14 +121,14 @@ public class BlogController {
     }
 
     /**
-     * 获取最新评论列表
+     * 获取最新20条评论列表
      *
-     * @param request
+     * @param blogAuthorId
      * @return
      */
     @GetMapping("/comment/newest")
-    public BaseResult<List<BlogCommentListResponse>> blogCommentNewest(BlogCommentNewestRequest request) {
-        return BaseResult.succeed(blogFacade.blogCommentNewest(request));
+    public BaseResult<List<BlogCommentListResponse>> blogCommentNewest(@RequestParam("blogAuthorId")Long blogAuthorId) {
+        return BaseResult.succeed(blogFacade.blogCommentNewest(blogAuthorId));
     }
 
     /**

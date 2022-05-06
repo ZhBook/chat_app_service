@@ -255,19 +255,17 @@ public class BlogFacade {
     }
 
     /**
-     * 获取最新评论列表
+     * 获取最新20条评论列表
      *
-     * @param request
+     * @param blogAuthorId
      * @return
      */
-    public List<BlogCommentListResponse> blogCommentNewest(BlogCommentNewestRequest request) {
-        IPage<BlogComment> page = new Page<>(request.getPageIndex(), request.getPageSize());
-
-        page = blogCommentService.page(page, new LambdaQueryWrapper<BlogComment>()
-                .eq(Objects.nonNull(request), BlogComment::getBlogAuthorId, request.getBlogAuthorId())
+    public List<BlogCommentListResponse> blogCommentNewest(Long blogAuthorId) {
+        List<BlogComment> records = blogCommentService.list(new LambdaQueryWrapper<BlogComment>()
+                .eq(BlogComment::getBlogAuthorId, blogAuthorId)
                 .eq(BlogComment::getIsDelete, IsDeleteEnum.NO.getCode())
-                .orderByDesc(BlogComment::getCreateDate));
-        List<BlogComment> records = page.getRecords();
+                .orderByDesc(BlogComment::getCreateDate)
+                .last("limit 20"));
         if (Objects.isNull(records)) {
             return CollectionUtil.newArrayList();
         }
