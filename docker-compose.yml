@@ -3,11 +3,7 @@ business:
   hostname: business
   container_name: business
   ports:
-    - target: 8001
-      host_ip: 127.0.0.1
-      published: 8001
-      protocol: tcp
-      mode: host
+    - "0.0.0.0:8001:8001"
   volumes:
     - "/apps/chat_app_service/business:/apps/chat_app_service/business"
 
@@ -16,17 +12,8 @@ chatting:
   hostname: chatting
   container_name: chatting
   ports:
-    - target: 9001
-      host_ip: 127.0.0.1
-      published: 9001
-      protocol: tcp
-      mode: host
-
-    - target: 58080
-      host_ip: 127.0.0.1
-      published: 58080
-      protocol: tcp
-      mode: host
+    - "0.0.0.0:9001:9001"
+    - "0.0.0.0:58080:58080"
   volumes:
     - "/apps/chat_app_service/chatting:/apps/chat_app_service/chatting"
 
@@ -35,11 +22,7 @@ gateway:
   hostname: gateway
   container_name: gateway
   ports:
-    - target: 8008
-      host_ip: 127.0.0.1
-      published: 8008
-      protocol: tcp
-      mode: host
+    - "0.0.0.0:8008:8008"
   volumes:
     - "/apps/chat_app_service/gateway:/apps/chat_app_service/gateway"
 
@@ -48,10 +31,6 @@ oauth:
   hostname: oauth
   container_name: oauth
   ports:
-    - target: 8002
-      host_ip: 127.0.0.1
-      published: 8002
-      protocol: tcp
-      mode: host
+    - "0.0.0.0:8002:8002"
   volumes:
     - "/apps/chat_app_service/oauth:/apps/chat_app_service/oauth"
