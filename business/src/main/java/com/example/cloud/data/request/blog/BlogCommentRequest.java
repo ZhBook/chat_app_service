@@ -30,4 +30,9 @@ public class BlogCommentRequest extends BlogUserRequest {
      */
     @NotBlank(message = "博主id不能为空")
     private Long blogAuthorId;
+
+    /**
+     * 浏览器标识
+     */
+    private String browserModel;
 }

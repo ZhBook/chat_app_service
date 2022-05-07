@@ -13,7 +13,6 @@ public class IpAddressUtil {
      * @return
      */
     public static String get(HttpServletRequest request) {
-        consoleIp(request);
         String ip = request.getHeader("X-Forwarded-For");
         if (ip != null){
             if (!ip.isEmpty() && !"unKnown".equalsIgnoreCase(ip)) {

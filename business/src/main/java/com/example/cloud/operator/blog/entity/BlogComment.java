@@ -58,6 +58,16 @@ public class BlogComment implements Serializable {
     private String headImgUrl;
 
     /**
+     * ip地址
+     */
+    private String ipAddress;
+
+    /**
+     * 浏览器标识
+     */
+    private String browserModel;
+
+    /**
      * 
      */
     private Long createUserId;

@@ -13,6 +13,8 @@
             <result property="email" column="email" jdbcType="VARCHAR"/>
             <result property="isDelete" column="is_delete" jdbcType="TINYINT"/>
             <result property="headImgUrl" column="head_img_url" jdbcType="VARCHAR"/>
+            <result property="ipAddress" column="ip_address" jdbcType="VARCHAR"/>
+            <result property="browserModel" column="browser_model" jdbcType="VARCHAR"/>
             <result property="createUserId" column="create_user_id" jdbcType="BIGINT"/>
             <result property="createUserName" column="create_user_name" jdbcType="VARCHAR"/>
             <result property="createDate" column="create_date" jdbcType="TIMESTAMP"/>
@@ -24,8 +26,9 @@
     <sql id="Base_Column_List">
         id,blog_id,blog_author_id,
         comment,version,email,
-        is_delete,head_img_url,create_user_id,
-        create_user_name,create_date,update_user_id,
-        update_user_name,update_date
+        is_delete,head_img_url,ip_address,
+        browser_model,create_user_id,create_user_name,
+        create_date,update_user_id,update_user_name,
+        update_date
     </sql>
 </mapper>

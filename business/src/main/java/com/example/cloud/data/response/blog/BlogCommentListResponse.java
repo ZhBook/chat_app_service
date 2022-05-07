@@ -1,6 +1,8 @@
 package com.example.cloud.data.response.blog;
 
+import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.google.common.base.Joiner;
 import lombok.Data;
 
 import java.util.Date;
@@ -56,4 +58,21 @@ public class BlogCommentListResponse {
      *
      */
     private String headImgUrl;
+
+    /**
+     * ip地址
+     */
+    private String ipAddress;
+
+    /**
+     * 浏览器标识
+     */
+    private String browserModel;
+
+    public void setIpAddress(String ipAddress) {
+        String[] ipArray = StrUtil.split(ipAddress, ".");
+        ipArray[2] = ipArray[2].replaceAll(".*", "*");
+        ipArray[1] = ipArray[1].replaceAll(".*", "*");
+        this.ipAddress = Joiner.on(".").join(ipArray);
+    }
 }

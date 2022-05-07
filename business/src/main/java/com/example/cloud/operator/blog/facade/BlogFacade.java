@@ -18,6 +18,8 @@ import com.example.cloud.operator.file.entity.FileInfo;
 import com.example.cloud.operator.file.service.FileInfoService;
 import com.example.cloud.operator.login.entity.UserInfo;
 import com.example.cloud.operator.login.service.UserInfoService;
+import com.example.cloud.operator.utils.IpAddressUtil;
+import com.example.cloud.operator.utils.WebUtil;
 import com.example.cloud.system.NoParamsBlogUserRequest;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -26,6 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
@@ -236,6 +239,9 @@ public class BlogFacade {
      * @return
      */
     public Boolean blogComment(BlogCommentRequest request) {
+        HttpServletRequest httpServletRequest = WebUtil.getRequest();
+        String ip = IpAddressUtil.get(httpServletRequest);
+
         Long blogId = request.getBlogId();
         BlogList blog = blogListService.getById(blogId);
         if (Objects.isNull(blog)) {
@@ -243,6 +249,8 @@ public class BlogFacade {
         }
         Date date = new Date();
         BlogComment blogComment = new BlogComment();
+        blogComment.setIpAddress(ip);
+        blogComment.setBrowserModel(request.getBrowserModel());
         blogComment.setBlogAuthorId(request.getBlogAuthorId());
         blogComment.setBlogId(blogId);
         blogComment.setComment(request.getComment());
