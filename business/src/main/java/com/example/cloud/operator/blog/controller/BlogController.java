@@ -9,6 +9,7 @@ import com.example.cloud.system.NoParamsBlogUserRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -67,6 +68,7 @@ public class BlogController {
 
     /**
      * 更新blog
+     *
      * @param request
      * @return
      */
@@ -127,7 +129,7 @@ public class BlogController {
      * @return
      */
     @GetMapping("/comment/newest")
-    public BaseResult<List<BlogCommentListResponse>> blogCommentNewest(@RequestParam("blogAuthorId")Long blogAuthorId) {
+    public BaseResult<List<BlogCommentListResponse>> blogCommentNewest(@RequestParam("blogAuthorId") Long blogAuthorId) {
         return BaseResult.succeed(blogFacade.blogCommentNewest(blogAuthorId));
     }
 
@@ -195,5 +197,16 @@ public class BlogController {
     @DeleteMapping("/tag/{tagId}")
     public BaseResult<Boolean> delTag(@PathVariable("tagId") Long tagId, NoParamsBlogUserRequest request) {
         return BaseResult.succeed(blogFacade.delTag(tagId, request));
+    }
+
+    /**
+     * 回复评论
+     *
+     * @param request
+     * @return
+     */
+    @PostMapping("/comment/reply")
+    public BaseResult<Boolean> replyComment(@Valid @RequestBody BlogReplyCommentRequest request) {
+        return BaseResult.succeed(blogFacade.replyComment(request));
     }
 }

@@ -3,18 +3,19 @@ package com.example.cloud.data.response.blog;
 import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.google.common.base.Joiner;
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.experimental.FieldDefaults;
 
 import java.util.Date;
-import java.util.List;
 
 /**
- * @author: zhooke
- * @create: 2022-03-20 17:14
- * @description:
+ * @author zhooke
+ * @since 2022/5/12 15:25
  **/
 @Data
-public class BlogCommentListResponse {
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class BlogReplyCommentResponse {
     /**
      *
      */
@@ -24,6 +25,11 @@ public class BlogCommentListResponse {
      *
      */
     private Long blogId;
+
+    /**
+     *
+     */
+    private Long commentId;
 
     /**
      *
@@ -69,8 +75,6 @@ public class BlogCommentListResponse {
      * 浏览器标识
      */
     private String browserModel;
-
-    List<BlogReplyCommentResponse> blogReplyCommentList;
 
     public void setIpAddress(String ipAddress) {
         String[] ipArray = StrUtil.split(ipAddress, ".");

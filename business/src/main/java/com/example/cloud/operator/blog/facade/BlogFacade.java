@@ -63,6 +63,9 @@ public class BlogFacade {
     @Autowired
     private FileInfoService fileInfoService;
 
+    @Autowired
+    private ReplyCommentService replyCommentService;
+
     final private Integer tagMax = 10;
 
     /**
@@ -222,11 +225,27 @@ public class BlogFacade {
         List<BlogComment> blogCommentList = page.getRecords();
 
         Page<BlogCommentListResponse> responsePage = new Page<>(request.getPageIndex(), request.getPageSize());
+        List<Long> commentIds = blogCommentList.stream().map(BlogComment::getId).collect(Collectors.toList());
+
+        List<ReplyComment> replyComments = replyCommentService.list(new LambdaQueryWrapper<ReplyComment>()
+                .in(ReplyComment::getCommentId, commentIds)
+                .eq(ReplyComment::getIsDelete, IsDeleteEnum.NO.getCode()));
+
+        List<BlogReplyCommentResponse> commentResponseList = replyComments.stream().map(reply -> {
+            BlogReplyCommentResponse blogReplyCommentResponse = new BlogReplyCommentResponse();
+            BeanUtils.copyProperties(reply, blogReplyCommentResponse);
+            return blogReplyCommentResponse;
+        }).collect(Collectors.toList());
+
         List<BlogCommentListResponse> responses = blogCommentList.stream().map(comment -> {
             BlogCommentListResponse blogCommentListResponse = new BlogCommentListResponse();
             BeanUtils.copyProperties(comment, blogCommentListResponse);
+            List<BlogReplyCommentResponse> replyCommentResponseList = commentResponseList.stream().filter(reply -> Objects.equals(reply.getCommentId(), comment.getId())).collect(Collectors.toList());
+            blogCommentListResponse.setBlogReplyCommentList(replyCommentResponseList);
             return blogCommentListResponse;
         }).collect(Collectors.toList());
+
+
         responsePage.setRecords(responses);
         responsePage.setTotal(page.getTotal());
         return responsePage;
@@ -529,5 +548,24 @@ public class BlogFacade {
             blogTagRelationService.saveBatch(relations);
         }
         return Boolean.TRUE;
+    }
+
+    /**
+     * 回复评论
+     *
+     * @param request
+     * @return
+     */
+    public Boolean replyComment(BlogReplyCommentRequest request) {
+        HttpServletRequest httpServletRequest = WebUtil.getRequest();
+        String ip = IpAddressUtil.get(httpServletRequest);
+        ReplyComment replyComment = new ReplyComment();
+        BeanUtils.copyProperties(request, replyComment);
+        replyComment.setHeadImgUrl(request.getHeadImgUrl());
+        replyComment.setIpAddress(ip);
+        replyComment.setCreateDate(new Date());
+        replyComment.setCreateUserId(request.getUserId());
+        replyComment.setCreateUserName(request.getUsername());
+        return replyCommentService.save(replyComment);
     }
 }
