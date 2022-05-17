@@ -12,6 +12,8 @@ import lombok.experimental.FieldDefaults;
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class DictionariesValueResponse {
+
+    Integer id;
     /**
      * 字典类型
      */
