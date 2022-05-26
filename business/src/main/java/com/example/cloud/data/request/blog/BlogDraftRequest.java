@@ -2,7 +2,7 @@ package com.example.cloud.data.request.blog;
 
 import lombok.Data;
 
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 /**
  * @author zhooke
@@ -24,6 +24,6 @@ public class BlogDraftRequest {
     /**
      * 作者id
      */
-    @NotEmpty(message = "作者id不能为空")
+    @NotNull(message = "作者id不能为空")
     private Long userId;
 }

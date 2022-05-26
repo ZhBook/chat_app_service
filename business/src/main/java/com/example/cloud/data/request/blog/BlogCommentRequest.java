@@ -30,7 +30,7 @@ public class BlogCommentRequest extends BlogUserRequest {
     /**
      *
      */
-    @NotBlank(message = "博主id不能为空")
+    @NotNull(message = "博主id不能为空")
     private Long blogAuthorId;
 
     /**

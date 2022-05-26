@@ -7,8 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.nio.file.AccessDeniedException;
 import java.sql.SQLException;
@@ -18,17 +18,18 @@ import java.util.List;
  * 用于处理业务层面的错误
  * 异常通用处理
  */
-@ResponseBody
+@RestControllerAdvice
 @Slf4j
 public class DefaultExceptionAdvice {
     /**
      * IllegalArgumentException异常处理返回json
+     * 处理Assert异常
      * 返回状态码:400
      */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({IllegalArgumentException.class})
     public BaseResult badRequestException(IllegalArgumentException e) {
-        return defHandler("参数解析失败", e);
+        return defHandler(e.getMessage(), e);
     }
 
     /**
@@ -73,16 +74,17 @@ public class DefaultExceptionAdvice {
 
     /**
      * 处理validator验证失败的异常
+     *
      * @param e
      * @return
      */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public BaseResult handException(MethodArgumentNotValidException e){
+    public BaseResult handException(MethodArgumentNotValidException e) {
         //循环处理第一个错误
         List<ObjectError> allErrors = e.getBindingResult().getAllErrors();
         ObjectError objectError = allErrors.get(0);
-        return defHandler(objectError.getDefaultMessage(),e);
+        return defHandler(objectError.getDefaultMessage(), e);
     }
 
     private BaseResult defHandler(String msg, Exception e) {
