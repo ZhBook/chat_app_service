@@ -22,6 +22,7 @@ import com.example.cloud.operator.login.service.UserInfoService;
 import com.example.cloud.operator.utils.IpAddressUtil;
 import com.example.cloud.operator.utils.WebUtil;
 import com.example.cloud.system.NoParamsBlogUserRequest;
+import io.jsonwebtoken.lang.Assert;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -264,9 +265,11 @@ public class BlogFacade {
         String ip = IpAddressUtil.get(httpServletRequest);
 
         Long blogId = request.getBlogId();
-        BlogList blog = blogListService.getById(blogId);
-        if (Objects.isNull(blog)) {
-            throw new BusinessException("博客不存在");
+        Integer commentType = request.getCommentType();
+        if (BlogEnums.CommentType.SYSTEM_COMMENT.getType().equals(commentType)) {
+            Assert.notNull(blogConfigService.getById(blogId));
+        } else {
+            Assert.notNull(blogListService.getById(blogId));
         }
         Date date = new Date();
         BlogComment blogComment = new BlogComment();
