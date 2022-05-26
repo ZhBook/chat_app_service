@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.cloud.data.request.blog.*;
 import com.example.cloud.data.response.blog.*;
+import com.example.cloud.enums.BlogEnums;
 import com.example.cloud.enums.IsDeleteEnum;
 import com.example.cloud.enums.StateEnum;
 import com.example.cloud.exception.BusinessException;
@@ -217,9 +218,10 @@ public class BlogFacade {
      */
     public IPage<BlogCommentListResponse> getBlogComment(BlogCommentListRequest request) {
         IPage<BlogComment> page = new Page<>(request.getPageIndex(), request.getPageSize());
-
+        Integer commentType = request.getCommentType();
         page = blogCommentService.page(page, new LambdaQueryWrapper<BlogComment>()
                 .eq(BlogComment::getBlogId, request.getBlogId())
+                .eq(BlogComment::getType, Objects.isNull(commentType) ? BlogEnums.CommentType.BLOG_COMMENT.getType() : commentType)
                 .eq(BlogComment::getIsDelete, IsDeleteEnum.NO.getCode())
                 .orderByDesc(BlogComment::getCreateDate));
         List<BlogComment> blogCommentList = page.getRecords();
@@ -274,6 +276,7 @@ public class BlogFacade {
         blogComment.setBlogId(blogId);
         blogComment.setComment(request.getComment());
         blogComment.setCreateDate(date);
+        blogComment.setType(request.getCommentType());
         blogComment.setCreateUserId(request.getUserId());
         blogComment.setCreateUserName(request.getNickname());
         blogComment.setEmail(request.getEMail());
@@ -290,6 +293,7 @@ public class BlogFacade {
     public List<BlogCommentListResponse> blogCommentNewest(Long blogAuthorId) {
         List<BlogComment> records = blogCommentService.list(new LambdaQueryWrapper<BlogComment>()
                 .eq(BlogComment::getBlogAuthorId, blogAuthorId)
+                .eq(BlogComment::getType, BlogEnums.CommentType.BLOG_COMMENT.getType())
                 .eq(BlogComment::getIsDelete, IsDeleteEnum.NO.getCode())
                 .orderByDesc(BlogComment::getCreateDate)
                 .last("limit 20"));

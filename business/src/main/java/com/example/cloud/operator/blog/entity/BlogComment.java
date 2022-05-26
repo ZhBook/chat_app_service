@@ -43,6 +43,11 @@ public class BlogComment implements Serializable {
     private Integer version;
 
     /**
+     * 评论类型：1 普通博客 2 系统博客
+     */
+    private Integer type;
+
+    /**
      * 
      */
     private String email;

@@ -16,6 +16,11 @@ public class BlogCommentListRequest {
     private Long blogId;
 
     /**
+     * 评论类型
+     */
+    private Integer commentType;
+
+    /**
      * 默认第一页
      */
     Integer pageIndex = 1;
