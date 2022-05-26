@@ -51,7 +51,7 @@ public class BlogController {
      * @return
      */
     @PostMapping("/draft")
-    public PageResult<BlogDraftListResponse> getBlogDraftList(@RequestBody BlogDraftRequest request) {
+    public PageResult<BlogDraftListResponse> getBlogDraftList(@RequestBody @Valid BlogDraftRequest request) {
         return PageResult.pageSuccess(blogFacade.getBlogDraftList(request));
     }
 
@@ -62,7 +62,7 @@ public class BlogController {
      * @return
      */
     @PostMapping("/add")
-    public BaseResult<Boolean> addBlog(@RequestBody BlogRequest request) {
+    public BaseResult<Boolean> addBlog(@RequestBody @Valid BlogRequest request) {
         return BaseResult.succeed(blogFacade.addBlog(request));
     }
 
@@ -73,7 +73,7 @@ public class BlogController {
      * @return
      */
     @PostMapping("/update")
-    public BaseResult<Boolean> updateBlog(@RequestBody BlogRequest request) {
+    public BaseResult<Boolean> updateBlog(@RequestBody @Valid BlogRequest request) {
         return BaseResult.succeed(blogFacade.updateBlog(request));
     }
 
@@ -118,7 +118,7 @@ public class BlogController {
      * @return
      */
     @PostMapping("/comment")
-    public BaseResult<Boolean> blogComment(@RequestBody BlogCommentRequest request) {
+    public BaseResult<Boolean> blogComment(@RequestBody @Valid BlogCommentRequest request) {
         return BaseResult.succeed(blogFacade.blogComment(request));
     }
 

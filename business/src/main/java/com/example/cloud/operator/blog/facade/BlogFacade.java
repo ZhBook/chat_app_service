@@ -267,9 +267,9 @@ public class BlogFacade {
         Long blogId = request.getBlogId();
         Integer commentType = request.getCommentType();
         if (BlogEnums.CommentType.SYSTEM_COMMENT.getType().equals(commentType)) {
-            Assert.notNull(blogConfigService.getById(blogId));
+            Assert.notNull(blogConfigService.getById(blogId), "评论的文章不存在");
         } else {
-            Assert.notNull(blogListService.getById(blogId));
+            Assert.notNull(blogListService.getById(blogId), "评论的文章不存在");
         }
         Date date = new Date();
         BlogComment blogComment = new BlogComment();
