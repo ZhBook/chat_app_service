@@ -97,7 +97,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
     public SecureUserToken verifyToken(String key, String token) {
         SecureUserToken secureUserToken = taskToken(key);
         if (null == secureUserToken) {
-            throw new BusinessException("token expired");
+            throw new BusinessException("token已过期，请重新登陆");
         }
         if (!Objects.equals(secureUserToken.getToken(), token)) {
             throw new BusinessException("jwt token mismatching");
