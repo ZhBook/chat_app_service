@@ -1,46 +1,22 @@
 package com.example.cloud.config;
 
-import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
-import com.baomidou.mybatisplus.extension.plugins.PerformanceInterceptor;
-import org.springframework.context.annotation.Bean;
+import com.p6spy.engine.spy.appender.MessageFormattingStrategy;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * mybatis-plus配置
  *
- * @author Mark sunlightcs@gmail.com
  */
 @Configuration
-public class MybatisPlusConfig {
+public class MybatisPlusConfig implements MessageFormattingStrategy {
 
-    /**
-     * 分页插件
-     */
-    @Bean
-    public PaginationInterceptor paginationInterceptor() {
-        return new PaginationInterceptor();
+    private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS");
+
+    @Override
+    public String formatMessage(int connectionId, String now, long elapsed, String category, String prepared, String sql, String s4) {
+        return !"".equals(sql.trim()) ? this.format.format(new Date()) + " | took " + elapsed + "ms | " + category + " | connection " + connectionId + "\n " + sql + ";" : "";
     }
-
-
-    /**
-     * SQL执行效率插件
-     */
-    @Bean
-    @Profile({"dev"})// 设置 dev 环境开启
-    public PerformanceInterceptor devPerformanceInterceptor() {
-        return new PerformanceInterceptor();
-    }
-
-    /**
-     * SQL执行效率插件
-     */
-    @Bean
-    @Profile({"test"})// 设置 test 环境开启
-    public PerformanceInterceptor testPerformanceInterceptor() {
-//        return new PerformanceInterceptor().setWriteInLog(true);
-        return new PerformanceInterceptor();
-
-    }
-
 }

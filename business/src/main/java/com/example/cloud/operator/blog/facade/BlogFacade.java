@@ -344,7 +344,7 @@ public class BlogFacade {
      */
     public Boolean createTag(BlogTagRequest request) {
         Long userId = request.getUserId();
-        int count = blogTagService.count(new LambdaQueryWrapper<BlogTag>()
+        Long count = blogTagService.count(new LambdaQueryWrapper<BlogTag>()
                 .eq(BlogTag::getCreateUserId, userId)
                 .eq(BlogTag::getIsDelete, IsDeleteEnum.NO));
         if (count >= tagMax) {
@@ -423,10 +423,10 @@ public class BlogFacade {
         Date createTime = request.getCreateTime();
         String betweenDay = DateUtil.formatBetween(new Date(), createTime, BetweenFormater.Level.HOUR);
         response.setRunningDay(betweenDay);
-        int blogCount = blogListService.count(new LambdaQueryWrapper<BlogList>()
+        Long blogCount = blogListService.count(new LambdaQueryWrapper<BlogList>()
                 .eq(BlogList::getCreateUserId, userId)
                 .eq(BlogList::getIsDelete, IsDeleteEnum.NO.getCode()));
-        int commentCount = blogCommentService.count(new LambdaQueryWrapper<BlogComment>()
+        Long commentCount = blogCommentService.count(new LambdaQueryWrapper<BlogComment>()
                 .eq(BlogComment::getBlogAuthorId, userId)
                 .eq(BlogComment::getIsDelete, IsDeleteEnum.NO.getCode()));
 
@@ -434,7 +434,7 @@ public class BlogFacade {
         response.setCommentCount(commentCount);
         response.setBlogCount(blogCount);
         // todo 添加粉丝数量
-        response.setFollowCount(0);
+        response.setFollowCount(0L);
         return response;
     }
 

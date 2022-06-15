@@ -25,15 +25,15 @@ public class BlogUserInfoResponse {
     /**
      * blog统计
      */
-    Integer blogCount;
+    Long blogCount;
 
     /**
      * 评论统计
      */
-    Integer commentCount;
+    Long commentCount;
 
     /**
      * 粉丝数
      */
-    Integer followCount;
+    Long followCount;
 }

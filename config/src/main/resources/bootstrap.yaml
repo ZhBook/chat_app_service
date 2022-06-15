@@ -16,6 +16,14 @@ spring:
       discovery:
         ip: ${nacos.discovery.ip}
         namespace: ${nacos.namespace}
+  datasource:
+    url: ${spring.datasource.ip}
+    username: ${spring.datasource.username}
+    password: ${spring.datasource.password}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  servlet:
+    multipart:
+      max-file-size: 50MB
 management:
   endpoints:
     web:

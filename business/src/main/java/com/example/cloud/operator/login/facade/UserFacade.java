@@ -81,10 +81,10 @@ public class UserFacade {
         if (Objects.isNull(invite) || Objects.nonNull(invite.getUserId())) {
             throw new BusinessException("邀请码不正确");
         }
-        Integer num = userInfoMapper.selectCount(new LambdaQueryWrapper<UserInfo>()
+        Long num = userInfoMapper.selectCount(new LambdaQueryWrapper<UserInfo>()
                 .eq(UserInfo::getMobile, request.getMobile())
         );
-        if (num == 0) {
+        if (num.equals(0L)) {
             UserInfo userInfo = new UserInfo();
             BeanUtils.copyProperties(request, userInfo);
             BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
