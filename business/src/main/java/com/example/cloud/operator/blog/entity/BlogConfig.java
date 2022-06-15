@@ -19,7 +19,7 @@ public class BlogConfig implements Serializable {
     /**
      * 
      */
-    @TableId(type = IdType.AUTO)
+    @TableId(type = IdType.ASSIGN_ID)
     private Integer id;
 
     /**

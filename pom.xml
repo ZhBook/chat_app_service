@@ -43,7 +43,7 @@
         <redisson-starter.version>3.14.1</redisson-starter.version>
         <easyCaptcha.version>1.6.2</easyCaptcha.version>
         <hutool.version>5.1.4</hutool.version>
-        <mybatis-plus-boot-starter.version>3.1.1</mybatis-plus-boot-starter.version>
+        <mybatis-plus-boot-starter.version>3.5.2</mybatis-plus-boot-starter.version>
         <mysql-connector-java.version>8.0.13</mysql-connector-java.version>
         <mybatis-spring-boot-starter.version>2.2.0</mybatis-spring-boot-starter.version>
         <aliyun-sdk-oss>3.13.2</aliyun-sdk-oss>
