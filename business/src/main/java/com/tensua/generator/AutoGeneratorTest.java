@@ -1,5 +1,6 @@
 package com.tensua.generator;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.generator.AutoGenerator;
 import com.baomidou.mybatisplus.generator.config.*;
 import com.baomidou.mybatisplus.generator.config.rules.DateType;
@@ -64,6 +65,7 @@ public class AutoGeneratorTest {
             .enableActiveRecord()
             .enableLombok()
             .enableChainModel()
+            .idType(IdType.ASSIGN_ID)
 
             .mapperBuilder()
             .enableBaseResultMap()
