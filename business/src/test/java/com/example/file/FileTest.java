@@ -1,7 +1,7 @@
 package com.example.file;
 
-import com.example.cloud.BusinessApplication;
-import com.example.cloud.operator.file.service.FileInfoService;
+import com.tensua.BusinessApplication;
+import com.tensua.operator.file.service.FileInfoService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

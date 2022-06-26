@@ -2,7 +2,7 @@ server:
   port: 8008
 spring:
   application:
-    name: example-cloud-gateway
+    name: cloud-gateway
 logging:
   level:
     root: info

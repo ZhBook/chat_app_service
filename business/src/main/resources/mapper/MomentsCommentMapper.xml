@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.example.cloud.operator.moments.mapper.MomentsCommentMapper">
+<mapper namespace="com.tensua.operator.moments.mapper.MomentsCommentMapper">
 
-    <resultMap id="BaseResultMap" type="com.example.cloud.operator.moments.entity.MomentsComment">
+    <resultMap id="BaseResultMap" type="com.tensua.operator.moments.entity.MomentsComment">
             <id property="id" column="id" jdbcType="BIGINT"/>
             <result property="momentsId" column="moments_id" jdbcType="BIGINT"/>
             <result property="userId" column="user_id" jdbcType="BIGINT"/>

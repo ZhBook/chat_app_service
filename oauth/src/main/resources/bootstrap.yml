@@ -7,7 +7,7 @@ server:
 #    key-alias: example.com
 spring:
   application:
-    name: example-cloud-oauth
+    name: cloud-oauth
 logging:
   level:
     root: info

@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.example.cloud.operator.blog.mapper.BlogConfigMapper">
+<mapper namespace="com.tensua.operator.blog.mapper.BlogConfigMapper">
 
-    <resultMap id="BaseResultMap" type="com.example.cloud.operator.blog.entity.BlogConfig">
+    <resultMap id="BaseResultMap" type="com.tensua.operator.blog.entity.BlogConfig">
             <id property="id" column="id" jdbcType="INTEGER"/>
             <result property="typeName" column="type_name" jdbcType="VARCHAR"/>
             <result property="typeValue" column="type_value" jdbcType="VARCHAR"/>

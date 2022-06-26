@@ -6,3 +6,4 @@
 /oauth/target/
 /business/target/
 /api/target/
+*.log

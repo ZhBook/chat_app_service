@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.example.cloud.operator.login.mapper.UserInfoMapper">
+<mapper namespace="com.tensua.operator.login.mapper.UserInfoMapper">
 
-    <resultMap id="BaseResultMap" type="com.example.cloud.operator.login.entity.UserInfo">
+    <resultMap id="BaseResultMap" type="com.tensua.operator.login.entity.UserInfo">
             <id property="id" column="id" jdbcType="BIGINT"/>
             <result property="username" column="username" jdbcType="VARCHAR"/>
             <result property="nickname" column="nickname" jdbcType="VARCHAR"/>
