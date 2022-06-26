@@ -219,6 +219,8 @@ public class BlogFacade {
      */
     public IPage<BlogCommentListResponse> getBlogComment(BlogCommentListRequest request) {
         IPage<BlogComment> page = new Page<>(request.getPageIndex(), request.getPageSize());
+        Page<BlogCommentListResponse> responsePage = new Page<>(request.getPageIndex(), request.getPageSize());
+
         Integer commentType = request.getCommentType();
         page = blogCommentService.page(page, new LambdaQueryWrapper<BlogComment>()
                 .eq(BlogComment::getBlogId, request.getBlogId())
@@ -227,7 +229,10 @@ public class BlogFacade {
                 .orderByDesc(BlogComment::getCreateDate));
         List<BlogComment> blogCommentList = page.getRecords();
 
-        Page<BlogCommentListResponse> responsePage = new Page<>(request.getPageIndex(), request.getPageSize());
+        if (CollectionUtils.isEmpty(blogCommentList)) {
+            return responsePage;
+        }
+
         List<Long> commentIds = blogCommentList.stream().map(BlogComment::getId).collect(Collectors.toList());
 
         List<ReplyComment> replyComments = replyCommentService.list(new LambdaQueryWrapper<ReplyComment>()
@@ -247,7 +252,6 @@ public class BlogFacade {
             blogCommentListResponse.setBlogReplyCommentList(replyCommentResponseList);
             return blogCommentListResponse;
         }).collect(Collectors.toList());
-
 
         responsePage.setRecords(responses);
         responsePage.setTotal(page.getTotal());
