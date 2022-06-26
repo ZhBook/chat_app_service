@@ -2,7 +2,7 @@ server:
   port: 8001
 spring:
   application:
-    name: example-cloud-business   #唯一名称
+    name: cloud-business   #唯一名称
 mybatis:
   mapper-locations: classpath:mapper/*.xml
 
