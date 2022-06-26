@@ -161,6 +161,7 @@ public class BlogFacade {
         BlogList blogList = new BlogList();
         BeanUtils.copyProperties(request, blogList);
         Date date = new Date();
+        blogList.setId(null);
         blogList.setCreateDate(date);
         blogList.setCreateUserId(request.getId());
         blogList.setUpdateDate(date);
@@ -176,7 +177,7 @@ public class BlogFacade {
         if (StringUtils.isNotBlank(request.getTags())) {
             String[] tags = request.getTags().split(",");
             List<BlogTag> blogTags = blogTagService.list(new LambdaQueryWrapper<BlogTag>()
-                    .in(Objects.nonNull(tags), BlogTag::getId, tags));
+                    .in(BlogTag::getId, tags));
             List<BlogTagRelation> relations = blogTags.stream().map(tag -> {
                 BlogTagRelation tagRelation = new BlogTagRelation();
                 tagRelation.setTagId(tag.getId());
@@ -521,6 +522,9 @@ public class BlogFacade {
      */
     @Transactional
     public Boolean updateBlog(BlogRequest request) {
+        if (Objects.isNull(request.getBlogId())){
+            throw new BusinessException("博客id不能为空");
+        }
         BlogList blogList = blogListService.getById(request.getBlogId());
         if (Objects.isNull(blogList)) {
             throw new BusinessException("博客不存在");
@@ -544,7 +548,7 @@ public class BlogFacade {
         if (StringUtils.isNotBlank(request.getTags())) {
             String[] tags = request.getTags().split(",");
             List<BlogTag> blogTags = blogTagService.list(new LambdaQueryWrapper<BlogTag>()
-                    .in(Objects.nonNull(tags), BlogTag::getId, tags));
+                    .in(BlogTag::getId, tags));
             List<BlogTagRelation> relations = blogTags.stream().map(tag -> {
                 BlogTagRelation tagRelation = new BlogTagRelation();
                 tagRelation.setTagId(tag.getId());
