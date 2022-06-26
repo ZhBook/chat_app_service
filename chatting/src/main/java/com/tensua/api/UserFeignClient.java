@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 /**
  * @author 70968
  */
-@FeignClient(value = "example-cloud-business", fallback = UserFeignFallbackClient.class)
+@FeignClient(value = "cloud-business", fallback = UserFeignFallbackClient.class)
 public interface UserFeignClient {
 
     /**
