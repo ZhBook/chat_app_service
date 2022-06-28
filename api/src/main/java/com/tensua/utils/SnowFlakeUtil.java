@@ -5,10 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.Date;
  
 /**
- * @ClassName: SnowFlakeUtil
- * @Author: jiaoxian
- * @Date: 2022/4/24 16:34
- * @Description:
+ *
  */
 @Slf4j
 public class SnowFlakeUtil {
