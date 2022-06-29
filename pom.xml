@@ -69,8 +69,7 @@
         <dubbo.version>2.7.15</dubbo.version>
         <com.google.zxing.version>3.4.1</com.google.zxing.version>
         <curator.version>5.1.0</curator.version>
-        <fastjson.version>2.0.8</fastjson.version>
-        <velocity.version>2.3</velocity.version>
+        <fastjson.version>1.2.83</fastjson.version>
         <docker.baseImage>openjdk:8-jre-alpine</docker.baseImage>
         <docker.volumes>/tmp</docker.volumes>
         <docker.image.prefix>hub.tensua.com</docker.image.prefix>
@@ -78,7 +77,6 @@
         <docker.java.opts>-Xms128m -Xmx128m</docker.java.opts>
         <token.version>0.9.1</token.version>
         <captcha.version>1.6.2</captcha.version>
-        <lombok.version>1.18.24</lombok.version>
     </properties>
 
     <dependencies>
@@ -97,6 +95,11 @@
             <version>${commons-beanutils.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
@@ -105,11 +108,6 @@
 
     <dependencyManagement>
         <dependencies>
-            <dependency>
-                <groupId>org.projectlombok</groupId>
-                <artifactId>lombok</artifactId>
-                <version>${lombok.version}</version>
-            </dependency>
             <dependency>
                 <groupId>io.jsonwebtoken</groupId>
                 <artifactId>jjwt</artifactId>
@@ -365,11 +363,6 @@
                 <groupId>com.github.whvcse</groupId>
                 <artifactId>easy-captcha</artifactId>
                 <version>${captcha.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.velocity</groupId>
-                <artifactId>velocity-engine-core</artifactId>
-                <version>${velocity.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
