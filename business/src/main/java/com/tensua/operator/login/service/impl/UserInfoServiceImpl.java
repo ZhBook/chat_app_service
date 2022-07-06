@@ -2,7 +2,6 @@ package com.tensua.operator.login.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.tensua.constant.AuthConstants;
 import com.tensua.constant.SecurityConstant;
 import com.tensua.data.security.RedisKeyGenerator;
 import com.tensua.data.security.SecureUserToken;
@@ -11,7 +10,6 @@ import com.tensua.operator.login.entity.UserInfo;
 import com.tensua.operator.login.mapper.UserInfoMapper;
 import com.tensua.operator.login.service.UserInfoService;
 import com.tensua.operator.utils.WebUtil;
-import com.tensua.utils.JwtUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -67,14 +65,13 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
      * @return
      */
     private UserInfo getFromRequest(HttpServletRequest request) {
-        String accessToken = request.getHeader(WebUtil.ACCESS_TOKEN_KEY);
+        String tokenKey = request.getHeader(SecurityConstant.TOKEN_HEADER_KEY);
 
-        if (StringUtils.isEmpty(accessToken)) {
+        if (StringUtils.isEmpty(tokenKey)) {
             log.info("获取token为空");
             return null;
         }
-        String tokenKey = request.getHeader(SecurityConstant.TOKEN_HEADER_KEY);
-        SecureUserToken secureUserToken = verifyToken(tokenKey, accessToken.replace(AuthConstants.JWT_PREFIX, ""));
+        SecureUserToken secureUserToken = taskToken(tokenKey);
 
         if (Objects.isNull(secureUserToken.getSecureUser())) {
             throw new BusinessException("用户信息不存在");
@@ -91,18 +88,4 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
         return redisTemplate.opsForValue().get(RedisKeyGenerator.getLoginTokenKey(key));
     }
 
-    /**
-     * 验证 Token
-     */
-    public SecureUserToken verifyToken(String key, String token) {
-        SecureUserToken secureUserToken = taskToken(key);
-        if (null == secureUserToken) {
-            throw new BusinessException("token已过期，请重新登陆");
-        }
-        if (!Objects.equals(secureUserToken.getToken(), token)) {
-            throw new BusinessException("jwt token mismatching");
-        }
-        JwtUtil.parse(secureUserToken.getToken());
-        return secureUserToken;
-    }
 }

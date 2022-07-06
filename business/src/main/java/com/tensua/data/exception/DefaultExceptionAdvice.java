@@ -88,7 +88,7 @@ public class DefaultExceptionAdvice {
     }
 
     private BaseResult defHandler(String msg, Exception e) {
-        log.error(msg, e);
+        log.error(msg);
         return BaseResult.failed(msg);
     }
 }
