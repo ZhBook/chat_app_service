@@ -36,7 +36,7 @@ public class BaseResult<T> implements Serializable {
     }
 
     public static <T> BaseResult<T> failed(String msg) {
-        return of(null, ResultCodeEnum.FAILED.getCode(), msg);
+        return of(null, ResultCodeEnum.SUCCESS.getCode(), msg);
     }
 
     public static BaseResult fail(ResultCodeEnum resultCode) {
@@ -44,7 +44,7 @@ public class BaseResult<T> implements Serializable {
     }
 
     public static <T> BaseResult<T> failed(T model, String msg) {
-        return of(model, ResultCodeEnum.FAILED.getCode(), msg);
+        return of(model, ResultCodeEnum.SUCCESS.getCode(), msg);
     }
 
     public static boolean isSuccess(BaseResult<?> baseResult) {
