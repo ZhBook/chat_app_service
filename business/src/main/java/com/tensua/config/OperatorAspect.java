@@ -77,10 +77,10 @@ public class OperatorAspect {
                 for (Object arg : args) {
                     if (arg instanceof UserBeanRequest) {
                         UserInfo loginUser = userInfoService.getLoginUser();
-                        UserBeanRequest userBeanRequest = (UserBeanRequest) arg;
                         if (null == loginUser) {
                             throw new BusinessException(403, "未登录");
                         }
+                        UserBeanRequest userBeanRequest = (UserBeanRequest) arg;
                         BeanUtils.copyProperties(loginUser, userBeanRequest);
                     } else if (arg instanceof BlogUserRequest) {
                         UserInfo loginUser = userInfoService.getLoginUser();
