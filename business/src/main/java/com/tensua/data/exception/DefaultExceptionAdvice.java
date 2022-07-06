@@ -43,6 +43,16 @@ public class DefaultExceptionAdvice {
     }
 
     /**
+     * BusinessException 业务异常处理
+     * 返回状态码:500
+     */
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler({BusinessException.class})
+    public BaseResult handleException(BusinessException e) {
+        return defHandler(e.getMessage(), e);
+    }
+
+    /**
      * SQLException sql异常处理
      * 返回状态码:500
      */
@@ -52,15 +62,6 @@ public class DefaultExceptionAdvice {
         return defHandler("服务运行SQLException异常", e);
     }
 
-    /**
-     * BusinessException 业务异常处理
-     * 返回状态码:500
-     */
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    @ExceptionHandler(BusinessException.class)
-    public BaseResult handleException(BusinessException e) {
-        return defHandler(e.getMessage(), e);
-    }
 
 //    /**
 //     * 所有异常统一处理
@@ -88,7 +89,7 @@ public class DefaultExceptionAdvice {
     }
 
     private BaseResult defHandler(String msg, Exception e) {
-        log.error(msg);
+        log.error(msg, e.getMessage());
         return BaseResult.failed(msg);
     }
 }
