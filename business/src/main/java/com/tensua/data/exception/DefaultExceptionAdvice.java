@@ -62,17 +62,6 @@ public class DefaultExceptionAdvice {
         return defHandler("服务运行SQLException异常", e);
     }
 
-
-//    /**
-//     * 所有异常统一处理
-//     * 返回状态码:500
-//     */
-//    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-//    @ExceptionHandler(Exception.class)
-//    public BaseResult handleException(Exception e) {
-//        return defHandler("服务器异常", e);
-//    }
-
     /**
      * 处理validator验证失败的异常
      *
