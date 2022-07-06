@@ -89,7 +89,7 @@ public class DefaultExceptionAdvice {
     }
 
     private BaseResult defHandler(String msg, Exception e) {
-        log.error(msg, e.getMessage());
+        log.error("错误原因：{},系统错误信息：{}",msg, e);
         return BaseResult.failed(msg);
     }
 }
