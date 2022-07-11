@@ -1,6 +1,7 @@
 package com.tensua.handler;
 
 import com.tensua.constant.AuthConstants;
+import com.tensua.data.security.RedisKeyGenerator;
 import com.tensua.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -29,14 +30,10 @@ public class AuthLoginHandler implements WebFilter {
 //        PathPattern pattern=new PathPatternParser().parse("/**");
         //所有请求都需要通过验证
         ServerHttpRequest request = exchange.getRequest();
-        String authorization = request.getHeaders().getFirst(AuthConstants.AUTHORIZATION_KEY);
-        String jwt = authorization.replace(AuthConstants.JWT_PREFIX, "");
-        log.info("发送消息的token：{}", jwt);
-        // 匹配验证
-//        if (pattern.matches(request.getPath().pathWithinApplication())){
-//            System.out.println("custom webFilter");
-//        }
-        String result = redisTemplate.opsForValue().get(AuthConstants.TOKEN_ACCESS_PREFIX + jwt);
+        String tokenKey = request.getHeaders().getFirst(AuthConstants.TOKEN_HEADER_KEY);
+        log.info("发送消息的token：{}", tokenKey);
+
+        String result = redisTemplate.opsForValue().get(RedisKeyGenerator.getLoginTokenKey(tokenKey));
         if (StringUtils.isBlank(result)) {
             throw new BusinessException("未登录");
         }
