@@ -29,8 +29,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
- * @author:70968
- * Date:2021-10-16 08:56
+ * @author:70968 Date:2021-10-16 08:56
  */
 @Service
 public class FriendsFacade {
@@ -73,7 +72,7 @@ public class FriendsFacade {
         FriendRequest one = friendRequestService.getOne(new LambdaQueryWrapper<FriendRequest>()
                 .eq(FriendRequest::getSendUserId, request.getId())
                 .eq(FriendRequest::getReceiveUserId, request.getFriendId()));
-        if (Objects.nonNull(one)){
+        if (Objects.nonNull(one)) {
             one.setMessage(request.getMessage());
             return Boolean.TRUE;
         }
@@ -105,7 +104,7 @@ public class FriendsFacade {
         }
         Integer isAgree = request.getIsAgree();
         //如果同意，则保存好友关系
-        if (Objects.equals(isAgree, "1")) {
+        if (isAgree == 1) {
             Date date = new Date();
             //保存自己与好友的关系
             UserRelation userRelation = new UserRelation();
@@ -157,6 +156,7 @@ public class FriendsFacade {
 
     /**
      * 获取新的好友请求
+     *
      * @param request
      * @return
      */
