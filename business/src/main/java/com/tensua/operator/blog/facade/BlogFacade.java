@@ -522,7 +522,7 @@ public class BlogFacade {
      */
     @Transactional
     public Boolean updateBlog(BlogRequest request) {
-        if (Objects.isNull(request.getBlogId())){
+        if (Objects.isNull(request.getBlogId())) {
             throw new BusinessException("博客id不能为空");
         }
         BlogList blogList = blogListService.getById(request.getBlogId());
@@ -530,11 +530,7 @@ public class BlogFacade {
             throw new BusinessException("博客不存在");
         }
         Date date = new Date();
-        blogList.setContent(request.getContent());
-        blogList.setTitle(request.getTitle());
-        blogList.setIsDraft(request.getIsDraft());
-        blogList.setIsOriginal(request.getIsOriginal());
-        blogList.setIsPrivate(request.getIsPrivate());
+        BeanUtils.copyProperties(request, blogList);
         blogList.setUpdateDate(date);
         blogList.setUpdateUserId(request.getId());
         blogList.setVersion(blogList.getVersion() + 1);
