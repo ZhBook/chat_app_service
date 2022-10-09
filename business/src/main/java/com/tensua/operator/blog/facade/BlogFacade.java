@@ -27,9 +27,11 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
@@ -68,7 +70,10 @@ public class BlogFacade {
     @Autowired
     private ReplyCommentService replyCommentService;
 
-    final private Integer tagMax = 10;
+    final private static Integer tagMax = 10;
+
+    @Resource
+    private RedisTemplate<String, Object> redisTemplate;
 
     /**
      * 获取后台菜单列表
@@ -268,6 +273,14 @@ public class BlogFacade {
     public Boolean blogComment(BlogCommentRequest request) {
         HttpServletRequest httpServletRequest = WebUtil.getRequest();
         String ip = IpAddressUtil.get(httpServletRequest);
+        /** todo
+         * 防恶意评论校验规则
+         *  1.当天：最多500条评论次数
+         *  2.小时：最多30条
+         *  3.分钟：最多10条
+         *  4.秒：最多3条
+         */
+
 
         Long blogId = request.getBlogId();
         Integer commentType = request.getCommentType();
