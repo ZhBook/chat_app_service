@@ -312,10 +312,11 @@ public class BlogFacade {
          *  3.分钟：最多10条
          *  4.秒：最多3条
          */
-        Integer dayTime = (Integer) redisTemplate.opsForValue().get(RedisConstants.BLOG_PREVENTION_DAY + ip);
-        Integer hourTime = (Integer) redisTemplate.opsForValue().get(RedisConstants.BLOG_PREVENTION_HOUR + ip);
-        Integer minuteTime = (Integer) redisTemplate.opsForValue().get(RedisConstants.BLOG_PREVENTION_MINUTE + ip);
-        Integer secondTime = (Integer) redisTemplate.opsForValue().get(RedisConstants.BLOG_PREVENTION_SECOND + ip);
+        Date now = new Date();
+        Integer dayTime = (Integer) redisTemplate.opsForValue().get(RedisConstants.BLOG_PREVENTION_DAY + DateUtil.format(now, "yyyy-MM-dd") + ":" + ip);
+        Integer hourTime = (Integer) redisTemplate.opsForValue().get(RedisConstants.BLOG_PREVENTION_HOUR + DateUtil.format(now, "yyyy-MM-dd HH") + ":" + ip);
+        Integer minuteTime = (Integer) redisTemplate.opsForValue().get(RedisConstants.BLOG_PREVENTION_MINUTE + DateUtil.format(now, "yyyy-MM-dd HH:mm") + ":" + ip);
+        Integer secondTime = (Integer) redisTemplate.opsForValue().get(RedisConstants.BLOG_PREVENTION_SECOND + DateUtil.format(now, "yyyy-MM-dd HH:mm:ss") + ":" + ip);
         if (Objects.nonNull(dayTime) && dayTime > 500) {
             throw new BusinessException("每天最多500条评论");
         }
@@ -328,10 +329,10 @@ public class BlogFacade {
         if (Objects.nonNull(secondTime) && secondTime > 3) {
             throw new BusinessException("每秒最多3条评论");
         }
-        redisTemplate.opsForValue().increment(RedisConstants.BLOG_PREVENTION_DAY + ip, 1);
-        redisTemplate.opsForValue().increment(RedisConstants.BLOG_PREVENTION_HOUR + ip, 1);
-        redisTemplate.opsForValue().increment(RedisConstants.BLOG_PREVENTION_MINUTE + ip, 1);
-        redisTemplate.opsForValue().increment(RedisConstants.BLOG_PREVENTION_SECOND + ip, 1);
+        redisTemplate.opsForValue().increment(RedisConstants.BLOG_PREVENTION_DAY + DateUtil.format(now, "yyyy-MM-dd") + ":" + ip, 1);
+        redisTemplate.opsForValue().increment(RedisConstants.BLOG_PREVENTION_HOUR + DateUtil.format(now, "yyyy-MM-dd HH") + ":" + ip, 1);
+        redisTemplate.opsForValue().increment(RedisConstants.BLOG_PREVENTION_MINUTE + DateUtil.format(now, "yyyy-MM-dd HH:mm") + ":" + ip, 1);
+        redisTemplate.opsForValue().increment(RedisConstants.BLOG_PREVENTION_SECOND + DateUtil.format(now, "yyyy-MM-dd HH:mm:ss") + ":" + ip, 1);
     }
 
     /**
