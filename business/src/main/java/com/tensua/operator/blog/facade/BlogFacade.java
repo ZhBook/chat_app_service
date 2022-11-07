@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.tensua.constant.RedisConstants;
 import com.tensua.data.request.blog.*;
 import com.tensua.data.response.blog.*;
 import com.tensua.enums.BlogEnums;
@@ -273,14 +274,7 @@ public class BlogFacade {
     public Boolean blogComment(BlogCommentRequest request) {
         HttpServletRequest httpServletRequest = WebUtil.getRequest();
         String ip = IpAddressUtil.get(httpServletRequest);
-        /** todo
-         * 防恶意评论校验规则
-         *  1.当天：最多500条评论次数
-         *  2.小时：最多30条
-         *  3.分钟：最多10条
-         *  4.秒：最多3条
-         */
-
+        blogPrevention(ip);
 
         Long blogId = request.getBlogId();
         Integer commentType = request.getCommentType();
@@ -303,6 +297,41 @@ public class BlogFacade {
         blogComment.setEmail(request.getEMail());
         blogComment.setHeadImgUrl(request.getHeadImgUrl());
         return blogCommentService.save(blogComment);
+    }
+
+    /**
+     * ip防恶意评论校验规则
+     *
+     * @param ip
+     */
+    private void blogPrevention(String ip) {
+        /**
+         * 防恶意评论校验规则
+         *  1.当天：最多500条评论次数
+         *  2.小时：最多30条
+         *  3.分钟：最多10条
+         *  4.秒：最多3条
+         */
+        Integer dayTime = (Integer) redisTemplate.opsForValue().get(RedisConstants.BLOG_PREVENTION_DAY + ip);
+        Integer hourTime = (Integer) redisTemplate.opsForValue().get(RedisConstants.BLOG_PREVENTION_HOUR + ip);
+        Integer minuteTime = (Integer) redisTemplate.opsForValue().get(RedisConstants.BLOG_PREVENTION_MINUTE + ip);
+        Integer secondTime = (Integer) redisTemplate.opsForValue().get(RedisConstants.BLOG_PREVENTION_SECOND + ip);
+        if (Objects.nonNull(dayTime) && dayTime > 500) {
+            throw new BusinessException("每天最多500条评论");
+        }
+        if (Objects.nonNull(hourTime) && hourTime > 30) {
+            throw new BusinessException("每小时最多30条评论");
+        }
+        if (Objects.nonNull(minuteTime) && minuteTime > 10) {
+            throw new BusinessException("每分钟最多10条评论");
+        }
+        if (Objects.nonNull(secondTime) && secondTime > 3) {
+            throw new BusinessException("每秒最多3条评论");
+        }
+        redisTemplate.opsForValue().increment(RedisConstants.BLOG_PREVENTION_DAY + ip, 1);
+        redisTemplate.opsForValue().increment(RedisConstants.BLOG_PREVENTION_HOUR + ip, 1);
+        redisTemplate.opsForValue().increment(RedisConstants.BLOG_PREVENTION_MINUTE + ip, 1);
+        redisTemplate.opsForValue().increment(RedisConstants.BLOG_PREVENTION_SECOND + ip, 1);
     }
 
     /**
