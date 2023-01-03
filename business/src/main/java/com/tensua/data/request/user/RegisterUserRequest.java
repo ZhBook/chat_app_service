@@ -26,6 +26,12 @@ public class RegisterUserRequest {
     private String nickname;
 
     /**
+     * 用户类型 CHAT-聊天 BLOG-博客
+     */
+    @NotBlank(message = "用户类型不能为空")
+    private String userType;
+
+    /**
      *
      */
     @NotBlank(message = "密码不能为空")
@@ -45,7 +51,7 @@ public class RegisterUserRequest {
     /**
      *
      */
-    @Pattern(regexp = "^1(3|4|5|7|8)\\d{9}$",message = "手机号码格式错误")
+    @Pattern(regexp = "^1(3|4|5|7|8)\\d{9}$", message = "手机号码格式错误")
     @NotBlank(message = "手机号码不能为空")
     private String mobile;
 
