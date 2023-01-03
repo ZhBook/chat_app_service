@@ -38,6 +38,11 @@ public class UserInfo implements Serializable {
     private String nickname;
 
     /**
+     * 用户类型 CHAT-聊天 BLOG-博客
+     */
+    private String userType;
+
+    /**
      *
      */
 //    @JsonIgnore
