@@ -582,7 +582,7 @@ public class BlogFacade {
         blogList.setUpdateDate(date);
         blogList.setUpdateUserId(request.getId());
         blogList.setVersion(blogList.getVersion() + 1);
-        if (StringUtils.isBlank(blogList.getPicture())) {
+        if (StringUtils.isBlank(request.getPicture())) {
             List<FileInfo> pictures = fileInfoService.getBlogCoverPicture();
             ThreadLocalRandom random = ThreadLocalRandom.current();
             blogList.setPicture(pictures.get(random.nextInt(pictures.size())).getUrl());
