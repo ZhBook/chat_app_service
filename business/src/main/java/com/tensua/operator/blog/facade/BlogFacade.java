@@ -2,6 +2,7 @@ package com.tensua.operator.blog.facade;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.BetweenFormater;
+import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -334,10 +335,11 @@ public class BlogFacade {
         redisTemplate.opsForValue().increment(RedisConstants.BLOG_PREVENTION_MINUTE + DateUtil.format(now, "yyyy-MM-dd HH:mm") + ":" + ip, 1);
         redisTemplate.opsForValue().increment(RedisConstants.BLOG_PREVENTION_SECOND + DateUtil.format(now, "yyyy-MM-dd HH:mm:ss") + ":" + ip, 1);
 
-        redisTemplate.expireAt(RedisConstants.BLOG_PREVENTION_DAY + DateUtil.format(now, "yyyy-MM-dd") + ":" + ip, DateUtil.endOfDay(now));
-        redisTemplate.expireAt(RedisConstants.BLOG_PREVENTION_HOUR + DateUtil.format(now, "yyyy-MM-dd HH") + ":" + ip, DateUtil.endOfDay(now));
-        redisTemplate.expireAt(RedisConstants.BLOG_PREVENTION_DAY + DateUtil.format(now, "yyyy-MM-dd HH:mm") + ":" + ip, DateUtil.endOfDay(now));
-        redisTemplate.expireAt(RedisConstants.BLOG_PREVENTION_DAY + DateUtil.format(now, "yyyy-MM-dd HH:mm:ss") + ":" + ip, DateUtil.endOfDay(now));
+        DateTime end = DateUtil.endOfMonth(now);
+        redisTemplate.expireAt(RedisConstants.BLOG_PREVENTION_DAY + DateUtil.format(now, "yyyy-MM-dd") + ":" + ip, end);
+        redisTemplate.expireAt(RedisConstants.BLOG_PREVENTION_HOUR + DateUtil.format(now, "yyyy-MM-dd HH") + ":" + ip, end);
+        redisTemplate.expireAt(RedisConstants.BLOG_PREVENTION_MINUTE + DateUtil.format(now, "yyyy-MM-dd HH:mm") + ":" + ip, end);
+        redisTemplate.expireAt(RedisConstants.BLOG_PREVENTION_SECOND + DateUtil.format(now, "yyyy-MM-dd HH:mm:ss") + ":" + ip, end);
     }
 
     /**
