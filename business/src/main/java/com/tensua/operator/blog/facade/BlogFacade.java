@@ -22,9 +22,11 @@ import com.tensua.operator.file.service.FileInfoService;
 import com.tensua.operator.login.entity.UserInfo;
 import com.tensua.operator.login.service.UserInfoService;
 import com.tensua.operator.utils.IpAddressUtil;
+import com.tensua.operator.utils.PushUtil;
 import com.tensua.operator.utils.WebUtil;
 import com.tensua.system.NoParamsBlogUserRequest;
 import io.jsonwebtoken.lang.Assert;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -45,6 +47,7 @@ import java.util.stream.Collectors;
  * @since 2022/3/8 14:41
  **/
 @Service
+@Slf4j
 public class BlogFacade {
     @Autowired
     private BlogMenusService blogMenusService;
@@ -291,19 +294,24 @@ public class BlogFacade {
         } else {
             Assert.notNull(blogListService.getById(blogId), "评论的文章不存在");
         }
+        String comment = request.getComment();
+
         Date date = new Date();
         BlogComment blogComment = new BlogComment();
         blogComment.setIpAddress(ip);
         blogComment.setBrowserModel(request.getBrowserModel());
         blogComment.setBlogAuthorId(request.getBlogAuthorId());
         blogComment.setBlogId(blogId);
-        blogComment.setComment(request.getComment());
+        blogComment.setComment(comment);
         blogComment.setCreateDate(date);
         blogComment.setType(request.getCommentType());
         blogComment.setCreateUserId(request.getUserId());
         blogComment.setCreateUserName(request.getNickname());
         blogComment.setEmail(request.getEMail());
         blogComment.setHeadImgUrl(request.getHeadImgUrl());
+
+        String msg = String.format("ip：%s\n发布时间：%s\n内容：%s\n", ip, DateUtil.format(date, "yyyy-MM-dd HH:mm:ss"), comment);
+        PushUtil.pushDingTalk(msg);
         return blogCommentService.save(blogComment);
     }
 
