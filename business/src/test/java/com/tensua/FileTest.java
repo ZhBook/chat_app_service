@@ -1,4 +1,4 @@
-package com.example.file;
+package com.tensua;
 
 import com.tensua.BusinessApplication;
 import com.tensua.operator.file.service.FileInfoService;
