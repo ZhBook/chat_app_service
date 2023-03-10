@@ -12,4 +12,5 @@ public interface RedisConstants {
     String BLOG_PREVENTION_SECOND = "blog:prevention:second:";
 
 
+    String BLOG_READ_COUNT = "blog:read:count:";
 }

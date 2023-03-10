@@ -37,6 +37,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -206,15 +207,21 @@ public class BlogFacade {
      * @return
      */
     public BlogResponse getBlogById(Long blogId) {
+        HttpServletRequest httpServletRequest = WebUtil.getRequest();
+        String ip = IpAddressUtil.get(httpServletRequest);
         BlogList blog = blogListService.getOne(new LambdaQueryWrapper<BlogList>()
                 .eq(BlogList::getId, blogId)
                 .eq(BlogList::getIsDelete, IsDeleteEnum.NO.getCode()));
         if (Objects.isNull(blog)) {
             throw new BusinessException("博客不存在");
         }
+        String redisResult = (String) redisTemplate.opsForValue().get(String.format(RedisConstants.BLOG_READ_COUNT + "%s:%s", blogId, ip));
         BlogResponse blogResponse = new BlogResponse();
         BeanUtils.copyProperties(blog, blogResponse);
-        blog.setBlogBrowse(blog.getBlogBrowse() + 1);
+        if (StringUtils.isBlank(redisResult)) {
+            blog.setBlogBrowse(blog.getBlogBrowse() + 1);
+            redisTemplate.opsForValue().set(String.format(RedisConstants.BLOG_READ_COUNT + ":%s:%s", blogId, ip), 1, 10, TimeUnit.HOURS);
+        }
         blogListService.updateById(blog);
         return blogResponse;
     }
