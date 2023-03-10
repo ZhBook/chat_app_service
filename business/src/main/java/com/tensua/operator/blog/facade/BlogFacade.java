@@ -220,7 +220,7 @@ public class BlogFacade {
         BeanUtils.copyProperties(blog, blogResponse);
         if (StringUtils.isBlank(redisResult)) {
             blog.setBlogBrowse(blog.getBlogBrowse() + 1);
-            redisTemplate.opsForValue().set(String.format(RedisConstants.BLOG_READ_COUNT + ":%s:%s", blogId, ip), 1, 10, TimeUnit.HOURS);
+            redisTemplate.opsForValue().set(String.format(RedisConstants.BLOG_READ_COUNT + "%s:%s", blogId, ip), 1, 10, TimeUnit.HOURS);
         }
         blogListService.updateById(blog);
         return blogResponse;
