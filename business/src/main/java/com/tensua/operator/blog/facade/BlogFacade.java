@@ -22,7 +22,7 @@ import com.tensua.operator.file.service.FileInfoService;
 import com.tensua.operator.login.entity.UserInfo;
 import com.tensua.operator.login.service.UserInfoService;
 import com.tensua.operator.utils.IpAddressUtil;
-import com.tensua.operator.utils.PushUtil;
+import com.tensua.config.component.PushComponent;
 import com.tensua.operator.utils.WebUtil;
 import com.tensua.system.NoParamsBlogUserRequest;
 import io.jsonwebtoken.lang.Assert;
@@ -80,6 +80,9 @@ public class BlogFacade {
 
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
+
+    @Autowired
+    private PushComponent pushComponent;
 
     /**
      * 获取后台菜单列表
@@ -311,7 +314,7 @@ public class BlogFacade {
         blogComment.setHeadImgUrl(request.getHeadImgUrl());
 
         String msg = String.format("ip：%s\n发布时间：%s\n内容：%s\n", ip, DateUtil.format(date, "yyyy-MM-dd HH:mm:ss"), comment);
-        PushUtil.pushDingTalk(msg);
+        pushComponent.pushDingTalk(msg);
         return blogCommentService.save(blogComment);
     }
 

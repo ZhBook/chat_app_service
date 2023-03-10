@@ -1,10 +1,11 @@
-package com.tensua.operator.utils;
+package com.tensua.config.component;
 
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -19,13 +20,14 @@ import java.util.Base64;
  * @since 2023/3/10 17:28
  **/
 @Slf4j
-public class PushUtil {
+@Component
+public class PushComponent {
 
     @Value("${dingtalk.accesstoken}")
-    private static String accesstoken;
+    private String accesstoken;
 
     @Value("${dingtalk.secret}")
-    private static String secret;
+    private String secret;
 
     /**
      * 推送到钉钉
@@ -33,7 +35,7 @@ public class PushUtil {
      * @param commentText
      * @return
      */
-    public static Boolean pushDingTalk(String commentText) {
+    public Boolean pushDingTalk(String commentText) {
         try {
             JSONObject requestBody = new JSONObject();
 
