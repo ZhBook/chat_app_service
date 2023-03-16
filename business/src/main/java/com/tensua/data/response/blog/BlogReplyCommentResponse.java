@@ -1,11 +1,11 @@
 package com.tensua.data.response.blog;
 
-import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.google.common.base.Joiner;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Date;
 
@@ -77,7 +77,7 @@ public class BlogReplyCommentResponse {
     private String browserModel;
 
     public void setIpAddress(String ipAddress) {
-        String[] ipArray = StrUtil.split(ipAddress, ".");
+        String[] ipArray = StringUtils.split(ipAddress, ".");
         ipArray[2] = ipArray[2].replaceAll(".*", "*");
         ipArray[1] = ipArray[1].replaceAll(".*", "*");
         this.ipAddress = Joiner.on(".").join(ipArray);

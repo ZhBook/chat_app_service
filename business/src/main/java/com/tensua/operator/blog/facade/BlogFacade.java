@@ -1,13 +1,14 @@
 package com.tensua.operator.blog.facade;
 
 import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.date.BetweenFormater;
+import cn.hutool.core.date.BetweenFormatter;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.tensua.config.component.PushComponent;
 import com.tensua.constant.RedisConstants;
 import com.tensua.data.request.blog.*;
 import com.tensua.data.response.blog.*;
@@ -22,7 +23,6 @@ import com.tensua.operator.file.service.FileInfoService;
 import com.tensua.operator.login.entity.UserInfo;
 import com.tensua.operator.login.service.UserInfoService;
 import com.tensua.operator.utils.IpAddressUtil;
-import com.tensua.config.component.PushComponent;
 import com.tensua.operator.utils.WebUtil;
 import com.tensua.system.NoParamsBlogUserRequest;
 import io.jsonwebtoken.lang.Assert;
@@ -494,7 +494,7 @@ public class BlogFacade {
             request.setUserId(userInfo.getId());
         }
         Date createTime = request.getCreateTime();
-        String betweenDay = DateUtil.formatBetween(new Date(), createTime, BetweenFormater.Level.HOUR);
+        String betweenDay = DateUtil.formatBetween(new Date(), createTime, BetweenFormatter.Level.HOUR);
         response.setRunningDay(betweenDay);
         Long blogCount = blogListService.count(new LambdaQueryWrapper<BlogList>()
                 .eq(BlogList::getCreateUserId, userId)
