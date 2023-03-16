@@ -38,7 +38,7 @@ public class AutoGeneratorTest {
      * 包相关配置
      */
     private static final PackageConfig PACKAGE_CONFIG = new PackageConfig.Builder()
-            .parent("com.tensua.operator.blog")
+            .parent("com.tensua.operator.photo")
             .entity("entity")
             .service("service")
             .serviceImpl("service.impl")
@@ -59,7 +59,7 @@ public class AutoGeneratorTest {
      * enableActiveRecord-开启后可以直接通过实体进行insert、update等操作
      */
     private static final StrategyConfig STRATEGY_CONFIG = new StrategyConfig.Builder()
-            .addInclude("config_info")
+            .addInclude("photo_exif")
 
             .entityBuilder()
             .enableActiveRecord()
