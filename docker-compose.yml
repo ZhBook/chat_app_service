@@ -6,6 +6,12 @@ business:
     - "0.0.0.0:8001:8001"
   volumes:
     - "/apps/chat_app_service/business:/apps/chat_app_service/business"
+  deploy:
+    resources:
+      limits:
+        memory: 500m
+      reservations:
+        memory: 500m
 
 chatting:
   image: chatting
@@ -16,6 +22,12 @@ chatting:
     - "0.0.0.0:58080:58080"
   volumes:
     - "/apps/chat_app_service/chatting:/apps/chat_app_service/chatting"
+  deploy:
+    resources:
+      limits:
+        memory: 300m
+      reservations:
+        memory: 300m
 
 gateway:
   image: gateway
@@ -25,6 +37,12 @@ gateway:
     - "0.0.0.0:8008:8008"
   volumes:
     - "/apps/chat_app_service/gateway:/apps/chat_app_service/gateway"
+  deploy:
+    resources:
+      limits:
+        memory: 300m
+      reservations:
+        memory: 300m
 
 oauth:
   image: oauth
@@ -34,3 +52,9 @@ oauth:
     - "0.0.0.0:8002:8002"
   volumes:
     - "/apps/chat_app_service/oauth:/apps/chat_app_service/oauth"
+  deploy:
+    resources:
+      limits:
+        memory: 300m
+      reservations:
+        memory: 300m
