@@ -590,6 +590,10 @@ public class BlogFacade {
      */
     @Transactional
     public Boolean updateBlog(BlogRequest request) {
+        Long blogId = request.getId();
+        if (Objects.isNull(blogId)){
+            throw new BusinessException("blogId不能为空");
+        }
         BlogList blogList = blogListService.getById(request.getId());
         if (Objects.isNull(blogList)) {
             throw new BusinessException("博客不存在");
