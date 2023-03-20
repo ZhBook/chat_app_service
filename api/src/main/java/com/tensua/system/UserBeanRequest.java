@@ -13,7 +13,7 @@ public abstract class UserBeanRequest implements Serializable {
 
     private static final long serialVersionUID = 5998226118926105515L;
 
-    private Long id;
+    private Long userId;
 
     private String username;
 

@@ -177,9 +177,9 @@ public class BlogFacade {
         Date date = new Date();
         blogList.setId(null);
         blogList.setCreateDate(date);
-        blogList.setCreateUserId(request.getId());
+        blogList.setCreateUserId(request.getUserId());
         blogList.setUpdateDate(date);
-        blogList.setUpdateUserId(request.getId());
+        blogList.setUpdateUserId(request.getUserId());
         blogList.setVersion(1);
         if (StringUtils.isBlank(blogList.getPicture())) {
             List<FileInfo> pictures = fileInfoService.getBlogCoverPicture();
@@ -590,17 +590,14 @@ public class BlogFacade {
      */
     @Transactional
     public Boolean updateBlog(BlogRequest request) {
-        if (Objects.isNull(request.getBlogId())) {
-            throw new BusinessException("博客id不能为空");
-        }
-        BlogList blogList = blogListService.getById(request.getBlogId());
+        BlogList blogList = blogListService.getById(request.getId());
         if (Objects.isNull(blogList)) {
             throw new BusinessException("博客不存在");
         }
         Date date = new Date();
         BeanUtils.copyProperties(request, blogList);
         blogList.setUpdateDate(date);
-        blogList.setUpdateUserId(request.getId());
+        blogList.setUpdateUserId(request.getUserId());
         blogList.setVersion(blogList.getVersion() + 1);
         if (StringUtils.isBlank(request.getPicture())) {
             List<FileInfo> pictures = fileInfoService.getBlogCoverPicture();

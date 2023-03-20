@@ -56,10 +56,10 @@ public class MomentsFacade {
     public IPage<MomentsResponse> getMoments(MomentsPageRequest request) {
         IPage<Moments> page = new Page<>(request.getPageIndex(), request.getPageSize());
         List<Long> ids = new ArrayList<>();
-        ids.add(request.getId());
+        ids.add(request.getUserId());
 
         List<Long> relationList = userRelationService.list(new LambdaQueryWrapper<UserRelation>()
-                        .eq(UserRelation::getUserId, request.getId()))
+                        .eq(UserRelation::getUserId, request.getUserId()))
                 .stream().map(UserRelation::getFriendId).collect(Collectors.toList());
         // 查出所有的好友
         if (!relationList.isEmpty()) {
@@ -111,7 +111,7 @@ public class MomentsFacade {
      */
     public Boolean publishMoments(MomentsRequest request) {
         Moments moments = new Moments();
-        moments.setUserId(request.getId());
+        moments.setUserId(request.getUserId());
         moments.setContext(request.getContext());
         moments.setImages(request.getImages());
         moments.setVideo(request.getVideo());
@@ -129,14 +129,14 @@ public class MomentsFacade {
     public Boolean likeMoments(LikeRequest likeRequest) {
         MomentsLikes momentsLikes = momentsLikesService.getOne(new LambdaQueryWrapper<MomentsLikes>()
                 .eq(MomentsLikes::getMomentsId, likeRequest.getMomentsId())
-                .eq(MomentsLikes::getUserId, likeRequest.getId()));
+                .eq(MomentsLikes::getUserId, likeRequest.getUserId()));
         if (Objects.nonNull(momentsLikes)) {
             momentsLikesService.removeById(momentsLikes);
             return Boolean.TRUE;
         }
         MomentsLikes likes = new MomentsLikes();
         likes.setMomentsId(likeRequest.getMomentsId());
-        likes.setUserId(likeRequest.getId());
+        likes.setUserId(likeRequest.getUserId());
         likes.setCreateTime(new Date());
         momentsLikesService.save(likes);
         return Boolean.TRUE;
@@ -152,7 +152,7 @@ public class MomentsFacade {
         MomentsComment momentsComment = new MomentsComment();
         momentsComment.setMomentsId(request.getMomentsId());
         momentsComment.setContext(request.getContext());
-        momentsComment.setUserId(request.getId());
+        momentsComment.setUserId(request.getUserId());
         momentsComment.setCreateTime(new Date());
         momentsCommentService.save(momentsComment);
         return Boolean.TRUE;

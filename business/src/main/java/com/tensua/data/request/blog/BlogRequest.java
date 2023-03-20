@@ -16,7 +16,8 @@ public class BlogRequest extends UserBeanRequest {
     /**
      * blogId
      */
-    private Long blogId;
+    @NotNull(message = "blogID不能为空")
+    private Long id;
 
     /**
      *

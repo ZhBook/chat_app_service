@@ -81,12 +81,13 @@ public class OperatorAspect {
                             throw new BusinessException(403, "未登录");
                         }
                         UserBeanRequest userBeanRequest = (UserBeanRequest) arg;
-                        BeanUtils.copyProperties(loginUser, userBeanRequest);
+                        BeanUtils.copyProperties(loginUser, userBeanRequest,"id");
+                        userBeanRequest.setUserId(loginUser.getId());
                     } else if (arg instanceof BlogUserRequest) {
                         UserInfo loginUser = userInfoService.getLoginUser();
                         BlogUserRequest blogUserRequest = (BlogUserRequest) arg;
                         if (Objects.nonNull(loginUser)) {
-                            BeanUtils.copyProperties(loginUser, blogUserRequest);
+                            BeanUtils.copyProperties(loginUser, blogUserRequest,"id");
                             blogUserRequest.setUserId(loginUser.getId());
                         }
                     }

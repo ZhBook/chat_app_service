@@ -128,7 +128,7 @@ public class UserFacade {
      * @return
      */
     public UserInfoResponse updateUserInfo(UserInfoRequest request) {
-        Long id = request.getId();
+        Long id = request.getUserId();
         UserInfo userInfo = userInfoService.getById(id);
         if (Objects.isNull(userInfo)) {
             throw new BusinessException("用户不存在");

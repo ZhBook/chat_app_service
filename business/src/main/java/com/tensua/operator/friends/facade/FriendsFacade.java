@@ -49,7 +49,7 @@ public class FriendsFacade {
      * @return
      */
     public List<FriendsResponse> getFriends(PagingUserBaseRequest request) {
-        Long userId = request.getId();
+        Long userId = request.getUserId();
         List<UserRelation> friends = userRelationService.list(new LambdaQueryWrapper<UserRelation>().eq(UserRelation::getUserId, userId));
         if (Objects.isNull(friends)) {
             return new ArrayList<>();
@@ -70,7 +70,7 @@ public class FriendsFacade {
      */
     public Boolean addFriends(AddFriendsRequest request) {
         FriendRequest one = friendRequestService.getOne(new LambdaQueryWrapper<FriendRequest>()
-                .eq(FriendRequest::getSendUserId, request.getId())
+                .eq(FriendRequest::getSendUserId, request.getUserId())
                 .eq(FriendRequest::getReceiveUserId, request.getFriendId()));
         if (Objects.nonNull(one)) {
             one.setMessage(request.getMessage());
@@ -80,7 +80,7 @@ public class FriendsFacade {
         friendRequest.setCreateTime(new Date());
         friendRequest.setMessage(request.getMessage());
         friendRequest.setReceiveUserId(request.getFriendId());
-        friendRequest.setSendUserId(request.getId());
+        friendRequest.setSendUserId(request.getUserId());
         friendRequest.setSendHeadImgUrl(request.getHeadImgUrl());
         friendRequest.setSendUserNickname(request.getNickname());
         friendRequest.setSendUserUsername(request.getUsername());
@@ -162,7 +162,7 @@ public class FriendsFacade {
      */
     public List<NewFriendResponse> getNewFriends(NoParamsUserBean request) {
         List<FriendRequest> list = friendRequestService.list(new LambdaQueryWrapper<FriendRequest>()
-                .eq(FriendRequest::getReceiveUserId, request.getId())
+                .eq(FriendRequest::getReceiveUserId, request.getUserId())
                 .orderByDesc(FriendRequest::getCreateTime));
         List<NewFriendResponse> result = list.stream().map(l -> {
             NewFriendResponse response = new NewFriendResponse();
