@@ -29,8 +29,8 @@ gateway:
     - "0.0.0.0:8008:8008"
   volumes:
     - "/apps/chat_app_service/gateway:/apps/chat_app_service/gateway"
-  mem_limit: 300M
-  memswap_limit: 300M
+  mem_limit: 500M
+  memswap_limit: 500M
 
 oauth:
   image: oauth
