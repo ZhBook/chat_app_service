@@ -12,3 +12,9 @@ nacos:
   #nacos服务绑定的ip
   server-addr: 101.43.11.226:8848
   username: chat_app
+  core:
+    auth:
+      server:
+        identity:
+          key: authKey
+          value: zhooke

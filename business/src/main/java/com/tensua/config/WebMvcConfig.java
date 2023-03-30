@@ -1,10 +1,11 @@
 package com.tensua.config;
 
-import com.tensua.config.interceptor.AuthUserInterceptor;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import com.tensua.config.interceptor.AuthUserInterceptor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -12,7 +13,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
 
 /**
@@ -23,7 +23,7 @@ import java.text.SimpleDateFormat;
 @EnableWebMvc
 public class WebMvcConfig implements WebMvcConfigurer {
 
-    @Resource
+    @Autowired
     private AuthUserInterceptor authUserInterceptor;
 
     @Override

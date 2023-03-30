@@ -10,6 +10,7 @@ import com.tensua.operator.login.entity.UserInfo;
 import com.tensua.operator.login.mapper.UserInfoMapper;
 import com.tensua.operator.login.service.UserInfoService;
 import com.tensua.operator.utils.WebUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -17,7 +18,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import java.util.Objects;
 
 /**

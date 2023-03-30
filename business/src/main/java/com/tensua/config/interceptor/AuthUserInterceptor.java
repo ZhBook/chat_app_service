@@ -7,14 +7,14 @@ import com.tensua.operator.login.entity.UserInfo;
 import com.tensua.operator.login.service.UserInfoService;
 import com.tensua.operator.utils.IpAddressUtil;
 import com.tensua.operator.utils.WebUtil;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+import org.springframework.web.servlet.AsyncHandlerInterceptor;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 import java.util.List;
 import java.util.Objects;
@@ -25,11 +25,14 @@ import java.util.Objects;
  **/
 @Component
 @Slf4j
-public class AuthUserInterceptor extends HandlerInterceptorAdapter {
+public class AuthUserInterceptor implements AsyncHandlerInterceptor {
+
     @Autowired
     private UserInfoService userInfoService;
+
     @Autowired
     private IgnoreUrlsConfig ignoreUrlsConfig;
+
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -49,11 +52,11 @@ public class AuthUserInterceptor extends HandlerInterceptorAdapter {
         //todo 需要优化
         if (flag) {
             log.info("该访问连接不需要验证，url=[{}], ip={}", request.getRequestURI(), ip);
-            return super.preHandle(request, response, handler);
+            return true;
         }
         if (StringUtils.isEmpty(accessToken)) {
             log.error("ACCESS_TOKEN为空, url=[{}], ip={}", request.getRequestURI(), ip);
-            return super.preHandle(request, response, handler);
+            return true;
         }
         UserInfo loginUser = userInfoService.getLoginUser();
         request.getRequestURL();

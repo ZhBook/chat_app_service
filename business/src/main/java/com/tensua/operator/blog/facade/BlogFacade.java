@@ -26,6 +26,7 @@ import com.tensua.operator.utils.IpAddressUtil;
 import com.tensua.operator.utils.WebUtil;
 import com.tensua.system.NoParamsBlogUserRequest;
 import io.jsonwebtoken.lang.Assert;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -36,7 +37,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;

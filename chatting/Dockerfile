@@ -1,4 +1,4 @@
-FROM openjdk:11.0.13-jdk
+FROM openjdk:17.0.2-jdk
 
 MAINTAINER zhooke
 WORKDIR /apps

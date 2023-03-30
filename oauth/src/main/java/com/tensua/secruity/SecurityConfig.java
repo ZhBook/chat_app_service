@@ -9,23 +9,23 @@ import com.tensua.secruity.provider.SmsAuthenticationProvider;
 import com.tensua.secruity.provider.UsernameAuthenticationProvider;
 import com.tensua.secruity.token.SecureUserTokenSupportFilter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+@EnableMethodSecurity
+public class SecurityConfig {
 
     /**
      * 自定义登陆成功处理器
@@ -73,31 +73,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //    @Value("${server.servlet.context-path}")
 //    private String servletContextPath;
 
-
-    /**
-     * Web Configure 核心配置
-     */
-    @Override
-    public void configure(WebSecurity web) {
-        // TODO 解决静态资源被拦截的问题
-        web.ignoring().antMatchers(SecurityConstant.WEB_ACT_MATCHERS);
-    }
-
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.authenticationProvider(usernameAuthenticationProvider)
-                .authenticationProvider(smsAuthenticationProvider);
-    }
-
-    /**
-     * Http Security 核心配置
-     */
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
                 //不进行权限验证的请求或资源(从配置文件中读取)
-                .antMatchers(SecurityConstant.HTTP_ACT_MATCHERS).permitAll()
                 //其他的需要登陆后才能访问
+                .authorizeHttpRequests()
+                .requestMatchers(SecurityConstant.HTTP_ACT_MATCHERS).permitAll()
                 .anyRequest().authenticated()
 //                .and()
 //                //配置未登录自定义处理类
@@ -144,12 +126,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         // 开启 Security 跨域
         http.cors();
+
+        return http.build();
     }
 
 
+    /**
+     * TODO 四 4.4 基于用户名和密码或使用用户名和密码进行身份验证
+     * @param config
+     * @return
+     * @throws Exception
+     */
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
+    }
+
     private AbstractAuthenticationProcessingFilter smsAuthenticationFilter() throws Exception {
         SmsAuthenticationFilter authenticationFilter = new SmsAuthenticationFilter(new AntPathRequestMatcher(SecurityConstant.SMS_LOGIN_URL, SecurityConstant.LOGIN_METHOD));
-        authenticationFilter.setAuthenticationManager(this.authenticationManager());
         authenticationFilter.setAuthenticationSuccessHandler(secureLoginSuccessHandler);
         authenticationFilter.setAuthenticationFailureHandler(secureLoginFailureHandler);
         return authenticationFilter;
@@ -158,7 +152,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private AbstractAuthenticationProcessingFilter usernameAuthenticationFilter() throws Exception {
         UsernameAuthenticationFilter authenticationFilter = new UsernameAuthenticationFilter(new AntPathRequestMatcher(SecurityConstant.LOGIN_URL, SecurityConstant.LOGIN_METHOD));
-        authenticationFilter.setAuthenticationManager(this.authenticationManager());
         authenticationFilter.setAuthenticationSuccessHandler(secureLoginSuccessHandler);
         authenticationFilter.setAuthenticationFailureHandler(secureLoginFailureHandler);
         return authenticationFilter;

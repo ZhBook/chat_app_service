@@ -25,6 +25,9 @@ spring:
     multipart:
       max-file-size: 50MB
 management:
+  endpoint:
+    health:
+      show-details: always
   endpoints:
     web:
       exposure:
