@@ -1,0 +1,8 @@
+spring:
+  security:
+    user:
+      name: "zhooke"
+      password: "haodong@"
+  boot:
+    admin:
+      context-path: "control"
