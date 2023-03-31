@@ -9,6 +9,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="business" />
         <module name="common" />
+        <module name="admin" />
         <module name="api" />
         <module name="config" />
         <module name="oauth" />
@@ -16,5 +17,10 @@
         <module name="gateway" />
       </profile>
     </annotationProcessing>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="admin" options="" />
+    </option>
   </component>
 </project>
