@@ -73,6 +73,7 @@
         <token.version>0.9.1</token.version>
         <captcha.version>1.6.2</captcha.version>
         <metadata.version>2.18.0</metadata.version>
+        <guava.version>31.1-jre</guava.version>
     </properties>
 
     <dependencies>
@@ -303,6 +304,14 @@
                 <artifactId>javax.annotation-api</artifactId>
                 <version>${annotation-api-version}</version>
             </dependency>
+
+            <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
