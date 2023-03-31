@@ -1,6 +1,7 @@
 package com.tensua.admin.config;
 
 import de.codecentric.boot.admin.server.config.AdminServerProperties;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -13,6 +14,7 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 /**
  *
  */
+@Slf4j
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -27,9 +29,10 @@ public class SecuritySecureConfig {
     @Bean
     public SecurityFilterChain configure(HttpSecurity http) throws Exception {
         // 登录成功处理类
+        log.info(adminContextPath);
         SavedRequestAwareAuthenticationSuccessHandler successHandler = new SavedRequestAwareAuthenticationSuccessHandler();
         successHandler.setTargetUrlParameter("redirectTo");
-        successHandler.setDefaultTargetUrl(adminContextPath + "/");
+        successHandler.setDefaultTargetUrl(adminContextPath + "/applications");
 
         http.authorizeRequests()
                 //静态文件允许访问
@@ -43,7 +46,7 @@ public class SecuritySecureConfig {
                 //登录页面配置，用于替换security默认页面
                 .formLogin().loginPage(adminContextPath + "/login").successHandler(successHandler).and()
                 //登出页面配置，用于替换security默认页面
-                .logout().logoutUrl(adminContextPath + "/logout").and()
+                .logout().logoutUrl(adminContextPath + "/logout").logoutSuccessUrl(adminContextPath + "/login").and()
                 .httpBasic().and()
                 .csrf()
                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
