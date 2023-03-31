@@ -1,5 +1,7 @@
 spring:
   cloud:
+    compatibility-verifier: # todo https://github.com/micrometer-metrics/tracing/wiki/Spring-Cloud-Sleuth-3.1-Migration-Guide
+      enabled: false
     gateway:
       global-filter:
         adapt-cached-body:
