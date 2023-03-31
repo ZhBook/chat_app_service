@@ -47,7 +47,8 @@ public class SecuritySecureConfig {
                 .httpBasic().and()
                 .csrf()
                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                .ignoringRequestMatchers("/instances",
+                .ignoringRequestMatchers(
+                        "/instances",
                         "/actuator/**",
                         adminContextPath + "/logout")
         ;

@@ -3,8 +3,6 @@ spring:
     active: dev
   cloud:
     nacos:
-      password: ${nacos.password}
-      username: ${nacos.username}
       config:
         server-addr: ${nacos.server-addr}
         file-extension: yaml
@@ -13,14 +11,15 @@ spring:
           - data-id: ${nacos.dataId}
             group: ${nacos.group}
             refresh: false
+        password: ${nacos.password}
+        username: ${nacos.username}
       discovery:
         server-addr: ${nacos.server-addr}
         namespace: ${nacos.namespace}
         group: ${nacos.group}
         ip: ${nacos.discovery.ip}
-        metadata:
-          user.name: zhooke
-          user.password: haodong@
+        password: ${nacos.password}
+        username: ${nacos.username}
       core:
         auth:
           server:
