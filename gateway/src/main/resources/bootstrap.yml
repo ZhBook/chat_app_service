@@ -11,8 +11,12 @@ spring:
           management-url: http://101.43.75.191:8008/actuator
           health-url: http://101.43.75.191:8008/actuator/health
           service-url: http://101.43.75.191:8008
-        username: "zhooke"
-        password: "haodong@"
+          name: ${app.name}
+          metadata:
+            name: zhooke
+            password: haodong
+        username: zhooke
+        password: haodong@
 logging:
   level:
     root: info
