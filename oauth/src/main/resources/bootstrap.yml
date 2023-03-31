@@ -12,7 +12,7 @@ spring:
     admin:
       client:
         url: http://101.43.75.191:9110
-        api-path: /actuator
+        api-path: actuator
 logging:
   level:
     root: info
