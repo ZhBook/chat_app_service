@@ -7,8 +7,6 @@ spring:
     admin:
       client:
         url: http://101.43.75.191:9110
-        instance:
-          health-url: http://101.43.75.191:8008/actuator/health
 logging:
   level:
     root: info
