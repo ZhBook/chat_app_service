@@ -18,6 +18,9 @@ spring:
         namespace: ${nacos.namespace}
         group: ${nacos.group}
         ip: ${nacos.discovery.ip}
+        metadata:
+          user.name: zhooke
+          user.password: haodong@
       core:
         auth:
           server:

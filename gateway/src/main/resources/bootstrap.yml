@@ -11,9 +11,6 @@ spring:
           management-url: http://101.43.75.191:8008/actuator
           health-url: http://101.43.75.191:8008/actuator/health
           service-url: http://101.43.75.191:8008
-          metadata:
-            user.name: zhooke
-            user.password: haodong@
         username: zhooke
         password: haodong@
 logging:
