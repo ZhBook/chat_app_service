@@ -37,6 +37,12 @@ spring:
             - Path=/api-chatting/api/v1/**             # 当请求路径满足Path指定的规则时,才进行路由转发
           filters:
             - StripPrefix=3              # 转发之前去掉3层路径
+        - id: admin             # 当前路由的标识, 要求唯一
+          uri: lb://cloud-admin       # lb指的是从 nacos 中按照名称获取微服务,并遵循负载均衡策略
+          predicates: # 断言(就是路由转发要满足的条件)
+            - Path=/api-admin/api/v1/**             # 当请求路径满足Path指定的规则时,才进行路由转发
+          filters:
+            - StripPrefix=3              # 转发之前去掉3层路径
 secure:
   ignore:
     urls: #配置白名单路径,该白名单用来验证是否需要通过token认证，仍然需要gateway验证
