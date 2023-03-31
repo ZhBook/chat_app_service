@@ -12,6 +12,10 @@ spring:
     admin:
       client:
         url: http://101.43.75.191:9110
+        instance:
+          management-url: http://101.43.75.191:8002/actuator
+          health-url: http://101.43.75.191:8002/actuator/health
+          service-url: http://101.43.75.191:8002
 logging:
   level:
     root: info
