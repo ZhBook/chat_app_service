@@ -48,8 +48,8 @@ public class SecuritySecureConfig {
                 .csrf()
                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 .ignoringRequestMatchers(
-                        "/instances",
-                        "/actuator/**",
+                        adminContextPath + "/instances",
+                        adminContextPath + "/actuator/**",
                         adminContextPath + "/logout")
         ;
         return http.build();
