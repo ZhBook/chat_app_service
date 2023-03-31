@@ -10,7 +10,7 @@ spring:
         shared-configs:
           - data-id: ${nacos.dataId}
             group: ${nacos.group}
-            refresh: false
+            refresh: true
         password: ${nacos.password}
         username: ${nacos.username}
       discovery:
@@ -20,12 +20,6 @@ spring:
         ip: ${nacos.discovery.ip}
         password: ${nacos.password}
         username: ${nacos.username}
-      core:
-        auth:
-          server:
-            identity:
-              key: authKey
-              value: zhooke
   datasource:
     url: ${spring.datasource.ip}
     username: ${spring.datasource.username}
