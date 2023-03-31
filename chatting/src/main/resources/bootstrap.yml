@@ -11,6 +11,11 @@ spring:
           management-url: http://101.43.75.191:9001/actuator
           health-url: http://101.43.75.191:9001/actuator/health
           service-url: http://101.43.75.191:9001
+          metadata:
+            user.name: zhooke
+            user.password: haodong@
+        username: zhooke
+        password: haodong@
 mybatis:
   mapper-locations: classpath:mapper/*.xml
 logging:
