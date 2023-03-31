@@ -9,17 +9,18 @@ business:
   mem_limit: 500M
   memswap_limit: 500M
 
-chatting:
-  image: chatting
-  hostname: chatting
-  container_name: chatting
-  ports:
-    - "0.0.0.0:9001:9001"
-    - "0.0.0.0:58080:58080"
-  volumes:
-    - "/apps/chat_app_service/chatting:/apps/chat_app_service/chatting"
-  mem_limit: 300M
-  memswap_limit: 300M
+# todo 暂时关闭chatting
+#chatting:
+#  image: chatting
+#  hostname: chatting
+#  container_name: chatting
+#  ports:
+#    - "0.0.0.0:9001:9001"
+#    - "0.0.0.0:58080:58080"
+#  volumes:
+#    - "/apps/chat_app_service/chatting:/apps/chat_app_service/chatting"
+#  mem_limit: 300M
+#  memswap_limit: 300M
 
 gateway:
   image: gateway
