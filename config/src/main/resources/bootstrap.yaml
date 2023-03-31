@@ -4,7 +4,6 @@ spring:
   cloud:
     nacos:
       password: ${nacos.password}
-      server-addr: ${nacos.server-addr}
       username: ${nacos.username}
       config:
         server-addr: ${nacos.server-addr}
@@ -15,8 +14,16 @@ spring:
             group: ${nacos.group}
             refresh: false
       discovery:
-        ip: ${nacos.discovery.ip}
+        server-addr: ${nacos.server-addr}
         namespace: ${nacos.namespace}
+        group: ${nacos.group}
+        ip: ${nacos.discovery.ip}
+      core:
+        auth:
+          server:
+            identity:
+              key: authKey
+              value: zhooke
   datasource:
     url: ${spring.datasource.ip}
     username: ${spring.datasource.username}
@@ -26,13 +33,11 @@ spring:
     multipart:
       max-file-size: 50MB
 management:
-  endpoint:
-    health:
-      show-details: always
   endpoints:
     web:
       exposure:
-#        include: '*'
-        include: health,refresh,info
-    enabled-by-default: true
+        include: '*'
+  endpoint:
+    health:
+      show-details: ALWAYS
 # SpringBoot读取配置文件顺序：bootstrap.yml>bootstrap.yaml>bootstrap.properties>nacos的配置>application.yml>application.yaml>application.properties
