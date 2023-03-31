@@ -8,6 +8,7 @@ import com.tensua.utils.PatternUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
@@ -36,7 +37,7 @@ public class AuthGlobalFilter implements GlobalFilter, Ordered {
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
 
-    @Resource
+    @Autowired
     private IgnoreUrlsConfig ignoreUrlsConfig;
 
     @Override
