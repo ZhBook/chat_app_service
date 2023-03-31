@@ -11,7 +11,7 @@ spring:
   boot:
     admin:
       client:
-        url: http://101.43.75.191:9110
+        url: http://101.43.75.191:9110/control
         instance:
           management-url: http://101.43.75.191:8002/actuator
           health-url: http://101.43.75.191:8002/actuator/health
