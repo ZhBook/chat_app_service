@@ -7,7 +7,6 @@ spring:
     admin:
       client:
         url: http://101.43.75.191:9110
-        api-path: actuator
 mybatis:
   mapper-locations: classpath:mapper/*.xml
 
