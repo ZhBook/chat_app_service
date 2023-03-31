@@ -68,7 +68,7 @@
         <docker.volumes>/tmp</docker.volumes>
         <docker.image.prefix>hub.tensua.com</docker.image.prefix>
         <docker.java.security.egd>-Djava.security.egd=file:/dev/./urandom</docker.java.security.egd>
-        <docker.java.opts>-Xms128m -Xmx128m</docker.java.opts>
+        <docker.java.opts>-Xms256m -Xmx256m</docker.java.opts>
         <token.version>0.9.1</token.version>
         <captcha.version>1.6.2</captcha.version>
         <metadata.version>2.18.0</metadata.version>
