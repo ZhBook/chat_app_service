@@ -8,8 +8,8 @@ spring:
           enabled: false
       httpclient:
         # 配置全局加http超时
-#        connect-timeout: 1000
-#        response-timeout: 5s
+        connect-timeout: 5000
+        response-timeout: 5s
       # 路由数组[路由 就是指定当请求满足什么条件的时候转到哪个微服务]
       discovery:
         locator:
