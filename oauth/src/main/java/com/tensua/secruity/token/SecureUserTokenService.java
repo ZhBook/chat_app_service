@@ -6,11 +6,11 @@ import com.tensua.data.security.SecureUserToken;
 import com.tensua.data.security.UserInfo;
 import com.tensua.exception.TokenValidationException;
 import com.tensua.utils.JwtUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
-import javax.annotation.Resource;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class SecureUserTokenService {
 
-    @Resource
+    @Autowired
     private RedisTemplate<String, Object> redisTemplate;
 
     /**

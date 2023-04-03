@@ -22,7 +22,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
-import javax.annotation.Resource;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -34,7 +33,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class AuthGlobalFilter implements GlobalFilter, Ordered {
 
-    @Resource
+    @Autowired
     private RedisTemplate<String, Object> redisTemplate;
 
     @Autowired

@@ -36,7 +36,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
@@ -78,7 +77,7 @@ public class BlogFacade {
 
     final private static Integer tagMax = 10;
 
-    @Resource
+    @Autowired
     private RedisTemplate<String, Object> redisTemplate;
 
     @Autowired
