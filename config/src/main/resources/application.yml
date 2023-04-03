@@ -32,15 +32,6 @@ spring:
         session-stat-enable: false
         session-stat-max-count: 1000
         url-pattern: /*
-  data:
-    redis:
-      database: 0
-      lettuce:
-        pool:
-          max-active: 8
-          max-idle: 8
-          max-wait: -1
-          min-idle: 0
 feign:
   client:
     config:

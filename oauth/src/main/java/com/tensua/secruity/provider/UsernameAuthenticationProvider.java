@@ -13,13 +13,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Component;
 
 /**
  * 用户名密码登陆
  */
 @Slf4j
-@Component
 public class UsernameAuthenticationProvider implements AuthenticationProvider {
 
 

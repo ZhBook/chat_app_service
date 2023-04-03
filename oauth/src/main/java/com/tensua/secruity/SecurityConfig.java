@@ -58,12 +58,6 @@ public class SecurityConfig {
     private SecureNoAuthenticationHandler secureNoAuthenticationHandler;
 
     /**
-     * 自定义用户名和密码登陆验证
-     */
-    @Autowired
-    private UsernameAuthenticationProvider usernameAuthenticationProvider;
-
-    /**
      * 自定义短信验证码登陆验证
      */
     @Autowired
@@ -130,9 +124,14 @@ public class SecurityConfig {
         return http.build();
     }
 
+    @Bean
+    UsernameAuthenticationProvider usernameAuthenticationProvider() {
+        return new UsernameAuthenticationProvider();
+    }
 
     /**
      * TODO 四 4.4 基于用户名和密码或使用用户名和密码进行身份验证
+     *
      * @param config
      * @return
      * @throws Exception
@@ -148,7 +147,6 @@ public class SecurityConfig {
         authenticationFilter.setAuthenticationFailureHandler(secureLoginFailureHandler);
         return authenticationFilter;
     }
-
 
     private AbstractAuthenticationProcessingFilter usernameAuthenticationFilter() throws Exception {
         UsernameAuthenticationFilter authenticationFilter = new UsernameAuthenticationFilter(new AntPathRequestMatcher(SecurityConstant.LOGIN_URL, SecurityConstant.LOGIN_METHOD));
