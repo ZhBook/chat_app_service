@@ -29,7 +29,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
         implements UserInfoService {
 
     @Autowired
-    private RedisTemplate<String, SecureUserToken> redisTemplate;
+    private RedisTemplate<String, Object> redisTemplate;
 
     @Override
     public UserInfo getLoginUser() {
@@ -85,7 +85,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
      * 获取 Token
      */
     public SecureUserToken taskToken(String key) {
-        return redisTemplate.opsForValue().get(RedisKeyGenerator.getLoginTokenKey(key));
+        return (SecureUserToken) redisTemplate.opsForValue().get(RedisKeyGenerator.getLoginTokenKey(key));
     }
 
 }
