@@ -1,6 +1,5 @@
 package com.tensua.constant;
 
-
 public interface SecurityConstant {
 
     /**
@@ -28,19 +27,11 @@ public interface SecurityConstant {
      */
     String LOGOUT_URL = SERVLET_CONTEXT_PATH + "/logout";
 
-
     /**
      * 不需要认证的接口资源
      */
     String[] HTTP_ACT_MATCHERS = {
-            "/webjars/springfox-swagger-ui/fonts/**",
-            "/swagger-resources",
-            "/swagger-resources/configuration/**",
-            "/webjars**",
-            "/swagger-ui.html",
-            "/webjars/springfox-swagger-ui/**",
-            SERVLET_CONTEXT_PATH + LOGIN_URL,
-            SERVLET_CONTEXT_PATH + SMS_LOGIN_URL,
+            SMS_LOGIN_URL,
             "/api/captcha/generate",
             LOGIN_URL
     };
@@ -52,12 +43,10 @@ public interface SecurityConstant {
             "/favicon.ico"
     };
 
-
     /**
      * 是否开启验证码
      */
     Boolean IS_CAPTCHA_VERIFICATION = false;
-
 
     /**
      * 验证码key 参数名
@@ -78,7 +67,6 @@ public interface SecurityConstant {
      * Token 过期时间
      */
     long TOKEN_EXPIRE_TIME_SECOND = 60 * 60 * 12;
-
 
     String TOKEN_HEADER = "AccessToken";
 
