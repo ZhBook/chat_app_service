@@ -46,7 +46,7 @@ public interface SecurityConstant {
     /**
      * 是否开启验证码
      */
-    Boolean IS_CAPTCHA_VERIFICATION = false;
+    Boolean IS_CAPTCHA_VERIFICATION = Boolean.FALSE;
 
     /**
      * 验证码key 参数名
