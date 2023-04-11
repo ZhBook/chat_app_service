@@ -34,7 +34,7 @@ public class SecurityFilterConfig {
 //                .requestMatchers(HttpMethod.OPTIONS).permitAll()
                                         .anyRequest().authenticated()
                 )
-                .oauth2Login(Customizer.withDefaults())
+//                .oauth2Login(Customizer.withDefaults())
                 .addFilterBefore(authenticationTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 // 禁用缓存
                 .sessionManagement()
