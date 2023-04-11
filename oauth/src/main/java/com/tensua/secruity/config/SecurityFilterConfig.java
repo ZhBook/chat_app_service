@@ -5,15 +5,16 @@ import com.tensua.secruity.exception.SecurityAuthenticationEntryPoint;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.filter.OncePerRequestFilter;
+
+import static org.springframework.security.config.Customizer.withDefaults;
 
 /**
  * Spring SecurityFilter 配置文件
@@ -24,7 +25,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @EnableMethodSecurity
 public class SecurityFilterConfig {
 
-    private final OncePerRequestFilter authenticationTokenFilter;
+//    private final OncePerRequestFilter authenticationTokenFilter;
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -34,21 +35,24 @@ public class SecurityFilterConfig {
 //                .requestMatchers(HttpMethod.OPTIONS).permitAll()
                                         .anyRequest().authenticated()
                 )
-//                .oauth2Login(Customizer.withDefaults())
-                .addFilterBefore(authenticationTokenFilter, UsernamePasswordAuthenticationFilter.class)
+//                .oauth2Login(withDefaults())
+//                .addFilterBefore(authenticationTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 // 禁用缓存
+                .formLogin(form -> form.loginPage("/oauth/login").permitAll())
                 .sessionManagement()
                 // 使用无状态session，即不使用session缓存数据
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .exceptionHandling().authenticationEntryPoint(new SecurityAuthenticationEntryPoint())
-//                .and().headers().frameOptions().disable()
+                .and().exceptionHandling().authenticationEntryPoint(new SecurityAuthenticationEntryPoint())
+                .and().headers().frameOptions().disable()
                 .and().csrf(AbstractHttpConfigurer::disable)
-                .cors(Customizer.withDefaults())
+                .cors(withDefaults())
         ;
 
         return http.build();
     }
 
-
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
+    }
 }
