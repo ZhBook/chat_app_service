@@ -3,11 +3,11 @@ package com.tensua.secruity.service;
 import com.tensua.api.UserFeignClient;
 import com.tensua.data.security.UserInfo;
 import com.tensua.utils.PatternUtil;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 
@@ -15,11 +15,11 @@ import java.util.Objects;
  * Security 用户服务实现
  */
 @Slf4j
-@Service
-@RequiredArgsConstructor
+@Component
 public class SecureUserService implements UserDetailsService {
 
-    private final UserFeignClient userFeignClient;
+    @Autowired
+    private UserFeignClient userFeignClient;
 
     /**
      * 加载用户信息
@@ -28,16 +28,16 @@ public class SecureUserService implements UserDetailsService {
     public UserInfo loadUserByUsername(String username) throws UsernameNotFoundException {
         // 查询数据库操作
         UserInfo userInfo;
-        log.info("当前用户名：{}",username);
+        log.info("当前用户名：{}", username);
         if (PatternUtil.checkMobile(username)) {
             userInfo = userFeignClient.getUserByMobile(username).getData();
-            if (Objects.isNull(userInfo)){
+            if (Objects.isNull(userInfo)) {
                 userInfo = userFeignClient.getUserByUsername(username).getData();
             }
         } else {
             userInfo = userFeignClient.getUserByUsername(username).getData();
         }
-        if (Objects.isNull(userInfo)){
+        if (Objects.isNull(userInfo)) {
             throw new UsernameNotFoundException("账户不存在");
         }
         return userInfo;

@@ -5,9 +5,7 @@ import com.tensua.data.BaseResult;
 import com.tensua.data.security.UserInfo;
 import com.tensua.enums.ResultCodeEnum;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 
-@Component
 @Slf4j
 public class UserFeignFallbackClient implements UserFeignClient {
 

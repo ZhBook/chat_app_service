@@ -4,10 +4,12 @@ import com.tensua.api.fallback.UserFeignFallbackClient;
 import com.tensua.data.BaseResult;
 import com.tensua.data.security.UserInfo;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
+@Component
 @FeignClient(value = "cloud-business", fallback = UserFeignFallbackClient.class)
 public interface UserFeignClient {
 
