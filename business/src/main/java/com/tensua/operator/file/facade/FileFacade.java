@@ -6,15 +6,14 @@ import com.aliyun.oss.model.ObjectMetadata;
 import com.aliyun.oss.model.PutObjectRequest;
 import com.tensua.exception.BusinessException;
 import com.tensua.operator.file.entity.FileInfo;
-import com.tensua.operator.file.mapper.FileInfoMapper;
 import com.tensua.operator.file.properties.OSSProperties;
+import com.tensua.operator.file.service.FileInfoService;
 import com.tensua.operator.utils.FileUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.Resource;
 import java.io.IOException;
 
 /**
@@ -25,8 +24,8 @@ import java.io.IOException;
 @Slf4j
 public class FileFacade {
 
-    @Resource
-    private FileInfoMapper fileInfoMapper;
+    @Autowired
+    private FileInfoService fileInfoService;
     @Autowired
     private OSSProperties ossProperties;
 
@@ -61,7 +60,7 @@ public class FileFacade {
             fileInfo.setUrl(ossProperties.getUrl() + PATH_SPLIT + key);
             // 设置文件来源
             fileInfo.setSource("OSS");
-            fileInfoMapper.insert(fileInfo);
+            fileInfoService.save(fileInfo);
         } catch (IOException e) {
             log.error("上传文件失败，原因：{}", e.getMessage());
         } finally {

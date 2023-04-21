@@ -3,9 +3,9 @@ package com.tensua.handler;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.tensua.operator.chat.entity.ChatMessage;
-import com.tensua.operator.chat.mapper.ChatMessageMapper;
 import com.tensua.enums.HaveReadStateEnum;
+import com.tensua.operator.chat.entity.ChatMessage;
+import com.tensua.operator.chat.service.ChatMessageService;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
@@ -13,10 +13,10 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.util.concurrent.Future;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -38,8 +38,8 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketF
     //存储channel的id和用户主键的映射，客户端保证用户主键传入的是唯一值，解决问题四，如果是集群中需要换成redis的hash数据类型存储即可
     private static Map<Long, String> clientMap = new ConcurrentHashMap<>();
 
-    @Resource
-    private ChatMessageMapper messageMapper;
+    @Autowired
+    private ChatMessageService messageService;
 
     /**所有需要发送的消息，都要在以TextWebSocketFrame()作为载体发送**/
     /**
@@ -72,7 +72,7 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketF
                 channelMap.put(key, channel);
                 //存储每个channel中的future，保证每个channel中有一个定时任务在执行
                 futureMap.put(key, future);
-                List<ChatMessage> chatMessages = messageMapper.selectList(new LambdaQueryWrapper<ChatMessage>()
+                List<ChatMessage> chatMessages = messageService.list(new LambdaQueryWrapper<ChatMessage>()
                         .eq(ChatMessage::getFriendId, userId)
                         //消息发送后，更改数据库消息状态为未读
                         .eq(ChatMessage::getHaveRead, HaveReadStateEnum.UNREAD.getCode())
@@ -81,7 +81,7 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketF
                             channel.eventLoop().execute(() ->
                                     channel.writeAndFlush(new TextWebSocketFrame(JSONUtil.toJsonStr(message)
                                     )));
-                            messageMapper.updateById(message);
+                    messageService.updateById(message);
                         });
 
             } else {
