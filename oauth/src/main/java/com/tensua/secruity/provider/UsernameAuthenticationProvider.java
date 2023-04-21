@@ -84,7 +84,7 @@ public class UsernameAuthenticationProvider implements AuthenticationProvider {
      */
     @Override
     public boolean supports(Class<?> authentication) {
-        return UsernameAuthenticationToken.class.isAssignableFrom(authentication);
+        return authentication.equals(UsernameAuthenticationProvider.class);
     }
 
     public static void main(String[] args) {

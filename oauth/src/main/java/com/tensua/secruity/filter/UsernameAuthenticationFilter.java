@@ -46,7 +46,9 @@ public class UsernameAuthenticationFilter extends AbstractAuthenticationProcessi
         // Allow subclasses to set the "details" property
         setDetails(request, authRequest);
         SecurityContextHolder.getContext().setAuthentication(authRequest);
+
         return SecurityContextHolder.getContext().getAuthentication();
+//        return this.getAuthenticationManager().authenticate(authRequest);
     }
 
     /**
