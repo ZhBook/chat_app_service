@@ -61,8 +61,7 @@ public class SecurityFilterConfig {
 //                .oauth2Login(withDefaults())
 //                .addFilterBefore(authenticationTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 // 禁用缓存
-//                .formLogin().loginPage("/oauth/login").permitAll()
-//                .and()
+                .formLogin().loginPage("/oauth/login").successHandler(secureLoginSuccessHandler).permitAll().and()
                 .sessionManagement()
                 // 使用无状态session，即不使用session缓存数据
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)

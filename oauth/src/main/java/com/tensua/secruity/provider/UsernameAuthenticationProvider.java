@@ -5,10 +5,7 @@ import com.tensua.secruity.provider.token.UsernameAuthenticationToken;
 import com.tensua.secruity.service.SecureUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.InternalAuthenticationServiceException;
+import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -84,7 +81,7 @@ public class UsernameAuthenticationProvider implements AuthenticationProvider {
      */
     @Override
     public boolean supports(Class<?> authentication) {
-        return authentication.equals(UsernameAuthenticationProvider.class);
+        return UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication);
     }
 
     public static void main(String[] args) {
