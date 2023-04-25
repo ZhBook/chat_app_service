@@ -18,7 +18,7 @@ public interface BaseConstant {
      */
     String EMPTY = "";
 
-
+    String CHAT_GPT_KEY = "chat_gpt_key";
 
 
 

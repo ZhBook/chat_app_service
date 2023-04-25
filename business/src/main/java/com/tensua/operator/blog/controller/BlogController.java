@@ -209,4 +209,15 @@ public class BlogController {
     public BaseResult<Boolean> replyComment(@Valid @RequestBody BlogReplyCommentRequest request) {
         return BaseResult.succeed(blogFacade.replyComment(request));
     }
+
+    /**
+     * 回复评论
+     *
+     * @param request
+     * @return
+     */
+    @PostMapping("/chat")
+    public BaseResult<BlogChatResponse> blogChat(@Valid @RequestBody BlogChatRequest request) {
+        return BaseResult.succeed(blogFacade.blogChat(request));
+    }
 }

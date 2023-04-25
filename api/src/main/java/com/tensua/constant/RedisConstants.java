@@ -11,6 +11,8 @@ public interface RedisConstants {
     String BLOG_PREVENTION_MINUTE = "blog:prevention:minute:";
     String BLOG_PREVENTION_SECOND = "blog:prevention:second:";
 
+    String CHAT_GPT_IP = "chat:gpt:ip:";
+
 
     String BLOG_READ_COUNT = "blog:read:count:";
 }
