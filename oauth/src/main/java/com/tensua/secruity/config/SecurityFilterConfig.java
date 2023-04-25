@@ -1,7 +1,9 @@
 package com.tensua.secruity.config;
 
 import com.tensua.constant.SecurityConstant;
+import com.tensua.secruity.exception.SecurityAuthenticationEntryPoint;
 import com.tensua.secruity.filter.SecureUserTokenSupportFilter;
+import com.tensua.secruity.handle.SecureLoginFailureHandler;
 import com.tensua.secruity.handle.SecureLoginSuccessHandler;
 import com.tensua.secruity.provider.UsernameAuthenticationProvider;
 import com.tensua.secruity.service.SecureUserService;
@@ -54,43 +56,25 @@ public class SecurityFilterConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth ->
-                                auth.requestMatchers(SecurityConstant.HTTP_ACT_MATCHERS).permitAll()
-//                .requestMatchers(HttpMethod.OPTIONS).permitAll()
-                                        .anyRequest().authenticated()
+                        auth.requestMatchers(SecurityConstant.HTTP_ACT_MATCHERS).permitAll()
+                                .anyRequest().authenticated()
                 )
-//                .oauth2Login(withDefaults())
-//                .addFilterBefore(authenticationTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 // 禁用缓存
-                .formLogin().loginPage("/oauth/login").successHandler(secureLoginSuccessHandler).permitAll().and()
+                .formLogin().loginPage("/oauth/login")
+                .successHandler(secureLoginSuccessHandler)
+                .failureHandler(new SecureLoginFailureHandler()).permitAll().and()
                 .sessionManagement()
                 // 使用无状态session，即不使用session缓存数据
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//                .and().exceptionHandling().authenticationEntryPoint(new SecurityAuthenticationEntryPoint())
+                .and().exceptionHandling().authenticationEntryPoint(new SecurityAuthenticationEntryPoint())
                 .and().headers().frameOptions().disable()
                 .and().csrf().disable()
                 .cors().disable()
         ;
-//        http.addFilterAt(usernameAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-        http.addFilterBefore(new SecureUserTokenSupportFilter(), UsernamePasswordAuthenticationFilter.class);
-//        http.authenticationProvider(usernameAuthenticationProvider);
 
-//        http.addFilterAt(usernameAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-//
-//        http.getSharedObject(AuthenticationManagerBuilder.class)
-//                .authenticationProvider(usernameAuthenticationProvider);
+        http.addFilterBefore(new SecureUserTokenSupportFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
-
-//    /**
-//     * TODO 四 4.4 基于用户名和密码或使用用户名和密码进行身份验证
-//     * @param config
-//     * @return
-//     * @throws Exception
-//     */
-//    @Bean
-//    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
-//        return config.getAuthenticationManager();
-//    }
 
     @Bean
     DaoAuthenticationProvider authProvider() {
@@ -107,12 +91,4 @@ public class SecurityFilterConfig {
         authenticationManagerBuilder.authenticationProvider(usernameAuthenticationProvider);
         return authenticationManagerBuilder.build();
     }
-
-//    private AbstractAuthenticationProcessingFilter usernameAuthenticationFilter() throws Exception {
-//        UsernameAuthenticationFilter authenticationFilter = new UsernameAuthenticationFilter(new AntPathRequestMatcher(SecurityConstant.LOGIN_URL, SecurityConstant.LOGIN_METHOD));
-//        authenticationFilter.setAuthenticationSuccessHandler(secureLoginSuccessHandler);
-////        authenticationFilter.setAuthenticationFailureHandler(secureLoginFailureHandler);
-//        return authenticationFilter;
-//    }
-
 }
