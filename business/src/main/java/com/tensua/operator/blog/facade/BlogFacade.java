@@ -673,6 +673,9 @@ public class BlogFacade {
 
             chatKey = key.getTypeValue();
         }
+        if (StringUtils.isBlank(model)) {
+            model = "gpt-3.5-turbo";
+        }
 
         Date now = new Date();
 
@@ -686,24 +689,28 @@ public class BlogFacade {
         post.header("Authorization", String.format("Bearer %s", chatKey));
         JSONObject body = new JSONObject();
         JSONObject context = new JSONObject();
-        context.put("role", ip);
+        context.put("role", "assistant");
         context.put("content", message);
+        JSONArray messageArray = new JSONArray();
+        messageArray.add(context);
 
         body.put("model", model);
-        body.put("messages", context);
+        body.put("messages", messageArray);
         post.body(body.toJSONString());
         String response = post.execute().body();
-
+        log.info("调用chatGPT返回结果：{},请求参数：{}", response, body);
         JSONObject responseJson = JSONObject.parseObject(response);
         JSONArray choices = responseJson.getJSONArray("choices");
-        JSONObject messageJson = choices.getJSONObject(0);
-        String content = messageJson.getString("content");
-
-        if (StringUtils.isBlank(chatKey)) {
-            redisTemplate.opsForValue().increment(RedisConstants.CHAT_GPT_IP + DateUtil.format(now, "yyyy-MM-dd") + ":" + ip, 1);
-        }
         BlogChatResponse chatResponse = new BlogChatResponse();
-        chatResponse.setContext(content);
+        if (CollectionUtils.isNotEmpty(choices)) {
+            JSONObject messageJson = choices.getJSONObject(0);
+            JSONObject messageContext = messageJson.getJSONObject("message");
+            String content = messageContext.getString("content");
+            if (StringUtils.isBlank(chatKey)) {
+                redisTemplate.opsForValue().increment(RedisConstants.CHAT_GPT_IP + DateUtil.format(now, "yyyy-MM-dd") + ":" + ip, 1);
+            }
+            chatResponse.setContext(content);
+        }
 //        todo 记录聊天信息
         return chatResponse;
     }
