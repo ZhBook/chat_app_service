@@ -1,4 +1,4 @@
-package com.tensua.config.component;
+package com.tensua.component;
 
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpUtil;
@@ -11,6 +11,7 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
@@ -23,6 +24,8 @@ import java.util.Base64;
 @Component
 public class PushComponent {
 
+    private static final String DING_TALK_URL = "https://oapi.dingtalk.com/robot/send?access_token=%s&timestamp=%s&sign=%s";
+
     @Value("${dingtalk.accesstoken}")
     private String accesstoken;
 
@@ -32,32 +35,30 @@ public class PushComponent {
     /**
      * 推送到钉钉
      *
-     * @param commentText
+     * @param title
+     * @param text
      * @return
      */
-    public Boolean pushDingTalk(String commentText) {
+    public Boolean pushDingTalk(String title, String text) {
         try {
             JSONObject requestBody = new JSONObject();
-
-            JSONObject content = new JSONObject();
-            content.put("content", commentText);
-            requestBody.put("text", content);
-            requestBody.put("msgtype", "text");
+            JSONObject markdown = new JSONObject();
+            markdown.put("title", title);
+            markdown.put("text", text);
+            requestBody.put("markdown", markdown);
+            requestBody.put("msgtype", "markdown");
             Long timestamp = System.currentTimeMillis();
             String stringToSign = timestamp + "\n" + secret;
             Mac mac = Mac.getInstance("HmacSHA256");
-            mac.init(new SecretKeySpec(secret.getBytes("UTF-8"), "HmacSHA256"));
-            byte[] signData = mac.doFinal(stringToSign.getBytes("UTF-8"));
+            mac.init(new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), "HmacSHA256"));
+            byte[] signData = mac.doFinal(stringToSign.getBytes(StandardCharsets.UTF_8));
             String sign = URLEncoder.encode(new String(Base64.getEncoder().encode(signData)), "UTF-8");
-            String url = java.lang.String.format("https://oapi.dingtalk.com/robot/send?access_token=%s&timestamp=%s&sign=%s", accesstoken, timestamp, sign);
+            String url = String.format(DING_TALK_URL, accesstoken, timestamp, sign);
             HttpRequest httpRequest = HttpUtil.createPost(url);
             httpRequest.header("access_token", accesstoken);
             String body = httpRequest.body(requestBody.toJSONString()).executeAsync().body();
             log.info("发送钉钉推送消息结果:{}", body);
-        } catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
-            log.error("钉钉推送消息", e);
-            return Boolean.FALSE;
-        } catch (InvalidKeyException e) {
+        } catch (NoSuchAlgorithmException | UnsupportedEncodingException | InvalidKeyException e) {
             log.error("钉钉推送消息", e);
             return Boolean.FALSE;
         }

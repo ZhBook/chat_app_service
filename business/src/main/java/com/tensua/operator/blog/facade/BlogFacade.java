@@ -14,6 +14,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tensua.config.component.PushComponent;
 import com.tensua.constant.BaseConstant;
+import com.tensua.component.PushComponent;
 import com.tensua.constant.RedisConstants;
 import com.tensua.data.request.blog.*;
 import com.tensua.data.response.blog.*;
@@ -317,8 +318,8 @@ public class BlogFacade {
         blogComment.setEmail(request.getEMail());
         blogComment.setHeadImgUrl(request.getHeadImgUrl());
 
-        String msg = String.format("ip：%s\n发布时间：%s\n内容：%s\n", ip, DateUtil.format(date, "yyyy-MM-dd HH:mm:ss"), comment);
-        pushComponent.pushDingTalk(msg);
+        String msg = String.format("### 评论通知 \n> ip：<font color=\"#0000FF\">%s</font> \n\n> 发布时间：%s \n\n> 内容：<font color=\"#0000FF\">%s</font>", ip, DateUtil.format(date, "yyyy-MM-dd HH:mm:ss"), comment);
+        pushComponent.pushDingTalk("评论通知", msg);
         return blogCommentService.save(blogComment);
     }
 
