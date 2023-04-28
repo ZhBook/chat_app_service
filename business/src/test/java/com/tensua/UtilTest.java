@@ -1,6 +1,6 @@
 package com.tensua;
 
-import com.tensua.config.component.PushComponent;
+import com.tensua.component.PushComponent;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,7 +15,7 @@ public class UtilTest {
     private PushComponent pushComponent;
 
     @Test
-    public void pushTest(){
-        pushComponent.pushDingTalk("测试消息");
+    public void pushTest() {
+        pushComponent.pushDingTalk("标题", "<font color=\"#0000FF\"> Test Content </font>");
     }
 }

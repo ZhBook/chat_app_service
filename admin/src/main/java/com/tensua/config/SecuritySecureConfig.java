@@ -1,4 +1,4 @@
-package com.tensua.admin.config;
+package com.tensua.config;
 
 import de.codecentric.boot.admin.server.config.AdminServerProperties;
 import lombok.extern.slf4j.Slf4j;
