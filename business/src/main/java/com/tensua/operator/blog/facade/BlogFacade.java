@@ -666,21 +666,21 @@ public class BlogFacade {
         HttpServletRequest httpServletRequest = WebUtil.getRequest();
         String ip = IpAddressUtil.get(httpServletRequest);
 
+        Date now = new Date();
         if (StringUtils.isBlank(chatKey)) {
             BlogConfig key = blogConfigService.getOne(new LambdaQueryWrapper<BlogConfig>()
                     .eq(BlogConfig::getTypeName, BaseConstant.CHAT_GPT_KEY)
                     .eq(BlogConfig::getIsDelete, IsDeleteEnum.NO.getCode()));
 
+            redisTemplate.opsForValue().increment(RedisConstants.CHAT_GPT_IP + DateUtil.format(now, "yyyy-MM-dd") + ":" + ip, 1);
             chatKey = key.getTypeValue();
         }
         if (StringUtils.isBlank(model)) {
             model = "gpt-3.5-turbo";
         }
 
-        Date now = new Date();
-
         Object count = redisTemplate.opsForValue().get(RedisConstants.CHAT_GPT_IP + DateUtil.format(now, "yyyy-MM-dd") + ":" + ip);
-        if (StringUtils.isBlank(chatKey) && Objects.nonNull(count) && Integer.parseInt(count.toString()) > 10) {
+        if (StringUtils.isBlank(chatKey) && Objects.nonNull(count) && Integer.parseInt(count.toString()) > 11) {
             throw new BusinessException("调用次数超过上线");
         }
 
@@ -706,9 +706,6 @@ public class BlogFacade {
             JSONObject messageJson = choices.getJSONObject(0);
             JSONObject messageContext = messageJson.getJSONObject("message");
             String content = messageContext.getString("content");
-            if (StringUtils.isBlank(chatKey)) {
-                redisTemplate.opsForValue().increment(RedisConstants.CHAT_GPT_IP + DateUtil.format(now, "yyyy-MM-dd") + ":" + ip, 1);
-            }
             chatResponse.setContext(content);
         }
 //        todo 记录聊天信息
