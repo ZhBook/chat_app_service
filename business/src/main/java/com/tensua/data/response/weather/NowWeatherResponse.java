@@ -1,10 +1,9 @@
 package com.tensua.data.response.weather;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
-
-import java.util.Date;
 
 /**
  * @author: zhooke
@@ -14,7 +13,8 @@ import java.util.Date;
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class NowWeatherResponse {
-    private Date obsTime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private String obsTime;
     private String temp;
     private String feelsLike;
     private String icon;

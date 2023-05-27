@@ -1,10 +1,9 @@
 package com.tensua.data.response.weather;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
-
-import java.util.Date;
 
 /**
  * @author: zhooke
@@ -14,13 +13,15 @@ import java.util.Date;
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class H24weatherResponse {
-    private Date fxTime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private String fxTime;
     private String temp;
     private String icon;
     private String text;
     private String wind360;
     private String windDir;
-    private Date windScale;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private String windScale;
     private String windSpeed;
     private String humidity;
     private String pop;
