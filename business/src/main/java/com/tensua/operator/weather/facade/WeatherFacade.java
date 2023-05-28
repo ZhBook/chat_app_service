@@ -13,11 +13,13 @@ import com.tensua.exception.BusinessException;
 import com.tensua.operator.blog.entity.BlogConfig;
 import com.tensua.operator.blog.service.BlogConfigService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author: zhooke
@@ -53,8 +55,14 @@ public class WeatherFacade {
      * @return
      */
     public NowWeatherResponse nowWeather(String location, String lang) {
+        String weatherData = redisTemplate.opsForValue().get(RedisConstants.WEATHER_DATA_NOW + location);
+        if (StringUtils.isNotBlank(weatherData)) {
+            return JSON.parseObject(weatherData, NowWeatherResponse.class);
+        }
         JSONObject result = this.getResult(location, lang, NOW_WEATHER_URL);
-        return result.getObject("now", NowWeatherResponse.class);
+        NowWeatherResponse response = result.getObject("now", NowWeatherResponse.class);
+        redisTemplate.opsForValue().set(RedisConstants.WEATHER_DATA_NOW + location, result.getJSONObject("now").toJSONString(), 1, TimeUnit.HOURS);
+        return response;
     }
 
     /**
@@ -65,8 +73,14 @@ public class WeatherFacade {
      * @return
      */
     public List<D7weatherResponse> d7Weather(String location, String lang) {
+        String weatherData = redisTemplate.opsForValue().get(RedisConstants.WEATHER_DATA_D7 + location);
+        if (StringUtils.isNotBlank(weatherData)) {
+            return JSON.parseArray(weatherData, D7weatherResponse.class);
+        }
         JSONObject result = this.getResult(location, lang, D7_WEATHER_URL);
-        return result.getList("daily", D7weatherResponse.class);
+        List<D7weatherResponse> responseList = result.getList("daily", D7weatherResponse.class);
+        redisTemplate.opsForValue().set(RedisConstants.WEATHER_DATA_D7 + location, result.getJSONArray("daily").toJSONString(), 6, TimeUnit.HOURS);
+        return responseList;
     }
 
     /**
@@ -77,8 +91,14 @@ public class WeatherFacade {
      * @return
      */
     public List<H24weatherResponse> h24Weather(String location, String lang) {
+        String weatherData = redisTemplate.opsForValue().get(RedisConstants.WEATHER_DATA_H24 + location);
+        if (StringUtils.isNotBlank(weatherData)) {
+            return JSON.parseArray(weatherData, H24weatherResponse.class);
+        }
         JSONObject result = this.getResult(location, lang, H24_WEATHER_URL);
-        return result.getList("hourly", H24weatherResponse.class);
+        List<H24weatherResponse> responseList = result.getList("hourly", H24weatherResponse.class);
+        redisTemplate.opsForValue().set(RedisConstants.WEATHER_DATA_H24 + location, result.getJSONArray("hourly").toJSONString(), 1, TimeUnit.HOURS);
+        return responseList;
     }
 
 
@@ -90,8 +110,14 @@ public class WeatherFacade {
      * @return
      */
     public List<Indices1DWeatherResponse> indices1DWeather(String location, String lang) {
+        String weatherData = redisTemplate.opsForValue().get(RedisConstants.WEATHER_DATA_INDICES_1D + location);
+        if (StringUtils.isNotBlank(weatherData)) {
+            return JSON.parseArray(weatherData, Indices1DWeatherResponse.class);
+        }
         JSONObject result = this.getResult(location, lang, INDICES_1d_WEATHER_URL);
-        return result.getList("daily", Indices1DWeatherResponse.class);
+        List<Indices1DWeatherResponse> responseList = result.getList("daily", Indices1DWeatherResponse.class);
+        redisTemplate.opsForValue().set(RedisConstants.WEATHER_DATA_INDICES_1D + location, result.getJSONArray("daily").toJSONString(), 6, TimeUnit.HOURS);
+        return responseList;
     }
 
     /**
