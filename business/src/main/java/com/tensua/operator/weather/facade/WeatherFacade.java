@@ -36,7 +36,7 @@ public class WeatherFacade {
 
     final String H24_WEATHER_URL = "/v7/weather/24h?";
 
-    final String INDICES_1d_WEATHER_URL = "/v7/indices/1d?";
+    final String INDICES_1d_WEATHER_URL = "/v7/indices/1d?type=1,2&";
 
 
     final String WEATHER_KEY = "weather_key";
