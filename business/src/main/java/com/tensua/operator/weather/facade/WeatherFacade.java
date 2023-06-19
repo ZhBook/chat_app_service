@@ -2,24 +2,25 @@ package com.tensua.operator.weather.facade;
 
 import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.tensua.constant.RedisConstants;
-import com.tensua.data.response.weather.D7weatherResponse;
-import com.tensua.data.response.weather.H24weatherResponse;
-import com.tensua.data.response.weather.Indices1DWeatherResponse;
-import com.tensua.data.response.weather.NowWeatherResponse;
+import com.tensua.data.response.weather.*;
 import com.tensua.exception.BusinessException;
 import com.tensua.operator.blog.entity.BlogConfig;
 import com.tensua.operator.blog.service.BlogConfigService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 /**
  * @author: zhooke
@@ -38,8 +39,11 @@ public class WeatherFacade {
 
     final String INDICES_1d_WEATHER_URL = "/v7/indices/1d?type=1,2&";
 
-
     final String WEATHER_KEY = "weather_key";
+
+    final String APAM_WEB_KEY = "apam_web_key";
+
+    final String AMAP_WEB_DISTRICT_URL = "https://restapi.amap.com/v3/config/district?keywords=%s&subdistrict=0&key=%s";
 
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
@@ -101,7 +105,6 @@ public class WeatherFacade {
         return responseList;
     }
 
-
     /**
      * 获取1天的生活指数
      *
@@ -141,5 +144,32 @@ public class WeatherFacade {
             throw new BusinessException("获取天气信息失败，请稍微再试！");
         }
         return jsonResult;
+    }
+
+    /**
+     * 获取地区经纬度
+     *
+     * @param keywords
+     * @return
+     */
+    @GetMapping("/location")
+    public List<LocationDataResponse> getLocationData(String keywords) {
+        BlogConfig blogConfig = blogConfigService.getOne(new LambdaQueryWrapper<BlogConfig>()
+                .eq(BlogConfig::getTypeName, APAM_WEB_KEY));
+        String key = blogConfig.getTypeValue();
+        String urlString = String.format(AMAP_WEB_DISTRICT_URL, keywords, key);
+        String result = HttpUtil.get(urlString);
+        JSONObject responseJson = JSONObject.parseObject(result);
+        String status = responseJson.getString("status");
+        if (!status.equals("1")) {
+            throw new BusinessException("获取地区失败");
+        }
+        JSONArray districts = responseJson.getJSONArray("districts");
+
+        return districts.stream().map(district -> {
+            LocationDataResponse dataResponse = new LocationDataResponse();
+            BeanUtils.copyProperties(district, dataResponse);
+            return dataResponse;
+        }).collect(Collectors.toList());
     }
 }

@@ -1,10 +1,7 @@
 package com.tensua.operator.weather.controller;
 
 import com.tensua.data.BaseResult;
-import com.tensua.data.response.weather.D7weatherResponse;
-import com.tensua.data.response.weather.H24weatherResponse;
-import com.tensua.data.response.weather.Indices1DWeatherResponse;
-import com.tensua.data.response.weather.NowWeatherResponse;
+import com.tensua.data.response.weather.*;
 import com.tensua.operator.weather.facade.WeatherFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -76,5 +73,16 @@ public class WeatherController {
     public BaseResult<List<Indices1DWeatherResponse>> indices1DWeather(@RequestParam("location") String location,
                                                                        @RequestParam(value = "lang", defaultValue = "zh") String lang) {
         return BaseResult.succeed(weatherFacade.indices1DWeather(location, lang));
+    }
+
+    /**
+     * 获取地区经纬度
+     *
+     * @param keywords
+     * @return
+     */
+    @GetMapping("/location")
+    public BaseResult<List<LocationDataResponse>> getLocationData(@RequestParam("keywords") String keywords) {
+        return BaseResult.succeed(weatherFacade.getLocationData(keywords));
     }
 }

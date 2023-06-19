@@ -17,6 +17,7 @@ public interface RedisConstants {
     String BLOG_READ_COUNT = "blog:read:count:";
 
     String WEATHER_HOST = "weather:host";
+
     String WEATHER_DATA_H24 = "weather:data:h24:";
     String WEATHER_DATA_NOW = "weather:data:now:";
     String WEATHER_DATA_D7 = "weather:data:d7:";
