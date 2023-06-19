@@ -168,7 +168,7 @@ public class WeatherFacade {
 
         return districts.stream().map(district -> {
             LocationDataResponse dataResponse = new LocationDataResponse();
-            BeanUtils.copyProperties(district, dataResponse);
+            BeanUtils.copyProperties(dataResponse,district);
             return dataResponse;
         }).collect(Collectors.toList());
     }
