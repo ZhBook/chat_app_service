@@ -159,6 +159,7 @@ public class WeatherFacade {
         String key = blogConfig.getTypeValue();
         String urlString = String.format(AMAP_WEB_DISTRICT_URL, keywords, key);
         String result = HttpUtil.get(urlString);
+        log.info("获取地区经纬度,请求参数：{},返回结果：{}", urlString, result);
         JSONObject responseJson = JSONObject.parseObject(result);
         String status = responseJson.getString("status");
         if (!status.equals("1")) {
@@ -168,7 +169,7 @@ public class WeatherFacade {
 
         return districts.stream().map(district -> {
             LocationDataResponse dataResponse = new LocationDataResponse();
-            BeanUtils.copyProperties(dataResponse,district);
+            BeanUtils.copyProperties(dataResponse, district);
             return dataResponse;
         }).collect(Collectors.toList());
     }
