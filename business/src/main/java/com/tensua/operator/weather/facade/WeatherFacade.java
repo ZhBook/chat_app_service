@@ -6,13 +6,15 @@ import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.tensua.constant.RedisConstants;
-import com.tensua.data.response.weather.*;
+import com.tensua.data.response.weather.D7weatherResponse;
+import com.tensua.data.response.weather.H24weatherResponse;
+import com.tensua.data.response.weather.Indices1DWeatherResponse;
+import com.tensua.data.response.weather.NowWeatherResponse;
 import com.tensua.exception.BusinessException;
 import com.tensua.operator.blog.entity.BlogConfig;
 import com.tensua.operator.blog.service.BlogConfigService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -20,7 +22,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 /**
  * @author: zhooke
@@ -153,7 +154,7 @@ public class WeatherFacade {
      * @return
      */
     @GetMapping("/location")
-    public List<LocationDataResponse> getLocationData(String keywords) {
+    public JSONArray getLocationData(String keywords) {
         BlogConfig blogConfig = blogConfigService.getOne(new LambdaQueryWrapper<BlogConfig>()
                 .eq(BlogConfig::getTypeName, APAM_WEB_KEY));
         String key = blogConfig.getTypeValue();
@@ -165,12 +166,7 @@ public class WeatherFacade {
         if (!status.equals("1")) {
             throw new BusinessException("获取地区失败");
         }
-        JSONArray districts = responseJson.getJSONArray("districts");
 
-        return districts.stream().map(district -> {
-            LocationDataResponse dataResponse = new LocationDataResponse();
-            BeanUtils.copyProperties(dataResponse, district);
-            return dataResponse;
-        }).collect(Collectors.toList());
+        return responseJson.getJSONArray("districts");
     }
 }

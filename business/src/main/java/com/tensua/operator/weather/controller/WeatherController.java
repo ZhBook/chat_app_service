@@ -1,5 +1,6 @@
 package com.tensua.operator.weather.controller;
 
+import com.alibaba.fastjson2.JSONArray;
 import com.tensua.data.BaseResult;
 import com.tensua.data.response.weather.*;
 import com.tensua.operator.weather.facade.WeatherFacade;
@@ -82,7 +83,7 @@ public class WeatherController {
      * @return
      */
     @GetMapping("/location")
-    public BaseResult<List<LocationDataResponse>> getLocationData(@RequestParam("keywords") String keywords) {
+    public BaseResult<JSONArray> getLocationData(@RequestParam("keywords") String keywords) {
         return BaseResult.succeed(weatherFacade.getLocationData(keywords));
     }
 }
