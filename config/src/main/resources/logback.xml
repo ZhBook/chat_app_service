@@ -107,7 +107,4 @@
         <appender-ref ref="WARN_FILE" />
         <appender-ref ref="ERROR_FILE" />
     </root>
-
-    <logger name="net.maku" level="DEBUG"/>
-
 </configuration>

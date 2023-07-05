@@ -74,6 +74,7 @@
         <captcha.version>1.6.2</captcha.version>
         <metadata.version>2.18.0</metadata.version>
         <guava.version>31.1-jre</guava.version>
+        <logstash.logback.encoder.version>7.4</logstash.logback.encoder.version>
     </properties>
 
     <dependencies>
@@ -318,6 +319,12 @@
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
                 <version>${guava.version}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/net.logstash.logback/logstash-logback-encoder -->
+            <dependency>
+                <groupId>net.logstash.logback</groupId>
+                <artifactId>logstash-logback-encoder</artifactId>
+                <version>${logstash.logback.encoder.version}</version>
             </dependency>
 
         </dependencies>

@@ -17,6 +17,7 @@ spring:
         username: zhooke
         password: haodong@
 logging:
+  config: classpath:logback-spring.xml
   level:
     root: info
   file:
