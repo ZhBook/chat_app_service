@@ -43,13 +43,13 @@ oauth:
   mem_limit: 300M
   memswap_limit: 300M
 
-admin:
-  image: admin
-  hostname: admin
-  container_name: admin
-  ports:
-    - "0.0.0.0:9110:9110"
-  volumes:
-    - "/apps/chat_app_service/admin:/apps/chat_app_service/admin"
-  mem_limit: 500M
-  memswap_limit: 500M
+#admin:
+#  image: admin
+#  hostname: admin
+#  container_name: admin
+#  ports:
+#    - "0.0.0.0:9110:9110"
+#  volumes:
+#    - "/apps/chat_app_service/admin:/apps/chat_app_service/admin"
+#  mem_limit: 500M
+#  memswap_limit: 500M
