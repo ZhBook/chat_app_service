@@ -1,4 +1,4 @@
-FROM openjdk:11.0.13-jdk
+FROM openjdk:21-oracle
 
 MAINTAINER zhooke
 WORKDIR /apps

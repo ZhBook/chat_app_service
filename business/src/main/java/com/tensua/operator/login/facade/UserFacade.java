@@ -10,7 +10,6 @@ import com.tensua.exception.BusinessException;
 import com.tensua.operator.blog.entity.InviteCode;
 import com.tensua.operator.blog.service.InviteCodeService;
 import com.tensua.operator.login.entity.UserInfo;
-import com.tensua.operator.login.mapper.UserInfoMapper;
 import com.tensua.operator.login.service.UserInfoService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +17,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
 import java.util.Date;
 import java.util.Objects;
 
@@ -29,9 +27,6 @@ import java.util.Objects;
 public class UserFacade {
     @Autowired
     private UserInfoService userInfoService;
-
-    @Resource
-    private UserInfoMapper userInfoMapper;
 
     @Autowired
     private InviteCodeService inviteCodeService;
@@ -81,7 +76,7 @@ public class UserFacade {
         if (Objects.isNull(invite) || Objects.nonNull(invite.getUserId())) {
             throw new BusinessException("邀请码不正确");
         }
-        Long num = userInfoMapper.selectCount(new LambdaQueryWrapper<UserInfo>()
+        Long num = userInfoService.count(new LambdaQueryWrapper<UserInfo>()
                 .eq(UserInfo::getMobile, request.getMobile())
         );
         if (num.equals(0L)) {
@@ -117,7 +112,7 @@ public class UserFacade {
      * @return
      */
     public UserInfo getUserByMobile(String mobile) {
-        return userInfoMapper.selectOne(new LambdaQueryWrapper<UserInfo>()
+        return userInfoService.getOne(new LambdaQueryWrapper<UserInfo>()
                 .eq(UserInfo::getMobile, mobile));
     }
 

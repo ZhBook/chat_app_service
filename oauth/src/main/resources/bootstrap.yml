@@ -8,6 +8,19 @@ server:
 spring:
   application:
     name: cloud-oauth
+  boot:
+    admin:
+      client:
+        url: http://101.43.75.191:9110/control
+        instance:
+          management-url: http://101.43.75.191:8002/actuator
+          health-url: http://101.43.75.191:8002/actuator/health
+          service-url: http://101.43.75.191:8002
+          metadata:
+            name: zhooke
+            password: haodong
+        username: zhooke
+        password: haodong@
 logging:
   level:
     root: info

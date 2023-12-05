@@ -8,3 +8,4 @@ secure:
       - "/upload"
       - "/blog/**"
       - "/system/**"
+      - "/weather/**"

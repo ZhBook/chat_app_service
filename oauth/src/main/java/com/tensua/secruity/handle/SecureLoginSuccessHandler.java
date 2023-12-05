@@ -1,4 +1,4 @@
-package com.tensua.secruity.handler;
+package com.tensua.secruity.handle;
 
 import com.tensua.constant.SecurityConstant;
 import com.tensua.data.BaseResult;
@@ -8,16 +8,16 @@ import com.tensua.data.security.UserInfo;
 import com.tensua.secruity.token.SecureUserTokenService;
 import com.tensua.utils.IpAddressUtil;
 import com.tensua.utils.WebUtil;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.util.DigestUtils;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,7 +31,7 @@ import java.util.Objects;
 public class SecureLoginSuccessHandler implements AuthenticationSuccessHandler {
 
 
-    @Resource
+    @Autowired
     private SecureUserTokenService customUserDetailsTokenService;
 
     @Override

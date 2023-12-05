@@ -2,13 +2,13 @@ package com.tensua.secruity.captcha;
 
 import com.tensua.constant.SecurityConstant;
 import com.tensua.data.response.captcha.SecureCaptcha;
-import com.tensua.exception.CaptchaValidationException;
 import com.tensua.data.security.RedisKeyGenerator;
+import com.tensua.exception.CaptchaValidationException;
 import com.wf.captcha.SpecCaptcha;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class SecureCaptchaService {
 
-    @Resource
+    @Autowired
     private RedisTemplate<String, String> redisTemplate;
 
     /**

@@ -3,19 +3,23 @@ spring:
     active: dev
   cloud:
     nacos:
-      password: ${nacos.password}
-      server-addr: ${nacos.server-addr}
-      username: ${nacos.username}
       config:
+        server-addr: ${nacos.server-addr}
         file-extension: yaml
         namespace: ${nacos.namespace}
         shared-configs:
           - data-id: ${nacos.dataId}
             group: ${nacos.group}
-            refresh: false
+            refresh: true
+        password: ${nacos.password}
+        username: ${nacos.username}
       discovery:
-        ip: ${nacos.discovery.ip}
+        server-addr: ${nacos.server-addr}
         namespace: ${nacos.namespace}
+        group: ${nacos.group}
+        ip: ${nacos.discovery.ip}
+        password: ${nacos.password}
+        username: ${nacos.username}
   datasource:
     url: ${spring.datasource.ip}
     username: ${spring.datasource.username}
@@ -24,11 +28,25 @@ spring:
   servlet:
     multipart:
       max-file-size: 50MB
+  data:
+    redis:
+      host: ${spring.redis.host}
+      password: ${spring.redis.password}
+      port: ${spring.redis.port}
+      database: ${spring.redis.database}
+      timeout: 5000
+      jedis:
+        pool:
+          max-active: 8
+          max-idle: 8
+          max-wait: -1ms
+          min-idle: 0
 management:
   endpoints:
     web:
       exposure:
-#        include: '*'
         include: health,refresh,info
-    enabled-by-default: true
+  endpoint:
+    health:
+      show-details: ALWAYS
 # SpringBoot读取配置文件顺序：bootstrap.yml>bootstrap.yaml>bootstrap.properties>nacos的配置>application.yml>application.yaml>application.properties

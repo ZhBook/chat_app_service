@@ -4,11 +4,16 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.BetweenFormatter;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.http.HttpRequest;
+import cn.hutool.http.HttpUtil;
+import com.alibaba.fastjson2.JSONArray;
+import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.tensua.config.component.PushComponent;
+import com.tensua.constant.BaseConstant;
+import com.tensua.component.PushComponent;
 import com.tensua.constant.RedisConstants;
 import com.tensua.data.request.blog.*;
 import com.tensua.data.response.blog.*;
@@ -26,6 +31,7 @@ import com.tensua.operator.utils.IpAddressUtil;
 import com.tensua.operator.utils.WebUtil;
 import com.tensua.system.NoParamsBlogUserRequest;
 import io.jsonwebtoken.lang.Assert;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -35,8 +41,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
@@ -78,7 +82,7 @@ public class BlogFacade {
 
     final private static Integer tagMax = 10;
 
-    @Resource
+    @Autowired
     private RedisTemplate<String, Object> redisTemplate;
 
     @Autowired
@@ -313,8 +317,8 @@ public class BlogFacade {
         blogComment.setEmail(request.getEMail());
         blogComment.setHeadImgUrl(request.getHeadImgUrl());
 
-        String msg = String.format("ip：%s\n发布时间：%s\n内容：%s\n", ip, DateUtil.format(date, "yyyy-MM-dd HH:mm:ss"), comment);
-        pushComponent.pushDingTalk(msg);
+        String msg = String.format("### 评论通知 \n> ip：<font color=\"#0000FF\">%s</font> \n\n> 发布时间：%s \n\n> 内容：<font color=\"#0000FF\">%s</font>", ip, DateUtil.format(date, "yyyy-MM-dd HH:mm:ss"), comment);
+        pushComponent.pushDingTalk("评论通知", msg);
         return blogCommentService.save(blogComment);
     }
 
@@ -591,7 +595,7 @@ public class BlogFacade {
     @Transactional
     public Boolean updateBlog(BlogRequest request) {
         Long blogId = request.getId();
-        if (Objects.isNull(blogId)){
+        if (Objects.isNull(blogId)) {
             throw new BusinessException("blogId不能为空");
         }
         BlogList blogList = blogListService.getById(request.getId());
@@ -647,5 +651,64 @@ public class BlogFacade {
         replyComment.setCreateUserId(request.getUserId());
         replyComment.setCreateUserName(request.getUsername());
         return replyCommentService.save(replyComment);
+    }
+
+    /**
+     * 回复评论
+     *
+     * @param request
+     * @return
+     */
+    public BlogChatResponse blogChat(BlogChatRequest request) {
+        String model = request.getModel();
+        String message = request.getMessage();
+        String chatKey = request.getChatKey();
+        HttpServletRequest httpServletRequest = WebUtil.getRequest();
+        String ip = IpAddressUtil.get(httpServletRequest);
+
+        Date now = new Date();
+        if (StringUtils.isBlank(chatKey)) {
+            BlogConfig key = blogConfigService.getOne(new LambdaQueryWrapper<BlogConfig>()
+                    .eq(BlogConfig::getTypeName, BaseConstant.CHAT_GPT_KEY)
+                    .eq(BlogConfig::getIsDelete, IsDeleteEnum.NO.getCode()));
+
+            redisTemplate.opsForValue().increment(RedisConstants.CHAT_GPT_IP + DateUtil.format(now, "yyyy-MM-dd") + ":" + ip, 1);
+            chatKey = key.getTypeValue();
+        }
+        if (StringUtils.isBlank(model)) {
+            model = "gpt-3.5-turbo";
+        }
+
+        Object count = redisTemplate.opsForValue().get(RedisConstants.CHAT_GPT_IP + DateUtil.format(now, "yyyy-MM-dd") + ":" + ip);
+        if (StringUtils.isBlank(chatKey) && Objects.nonNull(count) && Integer.parseInt(count.toString()) > 11) {
+            throw new BusinessException("调用次数超过上线");
+        }
+
+        HttpRequest post = HttpUtil.createPost("https://chatgpt.zhooke.shop/v1/chat/completions");
+        post.header("Content-Type", "application/json");
+        post.header("Authorization", String.format("Bearer %s", chatKey));
+        JSONObject body = new JSONObject();
+        JSONObject context = new JSONObject();
+        context.put("role", "assistant");
+        context.put("content", message);
+        JSONArray messageArray = new JSONArray();
+        messageArray.add(context);
+
+        body.put("model", model);
+        body.put("messages", messageArray);
+        post.body(body.toJSONString());
+        String response = post.execute().body();
+        log.info("调用chatGPT返回结果：{},请求参数：{}", response, body);
+        JSONObject responseJson = JSONObject.parseObject(response);
+        JSONArray choices = responseJson.getJSONArray("choices");
+        BlogChatResponse chatResponse = new BlogChatResponse();
+        if (CollectionUtils.isNotEmpty(choices)) {
+            JSONObject messageJson = choices.getJSONObject(0);
+            JSONObject messageContext = messageJson.getJSONObject("message");
+            String content = messageContext.getString("content");
+            chatResponse.setContext(content);
+        }
+//        todo 记录聊天信息
+        return chatResponse;
     }
 }

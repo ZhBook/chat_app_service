@@ -1,0 +1,25 @@
+spring:
+  security:
+    user:
+      name: "zhooke"
+      password: "haodong@"
+  boot:
+    admin:
+      context-path: "control"
+      notify:
+        mail:
+          from: ${spring.mail.username}
+          to: zhooke@foxmail.com
+  mail:
+    default-encoding: utf-8
+    port: 587
+    properties:
+      mail:
+        smtp:
+          port: 587
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          socketFactory:
+            class: javax.net.ssl.SSLSocketFactory

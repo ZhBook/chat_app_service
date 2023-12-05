@@ -10,14 +10,14 @@ import com.tensua.operator.login.entity.UserInfo;
 import com.tensua.operator.login.mapper.UserInfoMapper;
 import com.tensua.operator.login.service.UserInfoService;
 import com.tensua.operator.utils.WebUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import java.util.Objects;
 
 /**
@@ -28,8 +28,8 @@ import java.util.Objects;
 public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
         implements UserInfoService {
 
-    @Resource
-    private RedisTemplate<String, SecureUserToken> redisTemplate;
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
 
     @Override
     public UserInfo getLoginUser() {
@@ -85,7 +85,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
      * 获取 Token
      */
     public SecureUserToken taskToken(String key) {
-        return redisTemplate.opsForValue().get(RedisKeyGenerator.getLoginTokenKey(key));
+        return (SecureUserToken) redisTemplate.opsForValue().get(RedisKeyGenerator.getLoginTokenKey(key));
     }
 
 }

@@ -27,7 +27,7 @@ public class PhotoExif extends Model<PhotoExif> {
 
     private static final long serialVersionUID = 1L;
 
-      @TableId(value = "id", type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     /**
@@ -199,7 +199,6 @@ public class PhotoExif extends Model<PhotoExif> {
      * 更新时间
      */
     private LocalDateTime updateDate;
-
 
     @Override
     public Serializable pkVal() {
