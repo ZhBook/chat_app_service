@@ -1,33 +1,16 @@
-package com.tensua.operator.photo.entity;
+package com.tensua.data.response.photo;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.extension.activerecord.Model;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.Accessors;
+import lombok.Data;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * <p>
- * 照片信息
- * </p>
- *
  * @author zhooke
- * @since 2022-12-16
- */
-@Getter
-@Setter
-@Accessors(chain = true)
-@TableName("photo_exif")
-public class PhotoExif extends Model<PhotoExif> {
+ * @since 2022/12/29 15:14
+ **/
+@Data
+public class PhotoPagingResponse {
 
-    private static final long serialVersionUID = 1L;
-
-    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     /**
@@ -174,35 +157,4 @@ public class PhotoExif extends Model<PhotoExif> {
      * 纬度
      */
     private String latitude;
-
-    /**
-     * 0-正常 1-删除
-     */
-    private Integer isDelete;
-
-    /**
-     * 创建人ID
-     */
-    private Long createUserId;
-
-    /**
-     * 创建时间
-     */
-    private LocalDateTime createDate;
-
-    /**
-     * 更新人ID
-     */
-    private Long updateUserId;
-
-    /**
-     * 更新时间
-     */
-    private LocalDateTime updateDate;
-
-    @Override
-    public Serializable pkVal() {
-        return this.id;
-    }
-
 }
