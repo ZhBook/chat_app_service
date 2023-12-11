@@ -1,6 +1,8 @@
 package com.tensua.operator.photo.controller;
 
+import com.tensua.data.BaseResult;
 import com.tensua.data.PageResult;
+import com.tensua.data.request.photo.PhotoBatchAddRequest;
 import com.tensua.data.request.photo.PhotoPagingRequest;
 import com.tensua.data.response.photo.PhotoPagingResponse;
 import com.tensua.operator.photo.facade.PhotoFacade;
@@ -30,6 +32,17 @@ public class PhotoController {
     @PostMapping("/paging")
     public PageResult<PhotoPagingResponse> pagingPhoto(@RequestBody PhotoPagingRequest request) {
         return PageResult.pageSuccess(photoFacade.pagingPhoto(request));
+    }
+
+    /**
+     * 批量添加图片
+     *
+     * @param request
+     * @return
+     */
+    @PostMapping("/batch:add")
+    public BaseResult<Boolean> batchAddPhoto(@RequestBody PhotoBatchAddRequest request) {
+        return PageResult.succeed(photoFacade.batchAddPhoto(request));
     }
 
 }

@@ -9,7 +9,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * <p>
@@ -88,7 +88,7 @@ public class PhotoExif extends Model<PhotoExif> {
     /**
      * 图片创建时间
      */
-    private LocalDateTime datetimeOriginal;
+    private Date datetimeOriginal;
 
     /**
      * 曝光补偿
@@ -186,9 +186,14 @@ public class PhotoExif extends Model<PhotoExif> {
     private Long createUserId;
 
     /**
+     * 创建人姓名
+     */
+    private String createUserName;
+
+    /**
      * 创建时间
      */
-    private LocalDateTime createDate;
+    private Date createDate;
 
     /**
      * 更新人ID
@@ -196,9 +201,14 @@ public class PhotoExif extends Model<PhotoExif> {
     private Long updateUserId;
 
     /**
+     * 更新人姓名
+     */
+    private String updateUserName;
+
+    /**
      * 更新时间
      */
-    private LocalDateTime updateDate;
+    private Date updateDate;
 
     @Override
     public Serializable pkVal() {
