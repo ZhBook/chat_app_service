@@ -4,6 +4,7 @@ import com.tensua.data.BaseResult;
 import com.tensua.data.PageResult;
 import com.tensua.data.request.photo.PhotoBatchAddRequest;
 import com.tensua.data.request.photo.PhotoPagingRequest;
+import com.tensua.data.request.photo.PhotoUpdateRequest;
 import com.tensua.data.response.photo.PhotoPagingResponse;
 import com.tensua.operator.photo.facade.PhotoFacade;
 import jakarta.annotation.Resource;
@@ -42,7 +43,18 @@ public class PhotoController {
      */
     @PostMapping("/batch:add")
     public BaseResult<Boolean> batchAddPhoto(@RequestBody PhotoBatchAddRequest request) {
-        return PageResult.succeed(photoFacade.batchAddPhoto(request));
+        return BaseResult.succeed(photoFacade.batchAddPhoto(request));
+    }
+
+    /**
+     * 更新图片介绍
+     *
+     * @param request
+     * @return
+     */
+    @PostMapping("/update")
+    public BaseResult<Boolean> updatePhoto(@RequestBody PhotoUpdateRequest request) {
+        return BaseResult.succeed(photoFacade.updatePhoto(request));
     }
 
 }

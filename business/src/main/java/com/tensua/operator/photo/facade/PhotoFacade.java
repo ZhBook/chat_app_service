@@ -5,8 +5,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tensua.data.request.photo.PhotoBatchAddRequest;
 import com.tensua.data.request.photo.PhotoPagingRequest;
+import com.tensua.data.request.photo.PhotoUpdateRequest;
 import com.tensua.data.response.photo.PhotoPagingResponse;
 import com.tensua.enums.IsDeleteEnum;
+import com.tensua.exception.BusinessException;
 import com.tensua.operator.photo.entity.PhotoExif;
 import com.tensua.operator.photo.service.IPhotoExifService;
 import jakarta.annotation.Resource;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -127,5 +130,28 @@ public class PhotoFacade {
         }).collect(Collectors.toList());
 
         return photoExifService.saveBatch(photoExifList);
+    }
+
+    /**
+     * 更新图片介绍
+     *
+     * @param request
+     * @return
+     */
+    public Boolean updatePhoto(PhotoUpdateRequest request) {
+        Long id = request.getId();
+        PhotoExif photoExif = photoExifService.lambdaQuery()
+                .eq(PhotoExif::getId, id)
+                .eq(PhotoExif::getIsDelete, IsDeleteEnum.NO.getCode())
+                .one();
+        if (Objects.isNull(photoExif)) {
+            throw new BusinessException("图片信息不存在");
+        }
+        BeanUtils.copyProperties(request, photoExif);
+
+        return photoExif.setUpdateDate(new Date())
+                .setUpdateUserId(request.getUserId())
+                .setUpdateUserName(request.getNickname())
+                .updateById();
     }
 }
