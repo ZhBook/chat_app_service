@@ -153,6 +153,11 @@
 <!--            <groupId>net.logstash.logback</groupId>-->
 <!--            <artifactId>logstash-logback-encoder</artifactId>-->
 <!--        </dependency>-->
+        <!-- 图片地理信息依赖 -->
+        <dependency>
+            <groupId>com.drewnoakes</groupId>
+            <artifactId>metadata-extractor</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
