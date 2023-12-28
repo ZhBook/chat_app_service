@@ -14,6 +14,8 @@ import org.springframework.web.server.WebFilter;
 import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
 
+import javax.annotation.Resource;
+
 /**
  * @author zhooke
  * @since 2022/2/11 14:42
@@ -22,7 +24,7 @@ import reactor.core.publisher.Mono;
 @Component
 public class AuthLoginHandler implements WebFilter {
 
-    @Autowired
+    @Resource
     private StringRedisTemplate redisTemplate;
 
     @Override
