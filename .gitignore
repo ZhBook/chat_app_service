@@ -9,3 +9,4 @@
 /business/target/
 /api/target/
 *.log
+/.idea/
