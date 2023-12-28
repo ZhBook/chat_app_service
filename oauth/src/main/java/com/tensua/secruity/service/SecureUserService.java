@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.util.Objects;
 
 /**
@@ -18,7 +19,7 @@ import java.util.Objects;
 @Component
 public class SecureUserService implements UserDetailsService {
 
-    @Autowired
+    @Resource
     private UserFeignClient userFeignClient;
 
     /**

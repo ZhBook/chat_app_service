@@ -13,6 +13,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.io.IOException;
 
 /**
@@ -23,7 +24,7 @@ import java.io.IOException;
 public class SecureLoginFailureHandler implements AuthenticationFailureHandler {
 
 
-    @Autowired
+    @Resource
     private SecureUserTokenService customUserDetailsTokenService;
 
 

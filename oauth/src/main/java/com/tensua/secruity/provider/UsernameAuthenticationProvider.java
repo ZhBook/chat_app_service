@@ -4,13 +4,14 @@ import com.tensua.data.security.UserInfo;
 import com.tensua.secruity.provider.token.UsernameAuthenticationToken;
 import com.tensua.secruity.service.SecureUserService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
+
+import javax.annotation.Resource;
 
 /**
  * 用户名密码登陆
@@ -20,7 +21,7 @@ import org.springframework.stereotype.Component;
 public class UsernameAuthenticationProvider implements AuthenticationProvider {
 
 
-    @Autowired
+    @Resource
     private SecureUserService secureUserService;
 
     /**

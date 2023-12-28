@@ -7,20 +7,23 @@ import com.tensua.secruity.handle.SecureLoginFailureHandler;
 import com.tensua.secruity.handle.SecureLoginSuccessHandler;
 import com.tensua.secruity.provider.UsernameAuthenticationProvider;
 import com.tensua.secruity.service.SecureUserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import javax.annotation.Resource;
 
 /**
  * Spring SecurityFilter 配置文件
@@ -33,13 +36,13 @@ public class SecurityFilterConfig {
     /**
      * 自定义登陆成功处理器
      */
-    @Autowired
+    @Resource
     private SecureLoginSuccessHandler secureLoginSuccessHandler;
 
     /**
      * 自定义用户名和密码登陆验证
      */
-    @Autowired
+    @Resource
     private UsernameAuthenticationProvider usernameAuthenticationProvider;
 
     @Bean
@@ -60,16 +63,20 @@ public class SecurityFilterConfig {
                                 .anyRequest().authenticated()
                 )
                 // 禁用缓存
-                .formLogin().loginPage("/oauth/login")
-                .successHandler(secureLoginSuccessHandler)
-                .failureHandler(new SecureLoginFailureHandler()).permitAll().and()
-                .sessionManagement()
+                .formLogin(httpSecurityFormLoginConfigurer -> httpSecurityFormLoginConfigurer.loginPage("/oauth/login")
+                        .successHandler(secureLoginSuccessHandler)
+                        .failureHandler(new SecureLoginFailureHandler())
+                        .permitAll()
+
+                ).sessionManagement(Customizer.withDefaults())
+
                 // 使用无状态session，即不使用session缓存数据
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and().exceptionHandling().authenticationEntryPoint(new SecurityAuthenticationEntryPoint())
-                .and().headers().frameOptions().disable()
-                .and().csrf().disable()
-                .cors().disable()
+//                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .exceptionHandling(httpSecurityExceptionHandlingConfigurer ->
+                        httpSecurityExceptionHandlingConfigurer.authenticationEntryPoint(new SecurityAuthenticationEntryPoint()))
+                .headers(httpSecurityHeadersConfigurer -> httpSecurityHeadersConfigurer.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
+                .csrf(AbstractHttpConfigurer::disable)
+                .cors(AbstractHttpConfigurer::disable)
         ;
 
         http.addFilterBefore(new SecureUserTokenSupportFilter(), UsernamePasswordAuthenticationFilter.class);
