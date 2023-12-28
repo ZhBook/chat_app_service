@@ -7,12 +7,12 @@ import de.codecentric.boot.admin.server.domain.entities.InstanceRepository;
 import de.codecentric.boot.admin.server.domain.events.InstanceEvent;
 import de.codecentric.boot.admin.server.domain.events.InstanceStatusChangedEvent;
 import de.codecentric.boot.admin.server.notify.AbstractStatusChangeNotifier;
+import jakarta.annotation.Resource;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
@@ -27,7 +27,7 @@ import java.util.Date;
 @Component
 public class CustomNotifierConfig extends AbstractStatusChangeNotifier {
     //
-    @Autowired
+    @Resource
     private PushComponent pushComponent;
 
     public CustomNotifierConfig(InstanceRepository repository) {

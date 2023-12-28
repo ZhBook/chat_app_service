@@ -1,9 +1,11 @@
 .gitignore# Project exclude paths
 /.idea
 /common/target/
+/admin/target/
 /config/target/
 /gateway/target/
 /oauth/target/
+/chatting/target/
 /business/target/
 /api/target/
 *.log

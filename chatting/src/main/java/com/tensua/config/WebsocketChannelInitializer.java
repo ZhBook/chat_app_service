@@ -12,10 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
+
 @Component
 public class WebsocketChannelInitializer extends ChannelInitializer<SocketChannel> {
 
-    @Autowired
+    @Resource
     private WebSocketHandler webSocketHandler;
 
     /** * webSocket协议名 */

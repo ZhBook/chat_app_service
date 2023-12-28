@@ -4,6 +4,7 @@ import de.codecentric.boot.admin.server.config.AdminServerProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -12,7 +13,7 @@ import org.springframework.security.web.authentication.SavedRequestAwareAuthenti
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 /**
- *
+ * SecuritySecureConfig配置
  */
 @Slf4j
 @Configuration
@@ -41,17 +42,16 @@ public class SecuritySecureConfig {
                 .anyRequest().authenticated()
                 .and()
                 //登录页面配置，用于替换security默认页面
-                .formLogin().loginPage(adminContextPath + "/login").successHandler(successHandler).and()
+                .formLogin(httpSecurityFormLoginConfigurer -> httpSecurityFormLoginConfigurer.loginPage(adminContextPath + "/login").successHandler(successHandler))
                 //登出页面配置，用于替换security默认页面
-                .logout().logoutUrl(adminContextPath + "/logout").and()
-                .httpBasic().and()
-                .csrf()
-                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                .ignoringRequestMatchers(
-                        adminContextPath + "/instances",
-                        adminContextPath + "/actuator/**",
-                        adminContextPath + "/logout")
-        ;
+                .logout(httpSecurityLogoutConfigurer -> httpSecurityLogoutConfigurer.logoutUrl(adminContextPath + "/logout"))
+                .httpBasic(Customizer.withDefaults())
+                .csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                        .ignoringRequestMatchers(
+                                adminContextPath + "/instances",
+                                adminContextPath + "/actuator/**",
+                                adminContextPath + "/logout"));
+
         return http.build();
     }
 
