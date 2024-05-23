@@ -654,7 +654,7 @@ public class BlogFacade {
     }
 
     /**
-     * 回复评论
+     * chatGPT
      *
      * @param request
      * @return
@@ -710,5 +710,35 @@ public class BlogFacade {
         }
 //        todo 记录聊天信息
         return chatResponse;
+    }
+
+    /**
+     * 回复评论
+     *
+     * @param request
+     * @return
+     */
+    public Boolean replyCommentV2(BlogReplyCommentRequest request) {
+        HttpServletRequest httpServletRequest = WebUtil.getRequest();
+        String ip = IpAddressUtil.get(httpServletRequest);
+
+        Date date = new Date();
+        BlogComment blogComment = new BlogComment();
+        blogComment.setCommentId(request.getCommentId());
+        blogComment.setIpAddress(ip);
+        blogComment.setBrowserModel(request.getBrowserModel());
+        blogComment.setBlogAuthorId(request.getBlogAuthorId());
+        blogComment.setBlogId(request.getBlogId());
+        blogComment.setComment(request.getComment());
+        blogComment.setCreateDate(date);
+        blogComment.setType(2);
+        blogComment.setCreateUserId(request.getUserId());
+        blogComment.setCreateUserName(request.getNickname());
+        blogComment.setEmail(request.getEMail());
+        blogComment.setHeadImgUrl(request.getHeadImgUrl());
+
+        String msg = String.format("### 评论通知 \n> ip：<font color=\"#0000FF\">%s</font> \n\n> 发布时间：%s \n\n> 内容：<font color=\"#0000FF\">%s</font>", ip, DateUtil.format(date, "yyyy-MM-dd HH:mm:ss"), request.getComment());
+        pushComponent.pushDingTalk("评论通知", msg);
+        return Boolean.TRUE;
     }
 }

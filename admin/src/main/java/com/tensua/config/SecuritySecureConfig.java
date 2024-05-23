@@ -18,7 +18,6 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 @Slf4j
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity
 public class SecuritySecureConfig {
 
     private final String adminContextPath;

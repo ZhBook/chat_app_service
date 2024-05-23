@@ -122,6 +122,7 @@ public class BlogController {
         return BaseResult.succeed(blogFacade.blogComment(request));
     }
 
+
     /**
      * 获取最新20条评论列表
      *
@@ -212,6 +213,17 @@ public class BlogController {
 
     /**
      * 回复评论
+     *
+     * @param request
+     * @return
+     */
+    @PostMapping("/comment/reply/2")
+    public BaseResult<Boolean> replyCommentV2(@Valid @RequestBody BlogReplyCommentRequest request) {
+        return BaseResult.succeed(blogFacade.replyCommentV2(request));
+    }
+
+    /**
+     * chatGPT
      *
      * @param request
      * @return

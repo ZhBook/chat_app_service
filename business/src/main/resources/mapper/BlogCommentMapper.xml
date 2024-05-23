@@ -6,6 +6,7 @@
 
     <resultMap id="BaseResultMap" type="com.tensua.operator.blog.entity.BlogComment">
             <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="commentId" column="comment_id" jdbcType="BIGINT"/>
             <result property="blogId" column="blog_id" jdbcType="BIGINT"/>
             <result property="blogAuthorId" column="blog_author_id" jdbcType="BIGINT"/>
             <result property="comment" column="comment" jdbcType="VARCHAR"/>

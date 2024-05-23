@@ -23,6 +23,11 @@ public class BlogComment implements Serializable {
     private Long id;
 
     /**
+     *
+     */
+    private Long commentId;
+
+    /**
      * 
      */
     private Long blogId;
