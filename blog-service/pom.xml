@@ -5,13 +5,15 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.2.2</version>
+        <version>3.3.2</version>
     </parent>
+
     <groupId>com.tensua</groupId>
     <artifactId>blog-service</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <name>blog-service</name>
     <description>blog-service</description>
+    <packaging>jar</packaging>
 
     <!-- 依赖版本管理 -->
     <!-- spring-cloud版本可以去 https://start.spring.io 根据springBoot自己查看 -->
@@ -334,7 +336,7 @@
             <dependency>
                 <groupId>com.alibaba.cloud</groupId>
                 <artifactId>spring-cloud-alibaba-dependencies</artifactId>
-                <version>2022.0.0.0</version>
+                <version>2023.0.1.2</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -348,9 +350,9 @@
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
                     <version>${spring-boot-dependencies.version}</version>
-                    <configuration>
-                        <skip>true</skip>
-                    </configuration>
+<!--                    <configuration>-->
+<!--                        <skip>true</skip>-->
+<!--                    </configuration>-->
                 </plugin>
             </plugins>
         </build>
