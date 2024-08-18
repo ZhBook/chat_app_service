@@ -1,0 +1,63 @@
+server:
+  port: 8090
+spring:
+  profiles:
+    active: dev
+  application:
+    name: blog-service   #唯一名称
+  cloud:
+    nacos:
+      config:
+        name: ${nacos.name}
+        server-addr: ${nacos.server-addr}
+        file-extension: yaml
+        namespace: ${nacos.namespace}
+        group: ${nacos.group}
+        shared-configs:
+          - data-id: ${nacos.dataId}
+            group: ${nacos.group}
+            refresh: true
+        password: ${nacos.password}
+        username: ${nacos.username}
+      discovery:
+        server-addr: ${nacos.server-addr}
+        namespace: ${nacos.namespace}
+        group: ${nacos.group}
+        ip: ${nacos.discovery.ip}
+        password: ${nacos.password}
+        username: ${nacos.username}
+
+  servlet:
+    multipart:
+      max-file-size: 50MB
+  data:
+    redis:
+      host: ${spring.redis.host}
+      password: ${spring.redis.password}
+      port: ${spring.redis.port}
+      database: ${spring.redis.database}
+      timeout: 5000
+      jedis:
+        pool:
+          max-active: 8
+          max-idle: 8
+          max-wait: -1ms
+          min-idle: 0
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,refresh,info
+  endpoint:
+    health:
+      show-details: ALWAYS
+  # SpringBoot读取配置文件顺序：bootstrap.yml>bootstrap.yaml>bootstrap.properties>nacos的配置>application.yml>application.yaml>application.properties
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+
+logging:
+  level:
+    root: info
+    com.alibaba.nacos: warn
+#  file:
+#    path: blog-service

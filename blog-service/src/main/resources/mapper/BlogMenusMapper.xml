@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tensua.blogservice.operator.blog.mapper.BlogMenusMapper">
+
+    <resultMap id="BaseResultMap" type="com.tensua.blogservice.operator.blog.entity.BlogMenus">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="menuName" column="menu_name" jdbcType="VARCHAR"/>
+            <result property="menuCode" column="menu_code" jdbcType="VARCHAR"/>
+            <result property="fatherId" column="father_id" jdbcType="TINYINT"/>
+            <result property="index" column="index" jdbcType="TINYINT"/>
+            <result property="isDisable" column="is_disable" jdbcType="TINYINT"/>
+            <result property="description" column="description" jdbcType="VARCHAR"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,menu_name,menu_code,
+        father_id,index,is_disable,
+        description,create_time
+    </sql>
+</mapper>

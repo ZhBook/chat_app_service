@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tensua.blogservice.operator.friends.mapper.FriendRequestMapper">
+
+    <resultMap id="BaseResultMap" type="com.tensua.blogservice.operator.friends.entity.FriendRequest">
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="sendUserId" column="send_user_id" jdbcType="BIGINT"/>
+        <result property="sendUserUsername" column="send_user_username" jdbcType="VARCHAR"/>
+        <result property="sendHeadImgUrl" column="send_head_img_url" jdbcType="VARCHAR"/>
+        <result property="sendUserNickname" column="send_user_nickname" jdbcType="VARCHAR"/>
+        <result property="receiveUserId" column="receive_user_id" jdbcType="BIGINT"/>
+        <result property="receiveUserUsername" column="receive_user_username" jdbcType="VARCHAR"/>
+        <result property="message" column="message" jdbcType="VARCHAR"/>
+        <result property="infoState" column="info_state" jdbcType="TINYINT"/>
+        <result property="isAgree" column="is_agree" jdbcType="TINYINT"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+</mapper>
