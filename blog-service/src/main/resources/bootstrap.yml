@@ -1,8 +1,13 @@
 server:
   port: 8090
+  servlet:
+    context-path: /blog-service/api/v1/
 spring:
   profiles:
     active: dev
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
   application:
     name: blog-service   #唯一名称
   cloud:
