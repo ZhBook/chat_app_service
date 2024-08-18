@@ -2,7 +2,9 @@ package com.tensua.blogservice.operator.login.facade;
 
 import cn.hutool.core.util.RandomUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.tensua.blogservice.utils.JwtUtil;
+import com.tensua.blogservice.config.oauth.SecureUserToken;
+import com.tensua.blogservice.config.oauth.SecureUserTokenService;
+import com.tensua.blogservice.data.constant.SecurityConstant;
 import com.tensua.blogservice.data.exception.BusinessException;
 import com.tensua.blogservice.data.request.user.RegisterUserRequest;
 import com.tensua.blogservice.data.request.user.UserInfoRequest;
@@ -11,6 +13,7 @@ import com.tensua.blogservice.data.response.login.UserInfoResponse;
 import com.tensua.blogservice.operator.blog.service.InviteCodeService;
 import com.tensua.blogservice.operator.login.entity.UserInfo;
 import com.tensua.blogservice.operator.login.service.UserInfoService;
+import com.tensua.blogservice.utils.JwtUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeansException;
@@ -25,6 +28,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -45,6 +50,9 @@ public class UserFacade {
     @Resource
     private JwtUtil jwtUtil;
 
+    @Resource
+    private SecureUserTokenService secureUserTokenService;
+
     /**
      * 用户登录验证接口
      *
@@ -52,20 +60,20 @@ public class UserFacade {
      * @param password
      * @return
      */
-    public LoginUserInfoResponse login(String username, String password) {
-        UserInfo one = userInfoService.getOne(new LambdaQueryWrapper<UserInfo>()
+    public Map<String, Object> login(String username, String password) {
+        UserInfo userInfo = userInfoService.getOne(new LambdaQueryWrapper<UserInfo>()
                 .eq(UserInfo::getMobile, username)
         );
-        if (Objects.isNull(one)) {
+        if (Objects.isNull(userInfo)) {
             throw new BusinessException("用户不存在");
         }
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
-        if (!bCryptPasswordEncoder.matches(password, one.getPassword())) {
+        if (!bCryptPasswordEncoder.matches(password, userInfo.getPassword())) {
             throw new BusinessException("用户名或密码不正确！");
         }
 
-        LoginUserInfoResponse loginUserInfoResponse = null;
+        String jwtToken;
         try {
             UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(username, password);
 
@@ -73,16 +81,28 @@ public class UserFacade {
             SecurityContextHolder.getContext().setAuthentication(authentication);
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
-            String jwtToken = jwtUtil.getToken(userDetails.getUsername());
-            loginUserInfoResponse = new LoginUserInfoResponse();
-            BeanUtils.copyProperties(one, loginUserInfoResponse);
-            loginUserInfoResponse.setToken(jwtToken);
-            jwtUtil.insertToken(jwtToken, one);
+            jwtToken = jwtUtil.getToken(userDetails.getUsername());
+//            jwtUtil.insertToken(jwtToken, userInfo);
         } catch (AuthenticationException | BeansException e) {
             log.error("登录失败", e);
             throw new BusinessException("登录失败，请稍后再试");
         }
-        return loginUserInfoResponse;
+        LoginUserInfoResponse loginUserInfoResponse = new LoginUserInfoResponse();
+        BeanUtils.copyProperties(userInfo, loginUserInfoResponse);
+        String finalJwtToken = jwtToken;
+        Map<String, Object> tokenMap = new HashMap<>() {{
+            put(SecurityConstant.TOKEN_HEADER, finalJwtToken);
+            put(SecurityConstant.USER_INFO, loginUserInfoResponse);
+        }};
+        String key = "";
+        SecureUserToken secureUserToken = secureUserTokenService.taskToken(jwtToken);
+        if (Objects.isNull(secureUserToken)) {
+            secureUserToken = secureUserTokenService.createToken(userInfo);
+            key = secureUserTokenService.saveToken(secureUserToken);
+        }
+        tokenMap.put(SecurityConstant.TOKEN_HEADER_KEY, key);
+
+        return tokenMap;
     }
 
     /**
@@ -102,7 +122,7 @@ public class UserFacade {
      * @return
      */
     @Transactional
-    public LoginUserInfoResponse registerUser(RegisterUserRequest request) {
+    public Map<String, Object> registerUser(RegisterUserRequest request) {
 //        String inviteCode = request.getInviteCode();
 //        InviteCode invite = inviteCodeService.getOne(new LambdaQueryWrapper<InviteCode>()
 //                .eq(InviteCode::getCode, inviteCode)
@@ -132,13 +152,24 @@ public class UserFacade {
 //            invite.setUserId(userInfo.getId());
 //            invite.setUpdateDatetime(new Date());
 //            inviteCodeService.updateById(invite);
+            String jwtToken = jwtUtil.getToken(userInfo.getUsername());
+
             LoginUserInfoResponse loginUserInfoResponse = new LoginUserInfoResponse();
             BeanUtils.copyProperties(userInfo, loginUserInfoResponse);
-            String jwtToken = jwtUtil.getToken(userInfo.getUsername());
-            loginUserInfoResponse.setToken(jwtToken);
+            String finalJwtToken = jwtToken;
+            Map<String, Object> tokenMap = new HashMap<>() {{
+                put(SecurityConstant.TOKEN_HEADER, finalJwtToken);
+                put(SecurityConstant.USER_INFO, loginUserInfoResponse);
+            }};
+            String key = "";
+            SecureUserToken secureUserToken = secureUserTokenService.taskToken(jwtToken);
+            if (Objects.isNull(secureUserToken)) {
+                secureUserToken = secureUserTokenService.createToken(userInfo);
+                key = secureUserTokenService.saveToken(secureUserToken);
+            }
+            tokenMap.put(SecurityConstant.TOKEN_HEADER_KEY, key);
 
-            jwtUtil.insertToken(jwtToken, userInfo);
-            return loginUserInfoResponse;
+            return tokenMap;
         }
         throw new BusinessException("该手机号已注册");
     }

@@ -46,6 +46,4 @@ public class LoginUserInfoResponse {
      */
     private int sex;
 
-
-    private String token;
 }

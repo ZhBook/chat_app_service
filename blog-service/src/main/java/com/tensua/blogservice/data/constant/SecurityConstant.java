@@ -78,9 +78,11 @@ public interface SecurityConstant {
      */
     long TOKEN_EXPIRE_TIME_SECOND = 60 * 60 * 12;
 
-    String TOKEN_HEADER = "AccessToken";
+    String TOKEN_HEADER = "accessToken";
 
-    String USER_INFO = "OauthUserInfo";
+    String USER_INFO = "oauthUserInfo";
+
+    String TOKEN_HEADER_KEY = "accessTokenKey";
 
     String TOKEN_PREFIX = "Bearer ";
 

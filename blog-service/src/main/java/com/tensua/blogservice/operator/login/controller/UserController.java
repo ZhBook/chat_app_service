@@ -3,7 +3,6 @@ package com.tensua.blogservice.operator.login.controller;
 import com.tensua.blogservice.data.BaseResult;
 import com.tensua.blogservice.data.request.user.RegisterUserRequest;
 import com.tensua.blogservice.data.request.user.UserInfoRequest;
-import com.tensua.blogservice.data.response.login.LoginUserInfoResponse;
 import com.tensua.blogservice.data.response.login.UserInfoResponse;
 import com.tensua.blogservice.operator.login.entity.UserInfo;
 import com.tensua.blogservice.operator.login.facade.UserFacade;
@@ -11,6 +10,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Map;
 
 /**
  * @author:70968 Date:2021-10-06 09:48
@@ -29,8 +29,8 @@ public class UserController {
      * @return
      */
     @PostMapping("/login")
-    public BaseResult<LoginUserInfoResponse> login(@RequestParam("username") String username,
-                                                   @RequestParam("password") String password) {
+    public BaseResult<Map<String, Object>> login(@RequestParam("username") String username,
+                                                 @RequestParam("password") String password) {
         return BaseResult.succeed(userFacade.login(username, password));
     }
 
@@ -60,7 +60,7 @@ public class UserController {
      * @return
      */
     @PostMapping("/register")
-    public BaseResult<LoginUserInfoResponse> registerUser(@RequestBody @Validated RegisterUserRequest request) {
+    public BaseResult<Map<String, Object>> registerUser(@RequestBody @Validated RegisterUserRequest request) {
         return BaseResult.succeed(userFacade.registerUser(request));
     }
 
