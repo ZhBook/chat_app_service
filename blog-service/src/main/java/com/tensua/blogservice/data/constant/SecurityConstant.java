@@ -1,11 +1,16 @@
 package com.tensua.blogservice.data.constant;
 
+import org.springframework.security.access.ConfigAttribute;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 public interface SecurityConstant {
 
     /**
      * 根据项目配置
      */
-    String SERVLET_CONTEXT_PATH = "/oauth";
+    String SERVLET_CONTEXT_PATH = "/users";
 
     /**
      * 默认的登录接口
@@ -30,20 +35,23 @@ public interface SecurityConstant {
     /**
      * 不需要认证的接口资源
      */
-    String[] HTTP_ACT_MATCHERS = {
+    String[] WHITELIST = {
             SMS_LOGIN_URL,
-            "/api/captcha/generate",
             LOGIN_URL,
             "/users/login",
-            "/users/register"
+            "/users/register",
+            "/users/**",
+            "/resources/**",
+            "/upload",
+            "/upload/**",
+            "/blog/**",
+            "/system/**",
+            "/weather/**",
     };
-
     /**
-     * 不需要认证的静态资源
+     * 模拟权限数据。key：接口地址，value：所需权限
      */
-    String[] WEB_ACT_MATCHERS = {
-            "/favicon.ico"
-    };
+    Map<String, ConfigAttribute> PERMISSION_MAP = new ConcurrentHashMap<>();
 
     /**
      * 是否开启验证码

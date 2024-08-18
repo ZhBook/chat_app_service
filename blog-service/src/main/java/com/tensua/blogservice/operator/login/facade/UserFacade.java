@@ -2,7 +2,7 @@ package com.tensua.blogservice.operator.login.facade;
 
 import cn.hutool.core.util.RandomUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.tensua.blogservice.config.oauth.JwtUtil;
+import com.tensua.blogservice.utils.JwtUtil;
 import com.tensua.blogservice.data.exception.BusinessException;
 import com.tensua.blogservice.data.request.user.RegisterUserRequest;
 import com.tensua.blogservice.data.request.user.UserInfoRequest;

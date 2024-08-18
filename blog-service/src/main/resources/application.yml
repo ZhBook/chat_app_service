@@ -2,37 +2,37 @@ spring:
   cloud:
     compatibility-verifier: # todo https://github.com/micrometer-metrics/tracing/wiki/Spring-Cloud-Sleuth-3.1-Migration-Guide
       enabled: false
-    gateway:
-      global-filter:
-        adapt-cached-body:
-          enabled: false
-      httpclient:
-        # 配置全局加http超时
-        connect-timeout: 5000
-        response-timeout: 5s
-      # 路由数组[路由 就是指定当请求满足什么条件的时候转到哪个微服务]
-      discovery:
-        locator:
-          lowerCaseServiceId: true #使用小写服务名，默认是大写
-          enabled: true #开启自动代理
-      routes:
-        - id: oauth             # 当前路由的标识, 要求唯一
-          uri: lb://blog-service       # lb指的是从 nacos 中按照名称获取微服务,并遵循负载均衡策略
-          predicates: # 断言(就是路由转发要满足的条件)
-            - Path=/api-business/api/v1/oauth/**             # 当请求路径满足Path指定的规则时,才进行路由转发
-          filters:
-            #            - PreserveHostHeader
-            - StripPrefix=3              # 转发之前去掉2层路径
-        # 我们⾃定义的路由 ID，保持唯⼀
-        - id: business
-          # ⽬标服务地址（部署多实例）
-          uri: lb://blog-service
-          # gateway⽹关从服务注册中⼼获取实例信息然后负载后路由
-          # 断⾔：路由条件，Predicate 接受⼀个输⼊参数，返回⼀个布尔值结果。该接⼝包含多种默认⽅法来将 Predicate 组合成其他复杂的逻辑（⽐如：与，或，⾮）。
-          predicates:
-            - Path=/api-business/api/v1/**
-          filters: # 过滤器,请求在传递过程中可以通过过滤器对其进行一定的修改
-            - StripPrefix=3              # 转发之前去掉2层路径
+#    gateway:
+#      global-filter:
+#        adapt-cached-body:
+#          enabled: false
+#      httpclient:
+#        # 配置全局加http超时
+#        connect-timeout: 5000
+#        response-timeout: 5s
+#      # 路由数组[路由 就是指定当请求满足什么条件的时候转到哪个微服务]
+#      discovery:
+#        locator:
+#          lowerCaseServiceId: true #使用小写服务名，默认是大写
+#          enabled: true #开启自动代理
+#      routes:
+#        - id: oauth             # 当前路由的标识, 要求唯一
+#          uri: lb://blog-service       # lb指的是从 nacos 中按照名称获取微服务,并遵循负载均衡策略
+#          predicates: # 断言(就是路由转发要满足的条件)
+#            - Path=/api-business/api/v1/oauth/**             # 当请求路径满足Path指定的规则时,才进行路由转发
+#          filters:
+#            #            - PreserveHostHeader
+#            - StripPrefix=3              # 转发之前去掉2层路径
+#        # 我们⾃定义的路由 ID，保持唯⼀
+#        - id: business
+#          # ⽬标服务地址（部署多实例）
+#          uri: lb://blog-service
+#          # gateway⽹关从服务注册中⼼获取实例信息然后负载后路由
+#          # 断⾔：路由条件，Predicate 接受⼀个输⼊参数，返回⼀个布尔值结果。该接⼝包含多种默认⽅法来将 Predicate 组合成其他复杂的逻辑（⽐如：与，或，⾮）。
+#          predicates:
+#            - Path=/api-business/api/v1/**
+#          filters: # 过滤器,请求在传递过程中可以通过过滤器对其进行一定的修改
+#            - StripPrefix=3              # 转发之前去掉2层路径
   main:
     allow-bean-definition-overriding: true
     allow-circular-references: true #允许循环依赖
@@ -111,23 +111,6 @@ ribbon:
 upload:
   file:
     path: /data/file/images
-secure:
-  ignore:
-    urls: #配置白名单路径,该白名单用来验证是否需要通过token认证，仍然需要gateway验证
-      - "/oauth/**"
-      - "/oauth/**"
-      - "/users/**"
-      - "/resources/**"
-      - "/upload"
-      - "/upload/**"
-      - "/blog/**"
-      - "/system/**"
-      - "/weather/**"
-      - "/users/register"
-      - "/upload"
-      - "/blog/**"
-      - "/system/**"
-      - "/weather/**"
 jwt:
   private.key: classpath:app.key
   public.key: classpath:app.pub

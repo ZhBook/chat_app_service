@@ -2,7 +2,7 @@ package com.tensua.blogservice.operator.login.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.tensua.blogservice.config.oauth.JwtUtil;
+import com.tensua.blogservice.utils.JwtUtil;
 import com.tensua.blogservice.data.constant.SecurityConstant;
 import com.tensua.blogservice.data.exception.BusinessException;
 import com.tensua.blogservice.data.security.SecureUserToken;

@@ -1,4 +1,4 @@
-package com.tensua.blogservice.config.oauth;
+package com.tensua.blogservice.utils;
 
 import com.alibaba.fastjson2.JSON;
 import com.google.common.collect.Lists;
