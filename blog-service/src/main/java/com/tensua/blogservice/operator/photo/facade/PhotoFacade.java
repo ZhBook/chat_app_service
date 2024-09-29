@@ -190,4 +190,27 @@ public class PhotoFacade {
             return response;
         }).collect(Collectors.toList());
     }
+
+    /**
+     * 删除图片
+     *
+     * @param photoId
+     * @return
+     */
+    public Boolean deletePhoto(Long photoId, BlogUserRequest request) {
+        PhotoExif photoExif = photoExifService.lambdaQuery()
+                .eq(PhotoExif::getId, photoId)
+                .eq(PhotoExif::getCreateUserId, request.getUserId())
+                .eq(PhotoExif::getIsDelete, IsDeleteEnum.NO.getCode())
+                .one();
+        if (Objects.isNull(photoExif)) {
+            throw new BusinessException("图片信息不存在");
+        }
+
+        return photoExif.setIsDelete(IsDeleteEnum.YES.getCode())
+                .setUpdateDate(new Date())
+                .setUpdateUserId(request.getUserId())
+                .setUpdateUserName(request.getNickname())
+                .updateById();
+    }
 }

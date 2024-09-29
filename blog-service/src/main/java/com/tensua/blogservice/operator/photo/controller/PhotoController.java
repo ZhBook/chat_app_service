@@ -47,6 +47,17 @@ public class PhotoController {
     }
 
     /**
+     * 删除图片
+     *
+     * @param photoId
+     * @return
+     */
+    @PostMapping("/delete")
+    public BaseResult<Boolean> deletePhoto(@RequestParam("photoId") Long photoId, BlogUserRequest request) {
+        return BaseResult.succeed(photoFacade.deletePhoto(photoId, request));
+    }
+
+    /**
      * 更新图片介绍
      *
      * @param request

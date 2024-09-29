@@ -1,6 +1,7 @@
 package com.tensua.blogservice.operator.weather.controller;
 
 import com.alibaba.fastjson2.JSONArray;
+import com.alibaba.fastjson2.JSONObject;
 import com.tensua.blogservice.data.BaseResult;
 import com.tensua.blogservice.data.response.weather.D7weatherResponse;
 import com.tensua.blogservice.data.response.weather.H24weatherResponse;
@@ -88,5 +89,15 @@ public class WeatherController {
     @GetMapping("/location")
     public BaseResult<JSONArray> getLocationData(@RequestParam("keywords") String keywords) {
         return BaseResult.succeed(weatherFacade.getLocationData(keywords));
+    }
+
+    /**
+     * 获取当前空气状况
+     * @param location
+     * @return
+     */
+    @GetMapping("/air/quality")
+    public BaseResult<JSONObject> getAirQualityData(@RequestParam("location") String location) {
+        return BaseResult.succeed(weatherFacade.getAirQualityData(location));
     }
 }

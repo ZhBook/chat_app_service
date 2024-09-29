@@ -40,6 +40,8 @@ public class WeatherFacade {
 
     final String INDICES_1d_WEATHER_URL = "/v7/indices/1d?type=1,2&";
 
+    final String AIRQUALITY_CURRENT = "/airquality/v1/current/";
+
     final String WEATHER_KEY = "weather_key";
 
     final String APAM_WEB_KEY = "apam_web_key";
@@ -168,5 +170,13 @@ public class WeatherFacade {
         }
 
         return responseJson.getJSONArray("districts");
+    }
+
+
+    public JSONObject getAirQualityData(String location) {
+
+//        redisTemplate.opsForValue().set(RedisConstants.WEATHER_DATA_INDICES_1D + location, result.getJSONArray("daily").toJSONString(), 6, TimeUnit.HOURS);
+        //todo 添加
+        return null;
     }
 }
