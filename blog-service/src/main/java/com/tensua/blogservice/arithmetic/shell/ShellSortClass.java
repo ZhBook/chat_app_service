@@ -14,7 +14,7 @@ import java.util.Arrays;
  * @author zhooke
  * @since 2025/1/7 16:21
  **/
-public class shellSortClass {
+public class ShellSortClass {
     public static void main(String[] args) {
         int[] arr = {12, 23, 43, 11, 67, 13, 32, 69, 9};
         int[] arrCopy = Arrays.copyOf(arr, arr.length);
