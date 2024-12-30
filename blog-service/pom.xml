@@ -33,10 +33,9 @@
         <jasypt.version>1.14</jasypt.version>
         <sharding-sphere.version>3.1.0</sharding-sphere.version>
         <easyCaptcha.version>1.6.2</easyCaptcha.version>
-        <hutool.version>5.8.25</hutool.version>
+        <hutool.version>5.8.35</hutool.version>
         <mysql-version>8.0.32</mysql-version>
         <mybatis-plus-boot-starter.version>3.5.5</mybatis-plus-boot-starter.version>
-        <mysql-connector-java.version>8.0.13</mysql-connector-java.version>
         <mybatis-spring-boot-starter.version>3.0.3</mybatis-spring-boot-starter.version>
         <aliyun-sdk-oss>3.17.4</aliyun-sdk-oss>
         <qiniu-java-sdk>7.15.0</qiniu-java-sdk>
@@ -47,7 +46,7 @@
         <transmittable.version>2.12.0</transmittable.version>
         <banner.version>1.0.2</banner.version>
         <commons-beanutils.version>1.9.4</commons-beanutils.version>
-        <commons-io.version>2.15.1</commons-io.version>
+        <commons-io.version>2.18.0</commons-io.version>
         <servlet-api.version>4.0.1</servlet-api.version>
         <hibernate-validator.version>8.0.0.Final</hibernate-validator.version>
         <com.google.zxing.version>3.4.1</com.google.zxing.version>
@@ -58,7 +57,7 @@
         <docker.java.opts>-Xms128m -Xmx128m</docker.java.opts>
         <token.version>0.9.1</token.version>
         <metadata.version>2.18.0</metadata.version>
-        <guava.version>33.0.0-jre</guava.version>
+        <guava.version>33.4.0-jre</guava.version>
         <logstash.logback.encoder.version>7.4</logstash.logback.encoder.version>
     </properties>
 
