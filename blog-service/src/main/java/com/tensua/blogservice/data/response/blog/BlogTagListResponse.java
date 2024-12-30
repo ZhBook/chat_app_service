@@ -1,0 +1,21 @@
+package com.tensua.blogservice.data.response.blog;
+
+import lombok.Data;
+
+/**
+ * @author zhooke
+ * @since 2022/3/21 14:22
+ **/
+@Data
+public class BlogTagListResponse {
+    /**
+     *
+     */
+    private Long id;
+
+    /**
+     *
+     */
+    private String name;
+
+}

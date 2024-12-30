@@ -7,11 +7,11 @@ import com.tensua.data.request.photo.PhotoPagingRequest;
 import com.tensua.data.request.photo.PhotoUpdateRequest;
 import com.tensua.data.response.photo.PhotoPagingResponse;
 import com.tensua.operator.photo.facade.PhotoFacade;
+import com.tensua.system.BlogUserRequest;
 import jakarta.annotation.Resource;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @author zhooke
@@ -57,4 +57,14 @@ public class PhotoController {
         return BaseResult.succeed(photoFacade.updatePhoto(request));
     }
 
+    /**
+     * 获取图片信息
+     *
+     * @param photoId
+     * @return
+     */
+    @PostMapping("/info/{photoId}")
+    public BaseResult<List<PhotoPagingResponse>> getPhotoInfo(@PathVariable Long photoId, BlogUserRequest request) {
+        return BaseResult.succeed(photoFacade.getPhotoInfo(photoId, request));
+    }
 }

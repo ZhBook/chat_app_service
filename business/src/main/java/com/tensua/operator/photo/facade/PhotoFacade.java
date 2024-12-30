@@ -7,6 +7,7 @@ import com.drew.imaging.ImageMetadataReader;
 import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.exif.ExifSubIFDDirectory;
+import com.google.common.collect.Lists;
 import com.tensua.data.request.photo.PhotoBatchAddRequest;
 import com.tensua.data.request.photo.PhotoPagingRequest;
 import com.tensua.data.request.photo.PhotoUpdateRequest;
@@ -15,6 +16,7 @@ import com.tensua.enums.IsDeleteEnum;
 import com.tensua.exception.BusinessException;
 import com.tensua.operator.photo.entity.PhotoExif;
 import com.tensua.operator.photo.service.IPhotoExifService;
+import com.tensua.system.BlogUserRequest;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -165,5 +167,27 @@ public class PhotoFacade {
                 .setUpdateUserId(request.getUserId())
                 .setUpdateUserName(request.getNickname())
                 .updateById();
+    }
+
+    /**
+     * 获取图片信息
+     *
+     * @param photoId
+     * @return
+     */
+    public List<PhotoPagingResponse> getPhotoInfo(Long photoId, BlogUserRequest request) {
+        List<PhotoExif> photoExifList = photoExifService.list(new LambdaQueryWrapper<PhotoExif>()
+                .eq(PhotoExif::getId, photoId)
+                .eq(PhotoExif::getCreateUserId, request.getUserId())
+                .eq(PhotoExif::getIsDelete, IsDeleteEnum.NO.getCode())
+        );
+        if (CollectionUtils.isEmpty(photoExifList)) {
+            return Lists.newArrayList();
+        }
+        return photoExifList.stream().map(photo -> {
+            PhotoPagingResponse response = new PhotoPagingResponse();
+            BeanUtils.copyProperties(photo, response);
+            return response;
+        }).collect(Collectors.toList());
     }
 }

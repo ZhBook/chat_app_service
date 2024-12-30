@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tensua.blogservice.operator.photo.mapper.PhotoExifMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.tensua.blogservice.operator.photo.entity.PhotoExif">
+        <id column="id" property="id" />
+        <result column="focal_length" property="focalLength" />
+        <result column="f_number" property="fNumber" />
+        <result column="exposure_time" property="exposureTime" />
+        <result column="iso" property="iso" />
+        <result column="model" property="model" />
+        <result column="manufacturer" property="manufacturer" />
+        <result column="artist" property="artist" />
+        <result column="orientation" property="orientation" />
+        <result column="resolution_unit" property="resolutionUnit" />
+        <result column="software" property="software" />
+        <result column="exposure_program" property="exposureProgram" />
+        <result column="dateTime_original" property="datetimeOriginal" />
+        <result column="exposure_bias_value" property="exposureBiasValue" />
+        <result column="max_aperture_value" property="maxApertureValue" />
+        <result column="metering_mode" property="meteringMode" />
+        <result column="flash" property="flash" />
+        <result column="maker_note" property="makerNote" />
+        <result column="exifImage_width" property="exifimageWidth" />
+        <result column="exifImage_length" property="exifimageLength" />
+        <result column="photo_url" property="photoUrl" />
+        <result column="photo_describe" property="photoDescribe" />
+        <result column="province" property="province" />
+        <result column="city" property="city" />
+        <result column="county" property="county" />
+        <result column="town" property="town" />
+        <result column="village" property="village" />
+        <result column="address" property="address" />
+        <result column="longitude" property="longitude" />
+        <result column="latitude" property="latitude" />
+        <result column="is_delete" property="isDelete" />
+        <result column="create_user_id" property="createUserId" />
+        <result column="create_date" property="createDate" />
+        <result column="update_user_id" property="updateUserId" />
+        <result column="update_date" property="updateDate" />
+    </resultMap>
+
+</mapper>

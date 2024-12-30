@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tensua.blogservice.operator.login.mapper.UserInfoMapper">
+
+    <resultMap id="BaseResultMap" type="com.tensua.blogservice.operator.login.entity.UserInfo">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="username" column="username" jdbcType="VARCHAR"/>
+            <result property="nickname" column="nickname" jdbcType="VARCHAR"/>
+            <result property="userType" column="user_type" jdbcType="VARCHAR"/>
+            <result property="password" column="password" jdbcType="VARCHAR"/>
+            <result property="headImgUrl" column="head_img_url" jdbcType="VARCHAR"/>
+            <result property="EMail" column="e_mail" jdbcType="VARCHAR"/>
+            <result property="mobile" column="mobile" jdbcType="VARCHAR"/>
+            <result property="sex" column="sex" jdbcType="TINYINT"/>
+            <result property="address" column="address" jdbcType="VARCHAR"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="isDelete" column="is_delete" jdbcType="TINYINT"/>
+            <result property="isEnabled" column="is_enabled" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,username,nickname,
+        password,head_img_url,e_mail,
+        mobile,sex,address,
+        create_time,is_delete,is_enabled
+    </sql>
+</mapper>

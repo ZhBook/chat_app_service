@@ -1,0 +1,10 @@
+business:
+  image: blog-service
+  hostname: blog-service
+  container_name: blog-service
+  ports:
+    - "0.0.0.0:8090:8090"
+  volumes:
+    - "/apps/blog-service:/apps/blog-service"
+  mem_limit: 500M
+  memswap_limit: 500M
